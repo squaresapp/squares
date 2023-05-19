@@ -1,4 +1,6 @@
 
+![Logo](readme.logo.svg)
+
 # Rail
 
-Readme coming soon.
+Project status: pre-alpha.
