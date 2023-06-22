@@ -14,19 +14,18 @@ namespace Rail.Cover
 		const feed3 = await Reels.getFeedFromUrl(feedUrl3);
 		
 		const fila = Fila.new(__dirname, "../+mux.json");
-		fila.writeText("{}");
 		const mux = new Mux();
-		await mux.load(fila.path);
+		await mux.load(fila);
 		
-		const feedId1 = mux.addFeed({ url: feedUrl1 });
-		const feedId2 = mux.addFeed({ url: feedUrl2 });
-		const feedId3 = mux.addFeed({ url: feedUrl3 });
+		const feedId1 = mux.addFeed({ feedUrl: feedUrl1 });
+		const feedId2 = mux.addFeed({ feedUrl: feedUrl2 });
+		const feedId3 = mux.addFeed({ feedUrl: feedUrl3 });
 		
 		for (let i = -1; ++i < 4;)
 		{
-			mux.addStory(feedId1, feed1.urls[i]);
-			mux.addStory(feedId2, feed2.urls[i]);
-			mux.addStory(feedId3, feed3.urls[i]);
+			mux.addPost(feedId1, feed1.urls[i]);
+			mux.addPost(feedId2, feed2.urls[i]);
+			mux.addPost(feedId3, feed3.urls[i]);
 		}
 		
 		await mux.save();

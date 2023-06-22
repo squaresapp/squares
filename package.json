@@ -1,11 +1,20 @@
 {
 	"name": "rail",
 	"author": "Paul Gordon",
+	"private": true,
 	"description": "An app for sharing without powerful forces controlling you.",
-	"version": "1.0.0",
+	"version": "0.0.0",
 	"main": "rail.js",
 	"scripts": {
+		"tauri": "TAURI_APPLE_DEVELOPMENT_TEAM=WTS65T464J tauri",
 		"bundle": "tsc -p tsconfig.release.json && terser ./+build/rail.debug.js > ./+build/rail.min.js"
 	},
-	"license": "MIT"
+	"license": "MIT",
+	"dependencies": {
+		"@tauri-apps/api": "^1.4.0",
+		"@tauri-apps/plugin-fs": "^2.0.0-alpha.0"
+	},
+	"devDependencies": {
+		"@tauri-apps/cli": "^1.4.0"
+	}
 }

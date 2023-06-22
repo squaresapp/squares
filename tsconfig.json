@@ -24,19 +24,20 @@
 	},
 	"exclude": [
 		"**/+build/**/*.ts",
+		"**/tauri/**/*.ts"
 	],
 	"references": [
 		{ "path": "../Hot" },
 		{ "path": "../Hat" },
 		{ "path": "../Query" },
 		{ "path": "../Not" },
+		{ "path": "../Force" },
 		{ "path": "../Fila" },
-		{ "path": "../FilaNode" },
-		{ "path": "../FilaTauri" },
 		{ "path": "../FilaKeyva" },
+		{ "path": "../FilaNode" },
 		{ "path": "../Keyva" },
 		{ "path": "../Pinger" },
 		{ "path": "../HtmlReels" },
-		{ "path": "../Dock" },
+		{ "path": "../Dock" }
 	]
 }

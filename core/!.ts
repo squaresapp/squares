@@ -64,3 +64,5 @@ else if (ELECTRON)
 		path: require("path")
 	});
 }
+
+const hot = new Hot();
