@@ -134,9 +134,6 @@ namespace Rail
 				if (e.scrollLeft < w)
 					coords[0] = coords[6] = 1 - e.scrollLeft / w;
 				
-				else if (e.scrollLeft > w)
-					coords[2] = coords[4] = 1 - (e.scrollLeft - w) / w;
-				
 				const h = e.offsetHeight;
 				if (e.scrollTop < h)
 					coords[1] = coords[3] = 1 - (e.scrollTop / h);
@@ -149,16 +146,12 @@ namespace Rail
 				
 				coords[0] ??= 0;
 				coords[1] ??= 0;
-				coords[2] ??= 1;
+				coords[2] = 1;
 				coords[3] ??= 0;
-				coords[4] ??= 1;
+				coords[4] = 1;
 				coords[5] ??= 1;
 				coords[6] ??= 0;
 				coords[7] ??= 1;
-				
-				//! Temp
-				coords[2] = 1;
-				coords[4] = 1;
 				
 				const c = coords.map(c => (c * 100).toFixed(3) + "%");
 				c.splice(6, 0, `,`);
@@ -169,7 +162,6 @@ namespace Rail
 				if (e.scrollTop === 0 ||
 					e.scrollTop >= e.scrollHeight - h ||
 					e.scrollLeft === 0)
-					//e.scrollLeft >= e.scrollWidth - w)
 					e.remove();
 				
 				lastScrollLeft = e.scrollLeft;
@@ -181,23 +173,14 @@ namespace Rail
 					if (e.scrollLeft !== lastScrollLeft || e.scrollTop !== lastScrollTop)
 						return;
 					
-					if (e.scrollLeft <= 0 ||
-						e.scrollTop <= 0 ||
-						e.scrollTop >= e.scrollHeight - e.offsetHeight)
-						e.remove();
-					
-					/*
-					if (e.scrollLeft >= e.offsetWidth &&
-						e.scrollTop <= e.offsetHeight &&
-						e.scrollTop >= e.scrollHeight - e.offsetHeight * 2)
-						return;
-					
 					// A more elegant way to deal with this would be to animate
 					// it off the screen... but just removing it is good enough for now
 					// because this is just an edge case that isn't going to happen
 					// very often.
-					e.remove();
-					*/
+					if (e.scrollLeft <= 0 ||
+						e.scrollTop <= 0 ||
+						e.scrollTop >= e.scrollHeight - e.offsetHeight)
+						e.remove();
 				},
 				500);
 			});
