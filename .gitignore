@@ -2,3 +2,7 @@
 +*
 node_modules
 package-lock.json
+src-tauri/target
+src-tauri/icons
+src-tauri/gen
+Cargo.lock
