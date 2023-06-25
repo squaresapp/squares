@@ -10,7 +10,7 @@ namespace Rail
 		if (!ELECTRON)
 		{
 			FilaKeyva.use();
-		
+			
 			if (DEBUG)
 				await debugGetAppDataFiles();
 		}
@@ -18,10 +18,41 @@ namespace Rail
 		Rail.appendCssReset();
 		const rootHat = new RootHat();
 		document.body.append(rootHat.head);
+		
+		if (DEBUG && !ELECTRON)
+			connectDebugRefreshTool();
 	}
 	
 	//@ts-ignore
 	if (!DEBUG) return;
+	
+	/** */
+	function connectDebugRefreshTool()
+	{
+		let pointerdown = false;
+		let timeoutId: any = 0;
+		
+		document.body.addEventListener("pointerdown", ev =>
+		{
+			pointerdown = true;
+			
+			timeoutId = setTimeout(() =>
+			{
+				if (pointerdown)
+					window.location.reload();
+			},
+			1000);
+		});
+		
+		const end = () =>
+		{
+			pointerdown = false;
+			clearTimeout(timeoutId);
+		};
+		
+		document.body.addEventListener("pointerup", end);
+		document.body.addEventListener("pointermove", end);
+	}
 	
 	/**
 	 * DEBUG-only function that downloads app data files from a
@@ -45,8 +76,9 @@ namespace Rail
 				continue;
 			
 			// This should be FilaKeyva
-			const fila = Fila.new(name);
-			await fila.writeText(result.text);
+			const baseFila = await Rail.getAppDataFila();
+			const saveFila = baseFila.down(name);
+			await saveFila.writeText(result.text);
 		}
 	}
 }
