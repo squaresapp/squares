@@ -17,22 +17,48 @@ namespace Rail
 				scrollSnapAlign: "start",
 			};
 			
+			const children: HTMLElement[] = [];
+			
 			for (const [i, section] of sections.entries())
 			{
-				hot.get(section)({
-					gridRow: i + 2,
-					gridColumn: 3,
-				});
+				children.push(
+					hot.div(
+						"snap-left",
+						snap,
+						{
+							gridRow: i + 2,
+							gridColumn: 1,
+							background: "linear-gradient(45deg, purple, orange)"
+						}
+					),
+					
+					hot.get(section)({
+						gridRow: i + 2,
+						gridColumn: 2,
+						...snap,
+					}),
+					
+					hot.div(
+						"snap-right",
+						snap,
+						{
+							gridRow: i + 2,
+							gridColumn: 3,
+							scrollSnapAlign: "end",
+							background: "linear-gradient(45deg, orange, purple)"
+						}
+					),
+				);
 			}
 			
 			this.head = hot.div(
 				"head",
 				{
-					flex: "1 0",
 					width: "100%",
 					height: "100%",
 					overflow: "auto",
 					scrollSnapType: "both mandatory",
+					backgroundColor: "rgba(0, 0, 0, 0.33)",
 				},
 				hot.on("connected", () =>
 				{
@@ -43,21 +69,51 @@ namespace Rail
 					setTimeout(() =>
 					{
 						this.head.scrollBy({
-							top: 1,
+							top: this.head.offsetHeight,
 							left: this.head.offsetWidth,
 							behavior: "auto"
 						});
 						
-						this.setupScrollTracker();
+						//this.setupScrollTracker();
 					});
 				}),
 				hot.div(
 					{
 						display: "grid",
 						width: "300%",
-						gridTemplateColumns: "0 1fr 1fr 1fr 0",
+						gridTemplateColumns: "1fr 1fr 1fr",
 						gridTemplateRows: "1fr ".repeat(sections.length + 2),
 					},
+					hot.div(
+						"snap-top",
+						snap,
+						Cq.height(100, "head"),
+						{
+							gridRow: 1,
+							gridColumnStart: 2,
+							gridColumnEnd: 5,
+						}
+					),
+					hot.div(
+						"snap-bottom",
+						snap,
+						Cq.height(100, "head"),
+						{
+							gridRow: -1,
+							gridColumnStart: 2,
+							gridColumnEnd: 5,
+						}
+					),
+					/*
+					hot.div(
+						"sections-background",
+						{
+							gridColumn: 3,
+							gridRowStart: 2,
+							gridRowEnd: -2,
+							backgroundColor: "black",
+						}
+					),
 					hot.div(
 						"snap-left",
 						snap,
@@ -76,27 +132,11 @@ namespace Rail
 							gridColumn: 5,
 						}
 					),
-					hot.div(
-						"snap-top",
-						snap,
-						{
-							gridRow: 1,
-							gridColumnStart: 2,
-							gridColumnEnd: 5,
-						},
-						Cq.height(100, "head")
-					),
-					hot.div(
-						"snap-bottom",
-						snap,
-						{
-							gridRow: -1,
-							gridColumnStart: 2,
-							gridColumnEnd: 5,
-						}
-					),
 					
 					...sections,
+					*/
+					
+					...children,
 					
 					hot.div(
 						"about",
@@ -139,7 +179,7 @@ namespace Rail
 					coords[1] = coords[3] = 1 - (e.scrollTop / h);
 				
 				else if (e.scrollTop > e.scrollHeight - h * 2)
-					coords[5] = coords[7] = 2 - (e.scrollTop - h * 2) / h;
+					coords[5] = coords[7] = 1 - (e.scrollTop - h * 2) / h;
 				
 				if (coords.every(n => n === undefined))
 					return e.style.removeProperty("clip-path");

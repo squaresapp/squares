@@ -60,7 +60,10 @@ namespace Rail
 		}
 		
 		/** */
-		async save()
+		async save(
+			aboutJsonText = "",
+			feedsJsonText = "",
+			postsJsonText = "")
 		{
 			if (this.filePath === "")
 				throw new Error("File path not set.");
@@ -68,15 +71,15 @@ namespace Rail
 			const baseFila = Fila.new(this.filePath);
 			
 			const aboutFila = baseFila.down(MuxConst.aboutFile);
-			const aboutJson = JSON.stringify(this._about, null, "\t");
+			const aboutJson = aboutJsonText || JSON.stringify(this._about, null, "\t");
 			await aboutFila.writeText(aboutJson);
 			
 			const feedsFila = baseFila.down(MuxConst.feedsFile);
-			const feedsJson = JSON.stringify(this._feeds, null, "\t");
+			const feedsJson = feedsJsonText || JSON.stringify(this._feeds, null, "\t");
 			await feedsFila.writeText(feedsJson);
 			
 			const postsFila = baseFila.down(MuxConst.postsFile);
-			const postsJson = JSON.stringify(this._posts, null, "\t");
+			const postsJson = postsJsonText || JSON.stringify(this._posts, null, "\t");
 			await postsFila.writeText(postsJson);
 		}
 		

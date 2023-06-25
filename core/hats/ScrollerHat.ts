@@ -26,11 +26,13 @@ namespace Rail
 					width: "100vw",
 					height: "100vh",
 					overflow: "hidden",
+					outline: "2px solid black",
 					...Style.clickable,
 				}),
 				hot.on("scroll", () => this.updatePosterVisibility(true)),
 				hot.on("connected", () =>
 				{
+					this.setSizeInner(calculateNaturalSize());
 					this._width = this.head.offsetWidth;
 					this._height = this.head.offsetHeight;
 					Resize.watch(this.head, (w, h) => [this._width, this._height] = [w, h]);
@@ -38,7 +40,6 @@ namespace Rail
 				})
 			);
 			
-			this.setSizeInner(calculateNaturalSize());
 			Hat.wear(this);
 		}
 		
@@ -260,7 +261,7 @@ namespace Rail
 		}
 		
 		/** */
-		private updatePosterVisibility(canContinue?: boolean)
+		private updatePosterVisibility(canContinue: boolean = false)
 		{
 			if (!this.head.isConnected)
 				return;
@@ -269,7 +270,6 @@ namespace Rail
 			
 			if (this.posterCount > 0)
 			{
-				//const y = this.scrollTop - this.offsetTop;
 				const y = this.head.scrollTop;
 				const rowHeight = this.height / this.size;
 				const rowCount = this.posterCount / this.size;
@@ -451,6 +451,8 @@ namespace Rail
 	 */
 	function calculateNaturalSize()
 	{
+		return 3;
+		
 		const dp1 = window.devicePixelRatio === 1;
 		const logicalWidth = window.innerWidth / window.devicePixelRatio;
 		

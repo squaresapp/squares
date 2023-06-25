@@ -51,6 +51,19 @@ namespace Rail
 		{
 			if (!e.isConnected)
 				await new Promise(r => hot.get(e)(hot.on("connected", r)));
+			
+			// Wait an additional 1ms so that the element becomes transition-ready
+			await new Promise(r => setTimeout(r, 1));
+		}
+		
+		/** */
+		export async function waitTransitionEnd(e: Element)
+		{
+			await new Promise<void>(r => e.addEventListener("transitionend", ev =>
+			{
+				if (ev.target === e)
+					r();
+			}));
 		}
 		
 		/** */
