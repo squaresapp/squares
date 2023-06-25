@@ -12,7 +12,8 @@
 	"license": "MIT",
 	"dependencies": {
 		"@tauri-apps/api": "^1.4.0",
-		"@tauri-apps/plugin-fs": "^2.0.0-alpha.0"
+		"@tauri-apps/plugin-fs": "^2.0.0-alpha.0",
+		"moduless": "^3.2.5"
 	},
 	"devDependencies": {
 		"@tauri-apps/cli": "^1.4.0"
