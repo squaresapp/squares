@@ -293,7 +293,8 @@ namespace Rail
 					
 					const mul = getIndex(e) > 0 ? 1 : -1;
 					const vh = (100 * this.rowOf(e) * mul || 0).toFixed(5);
-					e.style.top = `calc(${vh}vh / var(${Class.sizeVar}))`;
+					e.style.top = `calc(${vh}dvh / var(${Class.sizeVar}))`;
+					e.style.top ||= `calc(${vh}vh / var(${Class.sizeVar}))`;
 					e.classList.add(Class.hasCssTop, showClass);
 					
 					elementsWithTop.delete(e);
