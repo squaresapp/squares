@@ -2,7 +2,7 @@
 namespace Rail.Cover
 {
 	/** */
-	export function coverStoryFrameHat()
+	export function coverStoryHat()
 	{
 		Rail.appendCssReset();
 		
@@ -30,14 +30,8 @@ namespace Rail.Cover
 			)
 		];
 		
-		const drawer = hot.div(
-			{
-				height: "200vh",
-				background: "linear-gradient(green, cyan)"
-			},
-		);
-		
-		const hat = new StoryFrameHat(sections, drawer);
+		const ownerHat = new StoryOwnerHat();
+		const hat = new StoryHat(sections, ownerHat);
 		document.body.append(hat.head);
 	}
 }

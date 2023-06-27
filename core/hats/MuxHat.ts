@@ -18,66 +18,36 @@ namespace Rail
 		private static pinger: Pinger.Service;
 		
 		readonly head;
+		private readonly mux = new Mux();
+		private readonly scrollerBox;
+		private readonly scroller: ScrollerHat;
 		
 		/** */
 		constructor()
 		{
-			this.mux = new Mux();
 			this.head = hot.div(
 				{
 					height: "100%",
 				},
-				
-				this.scrollerContainer = hot.div(
-					"scroll-container",
+				this.scrollerBox = hot.div(
+					"scroller-box",
 					{
 						height: "100%",
 						borderRadius: "30px",
 						overflow: "hidden",
-						opacity: 1,
-						transform: "perspective(10px) translateZ(0)",
 						transitionDuration,
 						transitionProperty: "transform, opacity",
-					}
+					},
 				)
 			);
 			
-			this.muxHiddenClass = hot.css({
-				opacity: "0 !",
-				transform: "perspective(10px) translateZ(-3px) !",
-				pointerEvents: "none",
-			});
-			
-			this.construct();
 			Hat.wear(this);
-		}
-		
-		private readonly scrollerContainer;
-		private readonly muxHiddenClass;
-		
-		/** */
-		private async construct()
-		{
-			await MuxHat.maybeSetupPinger();
-			const muxDirectory = await Rail.getAppDataFila();
-			await this.mux.load(muxDirectory);
 			
-			for (const post of this.mux.posts)
-			{
-				const feed = this.mux.getFeed(post.feedId);
-				if (!feed)
-				{
-					console.error("Feed not found for post: " + post.path);
-					continue;
-				}
-				
-				MuxHat.pinger.set(feed.feedUrl);
-			}
+			this.showScroller(true);
+			this.scroller = new ScrollerHat();
+			this.scroller.head.style.borderRadius = "inherit";
 			
-			const scroller = new ScrollerHat();
-			scroller.head.style.borderRadius = "inherit";
-			
-			scroller.handleRender(index =>
+			this.scroller.handleRender(index =>
 			{
 				if (index >= this.mux.posts.length)
 					return null;
@@ -90,40 +60,152 @@ namespace Rail
 				})();
 			});
 			
-			scroller.handleSelect(async (e, index) =>
+			this.scroller.handleSelect(async (e, index) =>
 			{
-				const post = this.mux.posts[index];
-				const reel = await Reels.getReelFromUrl(post.path);
-				const sections: HTMLElement[] = [];
-				
-				if (!reel)
-					return void sections.push(Reels.getErrorPoster());
-				
-				const drawer = hot.div(new Text("about section is in here"));
-				const storyFrameHat = new StoryFrameHat(reel.sections, drawer);
-				
-				hot.get(storyFrameHat)(
-					Dock.cover(),
-					{
-						transitionDuration,
-						transitionProperty: "transform",
-						transform: "translateY(110%)",
-					},
-					hot.on("disconnected", () =>
-					{
-						this.scrollerContainer.classList.remove(this.muxHiddenClass);
-					})
-				);
-				
-				this.head.append(storyFrameHat.head);
-				await UI.waitConnected(storyFrameHat.head);
-				storyFrameHat.head.style.transform = "translateY(0)";
-				this.scrollerContainer.classList.add(this.muxHiddenClass);
+				this.showStory(index);
 			});
 			
-			this.scrollerContainer.append(scroller.head);
+			(async () =>
+			{
+				await MuxHat.maybeSetupPinger();
+				const muxDirectory = await Rail.getAppDataFila();
+				await this.mux.load(muxDirectory);
+				
+				for (const post of this.mux.posts)
+				{
+					const feed = this.mux.getFeed(post.feedId);
+					if (!feed)
+					{
+						console.error("Feed not found for post: " + post.path);
+						continue;
+					}
+					
+					MuxHat.pinger.set(feed.feedUrl);
+				}
+				
+			})().then(() =>
+			{
+				this.scrollerBox.append(this.scroller.head);
+			});
 		}
 		
-		private readonly mux: Mux;
+		/** */
+		private async showStory(index: number)
+		{
+			const post = this.mux.posts[index];
+			const reel = await Reels.getReelFromUrl(post.path);
+			const sections: HTMLElement[] = [];
+			
+			if (!reel)
+				return void sections.push(Reels.getErrorPoster());
+			
+			const ownerHat = new StoryOwnerHat();
+			const storyHat = new StoryHat(reel.sections, ownerHat);
+			
+			hot.get(storyHat)(
+				Dock.cover(),
+				{
+					transitionDuration,
+					transitionProperty: "transform",
+					transform: "translateY(110%)",
+				},
+				hot.on("connected", () => setTimeout(async () =>
+				{
+					for (const e of Query.ancestors(this.head))
+						if (e instanceof HTMLElement)
+							e.classList.add(noOverflowClass);
+					
+					storyHat.head.style.transform = "translateY(0)";
+					await UI.waitTransitionEnd(storyHat.head);
+					this.scrollerBox.style.transitionDuration = "0s";
+				})),
+				hot.on("scroll", () => window.requestAnimationFrame(() =>
+				{
+					const h = storyHat.head;
+					const scrollTop = Math.ceil(h.scrollTop);
+					const scrollLeft = Math.ceil(h.scrollLeft);
+					const scrollHeight = Math.ceil(h.scrollHeight);
+					const offsetHeight = Math.ceil(h.offsetHeight);
+					const offsetWidth = Math.ceil(h.offsetWidth);
+					let pct = -1;
+					
+					if (scrollLeft < offsetWidth)
+						pct = scrollLeft / offsetWidth;
+					
+					else if (scrollTop < offsetHeight)
+						pct = scrollTop / offsetHeight;
+					
+					else if (scrollTop >= scrollHeight - offsetHeight * 2)
+						pct = (scrollHeight - offsetHeight - scrollTop) / offsetHeight;
+					
+					if (pct >= 0)
+					{
+						const s = this.scrollerBox.style;
+						s.transform = translateZ(pct * translateZMax + "px");
+						s.opacity = (1 - pct).toString();
+						
+						if (scrollTop === 0 || scrollTop >= scrollHeight - offsetHeight)
+							s.pointerEvents = "all";
+					}
+				})),
+				hot.on(this.scroller.head, "scroll", () =>
+				{
+					const e = storyHat.head;
+					
+					if (e.isConnected)
+					{
+						// This check will indicate whether the storyHat has rightward
+						// scrolling inertia. If it does, it's scrolling will halt and it will be
+						// necessary to animate the story hat away manually.
+						if (e.scrollLeft < e.offsetWidth)
+						{
+							const ms = 250;
+							e.style.transitionDuration = ms + "ms";
+							e.style.transitionProperty = "transform";
+							e.style.transform = `translateX(${e.scrollLeft}px)`;
+							e.style.pointerEvents = "none";
+							
+							setTimeout(() =>
+							{
+								storyHat.head.remove();
+								disconnected();
+							},
+							ms);
+							
+							this.showScroller(true);
+						}
+					}
+				})
+			);
+			
+			const disconnected = () =>
+			{
+				this.scrollerBox.style.transitionDuration = transitionDuration;
+				
+				for (const e of Query.ancestors(this.head))
+					if (e instanceof HTMLElement)
+						e.classList.remove(noOverflowClass);
+			}
+			
+			storyHat.disconnected(disconnected);
+			this.head.append(storyHat.head);
+			this.showScroller(false);
+		}
+		
+		/** */
+		private showScroller(show: boolean)
+		{
+			const s = this.scrollerBox.style;
+			s.transitionDuration = transitionDuration;
+			s.opacity = show ? "1" : "0";
+			s.transform = translateZ(show ? "0" : translateZMax + "px");
+		}
 	}
+	
+	const translateZ = (amount: string) => `perspective(10px) translateZ(${amount})`;
+	const translateZMax = -3;
+	
+	const noOverflowClass = hot.css({
+		overflow: "hidden !"
+	});
 }
