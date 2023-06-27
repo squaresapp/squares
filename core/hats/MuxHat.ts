@@ -1,6 +1,7 @@
 
 namespace Rail
 {
+	const canExitLeft = false;
 	const transitionDuration = "0.5s";
 	
 	/** */
@@ -129,7 +130,7 @@ namespace Rail
 					const offsetWidth = Math.ceil(h.offsetWidth);
 					let pct = -1;
 					
-					if (scrollLeft < offsetWidth)
+					if (canExitLeft && scrollLeft < offsetWidth)
 						pct = scrollLeft / offsetWidth;
 					
 					else if (scrollTop < offsetHeight)

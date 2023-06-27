@@ -1,6 +1,8 @@
 
 namespace Rail
 {
+	const canExitLeft = false;
+	
 	/** */
 	export class StoryHat
 	{
@@ -38,7 +40,10 @@ namespace Rail
 					// with no luck.
 					setTimeout(() =>
 					{
-						this.head.scrollTo(this.head.offsetWidth, this.head.offsetHeight);
+						this.head.scrollTo(
+							canExitLeft ? this.head.offsetWidth : 0,
+							this.head.offsetHeight);
+						
 						this.setupScrollTracker();
 					});
 				}),
@@ -46,10 +51,10 @@ namespace Rail
 					{
 						display: "flex",
 						flexWrap: "wrap",
-						width: "200%",
+						width: canExitLeft ? "200%" : "100%",
 					},
 					hot.css("> DIV", {
-						width: "50%",
+						width: canExitLeft ? "50%" : "100%",
 					}),
 					hot.div(
 						"snap-top",
@@ -63,15 +68,13 @@ namespace Rail
 						"owner",
 						snap,
 						Cq.height(50, "head"),
-						{
-							marginLeft: "50%",
-						},
+						canExitLeft ? { marginLeft: "50%" } : null,
 						owner
 					),
 					sections.map(section =>
 					{
 						return [
-							hot.div(
+							canExitLeft && hot.div(
 								"snap-left",
 								snap,
 								Cq.height(100, "head"),
@@ -115,7 +118,7 @@ namespace Rail
 				const w = e.offsetWidth;
 				const h = e.offsetHeight;
 				
-				if (e.scrollLeft < w)
+				if (canExitLeft && e.scrollLeft < w)
 					left = 1 - e.scrollLeft / w;
 				
 				if (e.scrollTop < h / 2)
@@ -143,14 +146,17 @@ namespace Rail
 				clearTimeout(timeoutId);
 				timeoutId = setTimeout(() =>
 				{
-					if (e.scrollLeft !== lastScrollLeft || e.scrollTop !== lastScrollTop)
+					if (canExitLeft && e.scrollLeft !== lastScrollLeft)
+						return;
+					
+					if (e.scrollTop !== lastScrollTop)
 						return;
 					
 					// A more elegant way to deal with this would be to animate
 					// it off the screen... but just removing it is good enough for now
 					// because this is just an edge case that isn't going to happen
 					// very often.
-					if (e.scrollLeft <= 0 ||
+					if (canExitLeft && e.scrollLeft <= 0 ||
 						e.scrollTop <= 0 ||
 						e.scrollTop >= e.scrollHeight - e.offsetHeight)
 					{

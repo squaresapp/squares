@@ -18,19 +18,6 @@ namespace Rail
 		}
 		
 		/** */
-		export function stretchHeight(): Hot.Style
-		{
-			return {
-				height: [
-					"-moz-available",
-					"-webkit-fill-available",
-					"fill-available",
-					"stretch"
-				]
-			};
-		}
-		
-		/** */
 		export function escape(fn: () => void): Hot.Param[]
 		{
 			return [
