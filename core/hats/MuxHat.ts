@@ -152,31 +152,38 @@ namespace Rail
 				{
 					const e = storyHat.head;
 					
-					if (e.isConnected)
-					{
-						// This check will indicate whether the storyHat has rightward
-						// scrolling inertia. If it does, it's scrolling will halt and it will be
-						// necessary to animate the story hat away manually.
-						if (e.scrollLeft < e.offsetWidth)
-						{
-							const ms = 250;
-							e.style.transitionDuration = ms + "ms";
-							e.style.transitionProperty = "transform";
-							e.style.transform = `translateX(${e.scrollLeft}px)`;
-							e.style.pointerEvents = "none";
-							
-							setTimeout(() =>
-							{
-								storyHat.head.remove();
-								disconnected();
-							},
-							ms);
-							
-							this.showScroller(true);
-						}
-					}
+					if (!e.isConnected)
+						return;
+					
+					// This check will indicate whether the storyHat has rightward
+					// scrolling inertia. If it does, it's scrolling will halt and it will be
+					// necessary to animate the story hat away manually.
+					if (e.scrollLeft < e.offsetWidth)
+						slideAway("x", e.scrollLeft);
+					
+					if (e.scrollTop < e.offsetHeight)
+						slideAway("y", e.scrollTop);
 				})
 			);
+			
+			const slideAway = (axis: "x" | "y", amount: number) =>
+			{
+				const ms = 250;
+				const e = storyHat.head;
+				e.style.transitionDuration = ms + "ms";
+				e.style.transitionProperty = "transform";
+				e.style.transform = `translate${axis.toLocaleUpperCase()}(${amount}px)`;
+				e.style.pointerEvents = "none";
+				
+				setTimeout(() =>
+				{
+					storyHat.head.remove();
+					disconnected();
+				},
+				ms);
+				
+				this.showScroller(true);
+			}
 			
 			const disconnected = () =>
 			{
