@@ -205,8 +205,8 @@ namespace Rail
 		{
 			const s = this.scrollerBox.style;
 			s.transitionDuration = transitionDuration;
-			s.opacity = show ? "1" : "0";
 			s.transform = translateZ(show ? "0" : translateZMax + "px");
+			s.opacity = show ? "1" : "0";
 		}
 	}
 	

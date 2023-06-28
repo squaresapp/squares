@@ -18,7 +18,7 @@ namespace Rail
 				},
 				":root", {
 					display: "flex",
-					height: "100%",
+					height: isPwa ? "100vh" : "100dvh",
 					fontSize: "20px",
 					fontFamily: "Inter, -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif",
 					color: "white",

@@ -2,7 +2,6 @@
 declare const DEBUG: boolean;
 declare const ELECTRON: boolean;
 declare const TAURI: boolean;
-declare const PWA: boolean;
 declare const Moduless: { getRunningFunctionName(): string; }
 
 declare namespace Tauri
@@ -48,9 +47,6 @@ if (typeof ELECTRON === "undefined")
 if (typeof TAURI === "undefined")
 	Object.assign(globalThis, { TAURI: typeof window !== "undefined" && typeof (window as any).__TAURI__ !== "undefined" });
 
-if (typeof PWA === "undefined")
-	Object.assign(globalThis, { PWA: typeof window !== "undefined" && !ELECTRON && !TAURI });
-
 if (TAURI)
 {
 	const g = globalThis as any;
@@ -65,4 +61,5 @@ else if (ELECTRON)
 	});
 }
 
+const isPwa = "standalone" in navigator || window.matchMedia("(display-mode: standalone)").matches;
 const hot = new Hot();
