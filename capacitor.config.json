@@ -2,14 +2,8 @@
 	"appId": "org.rail.app",
 	"appName": "Rail",
 	"webDir": "+build",
-	"plugins": {
-		"SplashScreen": {
-			"launchShowDuration": 0
-		}
-	},
 	"server": {
 		"hostname": "localhost",
-		"androidScheme": "https",
-		"url": "https://localhost:8181"
+		"androidScheme": "https"
 	}
 }

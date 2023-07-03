@@ -1,9 +1,7 @@
 {
-	"name": "Rail",
-	"integrations": {
-		"capacitor": {
-			
-		}
-	},
-	"type": "custom"
+  "name": "Rail",
+  "type": "custom",
+  "integrations": {
+    "capacitor": {}
+  }
 }
