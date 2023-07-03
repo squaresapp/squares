@@ -23,8 +23,10 @@
 		]
 	},
 	"exclude": [
+		"vite.config.ts",
 		"**/+build/**/*.ts",
-		"**/tauri/**/*.ts"
+		"**/android/**/*.ts",
+		"**/ios/**/*.ts",
 	],
 	"references": [
 		{ "path": "../Hot" },
