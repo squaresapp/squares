@@ -61,5 +61,10 @@ else if (ELECTRON)
 	});
 }
 
-const isPwa = "standalone" in navigator || window.matchMedia("(display-mode: standalone)").matches;
+const isPwa = 
+	"standalone" in navigator ||
+	window.matchMedia("(display-mode: standalone)").matches;
+
+const isTouch =  matchMedia("(pointer:coarse)").matches;
+
 const hot = new Hot();

@@ -1,8 +1,8 @@
 
+const canExitLeft = !isTouch;
+
 namespace Rail
 {
-	const canExitLeft = false;
-	
 	/** */
 	export class StoryHat
 	{

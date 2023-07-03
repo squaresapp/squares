@@ -1,7 +1,6 @@
 
 namespace Rail
 {
-	const canExitLeft = false;
 	const transitionDuration = "0.5s";
 	
 	/** */
@@ -34,7 +33,7 @@ namespace Rail
 					"scroller-box",
 					{
 						height: "100%",
-						borderRadius: "30px",
+						borderRadius: isTouch ? "30px" : 0,
 						overflow: "hidden",
 						transitionDuration,
 						transitionProperty: "transform, opacity",
@@ -159,10 +158,10 @@ namespace Rail
 					// This check will indicate whether the storyHat has rightward
 					// scrolling inertia. If it does, it's scrolling will halt and it will be
 					// necessary to animate the story hat away manually.
-					if (e.scrollLeft < e.offsetWidth)
+					if (e.scrollLeft > 0 && e.scrollLeft < e.offsetWidth)
 						slideAway("x", e.scrollLeft);
 					
-					if (e.scrollTop < e.offsetHeight)
+					else if (e.scrollTop > 0 && e.scrollTop < e.offsetHeight)
 						slideAway("y", e.scrollTop);
 				})
 			);
