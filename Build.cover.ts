@@ -17,7 +17,7 @@ namespace Rail.Build
 	async function emitIndexHtml(tsConfigName: string)
 	{
 		const indexHtml = [
-			`<DOCTYPE html>`,
+			`<!DOCTYPE html>`,
 			`<meta charset="UTF-8">`,
 			`<meta name="apple-mobile-web-app-capable" content="yes">`,
 			`<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">`,
