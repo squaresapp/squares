@@ -172,7 +172,7 @@ namespace Rail
 				return;
 			
 			const feed = this._feeds[idx];
-			const readResult = await Reels.getFeedFromUrl(feed.feedUrl, feed.size);
+			const readResult = await Syndi.getFeedFromUrl(feed.feedUrl, feed.size);
 			if (readResult.bytesRead === 0)
 				return;
 			

@@ -55,8 +55,8 @@ namespace Rail
 				return (async () =>
 				{
 					const post = this.mux.posts[index];
-					const maybePoster = await Reels.getPosterFromUrl(post.path);
-					return maybePoster || Reels.getErrorPoster();
+					const maybePoster = await Syndi.getPosterFromUrl(post.path);
+					return maybePoster || Syndi.getErrorPoster();
 				})();
 			});
 			
@@ -93,11 +93,11 @@ namespace Rail
 		private async showStory(index: number)
 		{
 			const post = this.mux.posts[index];
-			const reel = await Reels.getReelFromUrl(post.path);
+			const reel = await Syndi.getReelFromUrl(post.path);
 			const sections: HTMLElement[] = [];
 			
 			if (!reel)
-				return void sections.push(Reels.getErrorPoster());
+				return void sections.push(Syndi.getErrorPoster());
 			
 			const ownerHat = new StoryOwnerHat();
 			const storyHat = new StoryHat(reel.sections, ownerHat);

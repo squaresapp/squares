@@ -5,13 +5,13 @@ namespace Rail.Cover
 	export async function coverRailMux()
 	{
 		const feedUrl1 = "http://localhost:10001/beach-sunset/feed.txt";
-		const feed1 = await Reels.getFeedFromUrl(feedUrl1);
+		const feed1 = await Syndi.getFeedFromUrl(feedUrl1);
 		
 		const feedUrl2 = "http://localhost:10001/old-church/feed.txt";
-		const feed2 = await Reels.getFeedFromUrl(feedUrl2);
+		const feed2 = await Syndi.getFeedFromUrl(feedUrl2);
 		
 		const feedUrl3 = "http://localhost:10001/red-flowers/feed.txt";
-		const feed3 = await Reels.getFeedFromUrl(feedUrl3);
+		const feed3 = await Syndi.getFeedFromUrl(feedUrl3);
 		
 		const fila = Fila.new(__dirname, "../+mux.json");
 		const mux = new Mux();

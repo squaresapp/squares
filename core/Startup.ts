@@ -71,7 +71,7 @@ namespace Rail
 		for (const name of files)
 		{
 			const url = src + name;
-			const result = await Reels.getHttpContent(url);
+			const result = await Syndi.getHttpContent(url);
 			if (!result)
 				continue;
 			
