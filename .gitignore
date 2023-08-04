@@ -6,3 +6,4 @@ src-tauri/target
 src-tauri/icons
 src-tauri/gen
 Cargo.lock
+ios/App/App.xcodeproj/project.xcworkspace/xcshareddata/*

@@ -1,0 +1,101 @@
+{
+	"$schema": "../../node_modules/@tauri-apps/cli/schema.json",
+	"build":
+	{
+		"withGlobalTauri": true,
+		"beforeBuildCommand": "",
+		"beforeDevCommand": "",
+		"devPath": "../+build",
+		"distDir": "../+bundle"
+	},
+	"package":
+	{
+		"productName": "Rail",
+		"version": "0.1.0"
+	},
+	"tauri":
+	{
+		"allowlist":
+		{
+			"all": true,
+			"dialog": {
+				"open": true,
+				"message": true
+			},
+			"fs": {
+				"all": true,
+				"scope": ["**"]
+			},
+			"path": {
+				"all": true
+			},
+			"shell": {
+				"open": "^(https?|file)?://"
+			},
+			"window": {
+				"setPosition": true,
+				"setSize": true,
+				"startDragging": true
+			},
+			"protocol": {
+				"all": true,
+				"asset": true,
+				"assetScope": ["**"]
+			}
+		},
+		"bundle":
+		{
+			"active": true,
+			"category": "SocialNetworking",
+			"copyright": "",
+			"deb":
+			{
+				"depends": []
+			},
+			"externalBin": [],
+			"icon": [
+				"icons/32x32.png",
+				"icons/128x128.png",
+				"icons/128x128@2x.png",
+				"icons/icon.icns",
+				"icons/icon.ico"
+			],
+			"identifier": "co.railapp",
+			"longDescription": "",
+			"macOS":
+			{
+				"entitlements": null,
+				"exceptionDomain": "",
+				"frameworks": [],
+				"providerShortName": null,
+				"signingIdentity": null
+			},
+			"resources": [],
+			"shortDescription": "",
+			"targets": "all",
+			"windows":
+			{
+				"certificateThumbprint": null,
+				"digestAlgorithm": "sha256",
+				"timestampUrl": ""
+			}
+		},
+		"security":
+		{
+			"csp": "default-src *; img-src *"
+		},
+		"updater":
+		{
+			"active": false
+		},
+		"windows": [
+		{
+			"fullscreen": false,
+			"height": 800,
+			"resizable": true,
+			"title": "",
+			"width": 600,
+			"titleBarStyle": "Overlay"
+		}]
+	}
+}
