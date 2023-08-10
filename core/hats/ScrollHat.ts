@@ -1,10 +1,10 @@
 
-namespace Rail
+namespace ScrollApp
 {
 	const transitionDuration = "0.5s";
 	
 	/** */
-	export class MuxHat
+	export class ScrollHat
 	{
 		/** */
 		private static async maybeSetupPinger()
@@ -12,7 +12,7 @@ namespace Rail
 			if (this.pinger)
 				return;
 			
-			const pingerFila = await Rail.getPingerFila();
+			const pingerFila = await ScrollApp.getPingerFila();
 			this.pinger = new Pinger.Service(pingerFila.path);
 		}
 		private static pinger: Pinger.Service;
@@ -20,7 +20,7 @@ namespace Rail
 		readonly head;
 		private readonly mux = new Mux();
 		private readonly scrollerBox;
-		private readonly scroller: ScrollerHat;
+		private readonly scroller: TilerHat;
 		
 		/** */
 		constructor()
@@ -44,7 +44,7 @@ namespace Rail
 			Hat.wear(this);
 			
 			this.showScroller(true);
-			this.scroller = new ScrollerHat();
+			this.scroller = new TilerHat();
 			this.scroller.head.style.borderRadius = "inherit";
 			
 			this.scroller.handleRender(index =>
@@ -67,8 +67,8 @@ namespace Rail
 			
 			(async () =>
 			{
-				await MuxHat.maybeSetupPinger();
-				const muxDirectory = await Rail.getAppDataFila();
+				await ScrollHat.maybeSetupPinger();
+				const muxDirectory = await ScrollApp.getAppDataFila();
 				await this.mux.load(muxDirectory);
 				
 				for (const post of this.mux.posts)
@@ -80,7 +80,7 @@ namespace Rail
 						continue;
 					}
 					
-					MuxHat.pinger.set(feed.feedUrl);
+					ScrollHat.pinger.set(feed.feedUrl);
 				}
 				
 			})().then(() =>

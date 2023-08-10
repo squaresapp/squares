@@ -3,6 +3,14 @@
     windows_subsystem = "windows"
 )]
 
+use objc::runtime::{Class, Object, BOOL, YES};
+use objc::{class, msg_send, sel, sel_impl};
+use objc_id::Id;
+use std::ptr;
+
+#[link(name = "AppKit", kind = "framework")]
+extern "C" {}
+
 fn main() {
 	use tauri::{CustomMenuItem, Menu, MenuItem, Submenu};
 	
@@ -60,9 +68,11 @@ fn main() {
 		.plugin(tauri_plugin_window_state::Builder::default().build())
 		.plugin(tauri_plugin_fs_watch::init())
 		.plugin(tauri_plugin_fs_extra::init())
+		.invoke_handler(tauri::generate_handler![get_clipboard_change_count])
 		.menu(main_menu)
 		//.menu(tauri::Menu::os_default(&context.package_info().name))
 		.on_menu_event(move |event| {
+			
 			let win = event.window();
 			let id = event.menu_item_id().to_string();
 			let fmt = format!("
@@ -93,3 +103,23 @@ fn main() {
 		.run(context)
 		.expect("error while running tauri application");
 }
+
+/** */
+#[tauri::command]
+fn get_clipboard_change_count() -> i64 {
+	let cls = match Class::get("NSPasteboard") {
+		Some(cls) => cls,
+		None => return -1,
+	};
+	
+	let pasteboard: *mut Object = unsafe { msg_send![cls, generalPasteboard] };
+	
+	if pasteboard.is_null() {
+		return -1;
+	}
+	
+	let pasteboard: Id<Object> = unsafe { Id::from_ptr(pasteboard) };
+	let change_count: i64 = unsafe { msg_send![pasteboard, changeCount] };
+	change_count.into()
+}
+

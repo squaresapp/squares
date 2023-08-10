@@ -1,10 +1,10 @@
 
-namespace Rail
+namespace ScrollApp
 {
 	/**
 	 * 
 	 */
-	export class ScrollerHat
+	export class TilerHat
 	{
 		/** */
 		readonly head;

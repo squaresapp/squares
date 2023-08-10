@@ -1,5 +1,5 @@
 
-namespace Rail
+namespace ScrollApp
 {
 	/**
 	 * Safely parses a string JSON into an object.
@@ -31,10 +31,12 @@ namespace Rail
 			await fila.writeDirectory();
 			return fila;
 		}
-		else
+		else if (CAPACITOR)
 		{
-			return Fila.new("data");
+			return Fila.new(FilaCapacitor.directory.documents);
 		}
+		
+		throw new Error("Not implemented");
 	}
 	
 	/**

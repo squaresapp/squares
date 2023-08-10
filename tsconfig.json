@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"outFile": "+build/rail.debug.js",
+		"outFile": "+build/scroll.debug.js",
 		"composite": true,
 		"module": "system",
 		"moduleResolution": "node",
@@ -35,11 +35,12 @@
 		{ "path": "../Not" },
 		{ "path": "../Force" },
 		{ "path": "../Fila" },
-		{ "path": "../FilaKeyva" },
+		{ "path": "../FilaCapacitor" },
+		{ "path": "../FilaTauri" },
 		{ "path": "../FilaNode" },
 		{ "path": "../Keyva" },
 		{ "path": "../Pinger" },
-		{ "path": "../Syndi" },
+		{ "path": "../FeedBlit" },
 		{ "path": "../Dock" }
 	]
 }

@@ -1,7 +1,7 @@
 {
 	"extends": "./tsconfig.json",
 	"compilerOptions": {
-		"outFile": "+build/rail.js",
+		"outFile": "+build/scroll.js",
 	},
 	"exclude": [
 		"**/+build/**/*.ts",

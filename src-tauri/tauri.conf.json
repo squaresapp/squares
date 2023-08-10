@@ -10,7 +10,7 @@
 	},
 	"package":
 	{
-		"productName": "Rail",
+		"productName": "ScrollApp",
 		"version": "0.1.0"
 	},
 	"tauri":
@@ -82,7 +82,7 @@
 		},
 		"security":
 		{
-			"csp": "default-src *; img-src *"
+			"csp": "default-src *; img-src *;"
 		},
 		"updater":
 		{

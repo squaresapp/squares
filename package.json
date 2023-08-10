@@ -1,24 +1,25 @@
 {
-	"name": "rail",
+	"name": "scroll-app",
 	"author": "Paul Gordon",
 	"private": true,
 	"description": "An app for sharing without powerful forces controlling you.",
 	"version": "0.0.0",
-	"main": "rail.js",
+	"main": "scroll.js",
 	"scripts": {
 		"ionic:serve": "vite ./+build --host --cors",
 		"ionic:build": "cd .",
 		"ios-dev": "ionic cap run ios --target B3F46420-6EE1-4DCD-803E-E14DB66C0986 --external --livereload",
 		"android-dev": "ionic cap run android --external --livereload",
-		"bundle": "tsc -p tsconfig.release.json && terser ./+build/rail.debug.js > ./+build/rail.min.js"
+		"bundle": "tsc -p tsconfig.release.json && terser ./+build/scroll.debug.js > ./+build/scroll.min.js"
 	},
 	"license": "MIT",
 	"dependencies": {
-		"moduless": "^3.2.5",
-		"@capacitor/core": "latest",
-		"@capacitor/ios": "^5.1.0",
 		"@capacitor/android": "5.1.0",
-		"@capacitor/clipboard": "^5.0.5"
+		"@capacitor/clipboard": "^5.0.5",
+		"@capacitor/core": "latest",
+		"@capacitor/filesystem": "^5.1.1",
+		"@capacitor/ios": "^5.1.0",
+		"moduless": "^3.2.5"
 	},
 	"peerDependencies": {
 		"@capacitor/cli": "^5.1.0",

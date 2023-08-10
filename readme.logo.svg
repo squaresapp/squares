@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="500px" height="500px" viewBox="0 0 500 500" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>Rail</title>
-    <g id="Rail" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <title>ScrollApp</title>
+    <g id="ScrollApp" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <rect id="Rectangle" fill="#59330D" x="0" y="0" width="500" height="500" rx="50"></rect>
         <path d="M274,385 L274,263.5 C274,224.166667 293.333333,204.5 332,204.5 C339.666667,204.5 348,205.166667 357,206.5 L357,206.5 L357,106.5 C318,106.5 288.5,118 268.5,141 L268.5,141 L268.5,111.5 L161,111.5 L161,385 L274,385 Z" id="r" fill="#FFFFFF" fill-rule="nonzero"></path>
     </g>

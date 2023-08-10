@@ -1,5 +1,5 @@
 
-namespace Rail
+namespace ScrollApp
 {
 	/** */
 	export class RootHat
@@ -29,7 +29,11 @@ namespace Rail
 					this.head.style.setProperty(RootHat.cssSwipeVar, `inset(0 0 0 ${pct}%)`);
 				}),
 				
-				hot.get(new MuxHat())(
+				hot.get(new ScrollCreatorHat())(
+					
+				),
+				
+				hot.get(new ScrollHat())(
 					{
 						minWidth: "100%",
 						width: "100%",
@@ -37,15 +41,6 @@ namespace Rail
 						scrollSnapStop: "always",
 					}
 				),
-				
-				hot.get(new FollowersHat())(
-					{
-						minWidth: "100%",
-						width: "100%",
-						scrollSnapAlign: "start",
-						scrollSnapStop: "always",
-					}
-				)
 			);
 			
 			Hat.wear(this);

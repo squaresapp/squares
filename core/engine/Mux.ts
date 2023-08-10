@@ -1,5 +1,5 @@
 
-namespace Rail
+namespace ScrollApp
 {
 	/**
 	 * A class that multiplexes a series of feeds into a single readable stream.
@@ -28,21 +28,21 @@ namespace Rail
 			// Load the about file
 			const aboutFila = baseFila.down(MuxConst.aboutFile);
 			const aboutJson = await aboutFila.readText();
-			let about = Rail.tryParseJson(aboutJson) as IMuxAbout | null;
+			let about = ScrollApp.tryParseJson(aboutJson) as IMuxAbout | null;
 			if (!about)
 				about = { anchorIndex: 0 };
 			
 			// Load the feed file
 			const feedsFila = baseFila.down(MuxConst.feedsFile);
 			const feedsJson = await feedsFila.readText();
-			let feeds = Rail.tryParseJson(feedsJson) as IMuxFeed[];
+			let feeds = ScrollApp.tryParseJson(feedsJson) as IMuxFeed[];
 			if (!feeds)
 				feeds = [];
 			
 			// Load the posts file
 			const postsFila = baseFila.down(MuxConst.postsFile);
 			const postsJson = await postsFila.readText();
-			let posts = Rail.tryParseJson(postsJson) as IMuxPost[];
+			let posts = ScrollApp.tryParseJson(postsJson) as IMuxPost[];
 			if (!posts)
 				posts = [];
 			

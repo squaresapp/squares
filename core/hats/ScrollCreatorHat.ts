@@ -2,7 +2,7 @@
 namespace ScrollApp
 {
 	/** */
-	export class ProfileHat
+	export class ScrollCreatorHat
 	{
 		readonly head;
 		
@@ -12,8 +12,6 @@ namespace ScrollApp
 			this.head = hot.div(
 				
 			);
-			
-			Hat.wear(this);
 		}
 	}
 }

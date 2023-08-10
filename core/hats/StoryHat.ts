@@ -1,7 +1,7 @@
 
 const canExitLeft = !isTouch;
 
-namespace Rail
+namespace ScrollApp
 {
 	/** */
 	export class StoryHat

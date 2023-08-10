@@ -1,11 +1,11 @@
 
-namespace Rail.Cover
+namespace ScrollApp.Cover
 {
 	/** */
-	export function coverScrollerHat()
+	export function coverTilerHat()
 	{
-		Rail.appendCssReset();
-		const hat = new ScrollerHat();
+		ScrollApp.appendCssReset();
+		const hat = new TilerHat();
 		
 		hat.handleRender(index =>
 		{

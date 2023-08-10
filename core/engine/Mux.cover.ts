@@ -1,9 +1,14 @@
 
-namespace Rail.Cover
+namespace ScrollApp.Cover
 {
 	/** */
-	export async function coverRailMux()
+	export async function coverScrollAppMux()
 	{
+		FilaNode.use();
+		
+		const fila = Fila.new(__dirname, "../+mux.json");
+		const mux = new Mux();
+		
 		const feedUrl1 = "http://localhost:10001/beach-sunset/feed.txt";
 		const feed1 = await Syndi.getFeedFromUrl(feedUrl1);
 		
@@ -13,8 +18,6 @@ namespace Rail.Cover
 		const feedUrl3 = "http://localhost:10001/red-flowers/feed.txt";
 		const feed3 = await Syndi.getFeedFromUrl(feedUrl3);
 		
-		const fila = Fila.new(__dirname, "../+mux.json");
-		const mux = new Mux();
 		await mux.load(fila);
 		
 		const feedId1 = mux.addFeed({ feedUrl: feedUrl1 });

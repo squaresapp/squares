@@ -1,5 +1,5 @@
 
-namespace Rail
+namespace ScrollApp
 {
 	/**
 	 * Namespace of functions for container query units.

@@ -1,5 +1,5 @@
 {
-  "name": "Rail",
+  "name": "ScrollApp",
   "type": "custom",
   "integrations": {
     "capacitor": {}

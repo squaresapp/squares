@@ -1,5 +1,5 @@
 
-namespace Rail
+namespace ScrollApp
 {
 	/**
 	 * A namespace of color values that define the color palette

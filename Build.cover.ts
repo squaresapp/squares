@@ -1,5 +1,5 @@
 
-namespace Rail.Build
+namespace ScrollApp.Build
 {
 	/** */
 	export function emitIndexHtmlDebug()
@@ -16,12 +16,14 @@ namespace Rail.Build
 	/** */
 	async function emitIndexHtml(tsConfigName: string)
 	{
+		FilaNode.use();
+		
 		const indexHtml = [
 			`<!DOCTYPE html>`,
 			`<meta charset="UTF-8">`,
 			`<meta name="apple-mobile-web-app-capable" content="yes">`,
 			`<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">`,
-			`<meta name="apple-mobile-web-app-title" content="Rail">`,
+			`<meta name="apple-mobile-web-app-title" content="ScrollApp">`,
 			`<meta name="viewport" content="initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover, width=device-width">`,
 		];
 		
@@ -56,7 +58,7 @@ namespace Rail.Build
 		
 		const outFileName = Fila.new(getOutFile(tsConfigJson)).name;
 		indexHtml.push(`<script src="${outFileName}"></script>`);
-		indexHtml.push(`<script>setTimeout(() => Rail.startup());</script>`);
+		indexHtml.push(`<script>setTimeout(() => ScrollApp.startup());</script>`);
 		await buildFolder.down("index.html").writeText(indexHtml.join("\n"));
 		
 		console.log("Done - " + Moduless.getRunningFunctionName());

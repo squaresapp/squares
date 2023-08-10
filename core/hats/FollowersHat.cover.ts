@@ -1,10 +1,10 @@
 
-namespace Rail
+namespace ScrollApp
 {
 	/** */
 	export function coverFollowersHat()
 	{
-		Rail.appendCssReset();
+		ScrollApp.appendCssReset();
 		const hat = new FollowersHat();
 		document.body.append(hat.head);
 	}

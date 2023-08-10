@@ -1,10 +1,10 @@
 
-namespace Rail.Cover
+namespace ScrollApp.Cover
 {
 	/** */
 	export function coverStoryHat()
 	{
-		Rail.appendCssReset();
+		ScrollApp.appendCssReset();
 		
 		const sections = [
 			hot.div(

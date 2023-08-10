@@ -1,6 +1,6 @@
 {
-	"appId": "org.rail.app",
-	"appName": "Rail",
+	"appId": "org.scrollapp",
+	"appName": "ScrollApp",
 	"webDir": "+build",
 	"server": {
 		"hostname": "localhost",

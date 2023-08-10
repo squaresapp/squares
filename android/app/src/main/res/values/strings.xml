@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Rail</string>
-    <string name="title_activity_main">Rail</string>
-    <string name="package_name">org.rail.app</string>
-    <string name="custom_url_scheme">org.rail.app</string>
+    <string name="app_name">ScrollApp</string>
+    <string name="title_activity_main">ScrollApp</string>
+    <string name="package_name">org.scrollapp</string>
+    <string name="custom_url_scheme">org.scrollapp</string>
 </resources>

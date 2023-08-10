@@ -1,7 +1,7 @@
 [package]
 name = "app"
 version = "0.1.0"
-description = "A Tauri App"
+description = "ScrollApp"
 authors = ["you"]
 license = ""
 repository = ""
@@ -21,11 +21,14 @@ tauri = { version = "1.2.2", features = ["api-all"] }
 tauri-plugin-window-state = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
 tauri-plugin-fs-watch = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
 tauri-plugin-fs-extra = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
+objc = "0.2.7"
+objc_id = "0.1.1"
+cocoa = "0.25.0"
 
 [features]
 # by default Tauri runs in production mode
 # when `tauri dev` runs it is executed with `cargo run --no-default-features` if `devPath` is an URL
-default = [ "custom-protocol" ]
+default = ["custom-protocol"]
 # this feature is used for production builds where `devPath` points to the filesystem
 # DO NOT remove this
-custom-protocol = [ "tauri/custom-protocol" ]
+custom-protocol = ["tauri/custom-protocol"]

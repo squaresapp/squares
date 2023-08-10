@@ -2,7 +2,17 @@
 declare const DEBUG: boolean;
 declare const ELECTRON: boolean;
 declare const TAURI: boolean;
+declare const MACOS: boolean;
+declare const IOS: boolean;
+declare const ANDROID: boolean;
+declare const CAPACITOR: boolean;
 declare const Moduless: { getRunningFunctionName(): string; }
+
+declare namespace Electron
+{
+	export const fs: typeof import("fs");
+	export const path: typeof import("path");
+}
 
 declare namespace Tauri
 {
@@ -24,10 +34,9 @@ declare namespace Tauri
 	export const window: typeof import("@tauri-apps/api").window;
 }
 
-declare namespace Electron
+declare const Capacitor: typeof import("@capacitor/core").Capacitor &
 {
-	export const fs: typeof import("fs");
-	export const path: typeof import("path");
+	platform: string;
 }
 
 // The globalThis value isn't available in Safari, so a polyfill is necessary:
@@ -47,12 +56,19 @@ if (typeof ELECTRON === "undefined")
 if (typeof TAURI === "undefined")
 	Object.assign(globalThis, { TAURI: typeof window !== "undefined" && typeof (window as any).__TAURI__ !== "undefined" });
 
-if (TAURI)
-{
-	const g = globalThis as any;
-	g.Tauri = g.__TAURI__;
-}
-else if (ELECTRON)
+if (typeof MACOS === "undefined")
+	Object.assign(globalThis, { MACOS: (navigator.platform || "").indexOf("Mac") === 0 });
+
+if (typeof IOS === "undefined")
+	Object.assign(globalThis, { IOS: navigator.platform.startsWith("iP") });
+
+if (typeof ANDROID === "undefined")
+	Object.assign(globalThis, { ANDROID: navigator.userAgent.includes("Android") });
+
+if (typeof CAPACITOR === "undefined")
+	Object.assign(globalThis, { CAPACITOR: IOS || ANDROID });
+
+if (ELECTRON)
 {
 	const g = globalThis as any;
 	g.Electron = Object.freeze({
@@ -60,11 +76,15 @@ else if (ELECTRON)
 		path: require("path")
 	});
 }
+else if (TAURI)
+{
+	const g = globalThis as any;
+	g.Tauri = g.__TAURI__;
+}
 
 const isPwa = 
 	"standalone" in navigator ||
 	window.matchMedia("(display-mode: standalone)").matches;
 
 const isTouch =  matchMedia("(pointer:coarse)").matches;
-
 const hot = new Hot();

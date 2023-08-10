@@ -1,5 +1,5 @@
 
-namespace Rail
+namespace ScrollApp
 {
 	/** */
 	export enum Origin

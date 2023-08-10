@@ -1,5 +1,5 @@
 
-namespace Rail
+namespace ScrollApp
 {
 	/**
 	 * A namespace of functions that produce generic CSS

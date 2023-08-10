@@ -1,5 +1,5 @@
 
-namespace Rail
+namespace ScrollApp
 {
 	/**
 	 * This is the main entry point of the app.
@@ -7,20 +7,29 @@ namespace Rail
 	 */
 	export async function startup()
 	{
-		if (!ELECTRON)
+		if (ELECTRON)
+			FilaNode.use();
+		
+		else if (TAURI)
+			FilaTauri.use();
+		
+		else if (CAPACITOR)
+			FilaCapacitor.use();
+		
+		if (DEBUG && CAPACITOR)
 		{
-			FilaKeyva.use();
-			
-			if (DEBUG)
-				await debugGetAppDataFiles();
+			await debugGetAppDataFiles();
+			connectDebugRefreshTool();
 		}
 		
-		Rail.appendCssReset();
+		ScrollApp.appendCssReset();
 		const rootHat = new RootHat();
 		document.body.append(rootHat.head);
 		
-		if (DEBUG && !ELECTRON)
-			connectDebugRefreshTool();
+		TAURI && window.addEventListener("focus", () =>
+		{
+			
+		});
 	}
 	
 	//@ts-ignore
@@ -75,8 +84,7 @@ namespace Rail
 			if (!result)
 				continue;
 			
-			// This should be FilaKeyva
-			const baseFila = await Rail.getAppDataFila();
+			const baseFila = await ScrollApp.getAppDataFila();
 			const saveFila = baseFila.down(name);
 			await saveFila.writeText(result.text);
 		}
@@ -84,4 +92,4 @@ namespace Rail
 }
 
 //@ts-ignore
-if (typeof module === "object") Object.assign(module.exports, { Rail });
+if (typeof module === "object") Object.assign(module.exports, { ScrollApp });
