@@ -19,6 +19,7 @@
 		"@capacitor/core": "latest",
 		"@capacitor/filesystem": "^5.1.1",
 		"@capacitor/ios": "^5.1.0",
+		"@tauri-apps/api": "^1.4.0",
 		"moduless": "^3.2.5"
 	},
 	"peerDependencies": {

@@ -39,6 +39,7 @@ namespace ScrollApp
 		readonly posts: PostJson[] = [];
 	}
 	
+	/** */
 	export interface IFeedJson
 	{
 		/**

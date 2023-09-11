@@ -80,7 +80,7 @@ namespace ScrollApp
 		for (const name of files)
 		{
 			const url = src + name;
-			const result = await Syndi.getHttpContent(url);
+			const result = await FeedBlit.getHttpContent(url);
 			if (!result)
 				continue;
 			

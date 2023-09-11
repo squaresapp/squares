@@ -10,13 +10,13 @@ namespace ScrollApp.Cover
 		const mux = new Mux();
 		
 		const feedUrl1 = "http://localhost:10001/beach-sunset/feed.txt";
-		const feed1 = await Syndi.getFeedFromUrl(feedUrl1);
+		const feed1 = await FeedBlit.getFeedFromUrl(feedUrl1);
 		
 		const feedUrl2 = "http://localhost:10001/old-church/feed.txt";
-		const feed2 = await Syndi.getFeedFromUrl(feedUrl2);
+		const feed2 = await FeedBlit.getFeedFromUrl(feedUrl2);
 		
 		const feedUrl3 = "http://localhost:10001/red-flowers/feed.txt";
-		const feed3 = await Syndi.getFeedFromUrl(feedUrl3);
+		const feed3 = await FeedBlit.getFeedFromUrl(feedUrl3);
 		
 		await mux.load(fila);
 		

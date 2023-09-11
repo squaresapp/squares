@@ -16,7 +16,7 @@
 		{ "path": "../FilaNode" },
 		{ "path": "../FilaTauri" },
 		{ "path": "../Pinger" },
-		{ "path": "../Syndi" },
+		{ "path": "../FeedBlit" },
 		{ "path": "../Dock" },
 	]
 }

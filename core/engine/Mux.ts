@@ -172,7 +172,7 @@ namespace ScrollApp
 				return;
 			
 			const feed = this._feeds[idx];
-			const readResult = await Syndi.getFeedFromUrl(feed.feedUrl, feed.size);
+			const readResult = await FeedBlit.getFeedFromUrl(feed.feedUrl, feed.size);
 			if (readResult.bytesRead === 0)
 				return;
 			

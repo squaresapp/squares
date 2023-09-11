@@ -2,7 +2,7 @@
 namespace ScrollApp.Cover
 {
 	/** */
-	export async function coverScrollAppJson()
+	export async function coverJson()
 	{
 		
 	}

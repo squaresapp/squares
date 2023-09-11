@@ -24,7 +24,7 @@
 	},
 	"exclude": [
 		"vite.config.ts",
-		"**/+build/**/*.ts",
+		"**/+*/**/*.ts",
 		"**/android/**/*.ts",
 		"**/ios/**/*.ts",
 	],

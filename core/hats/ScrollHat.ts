@@ -55,8 +55,8 @@ namespace ScrollApp
 				return (async () =>
 				{
 					const post = this.mux.posts[index];
-					const maybePoster = await Syndi.getPosterFromUrl(post.path);
-					return maybePoster || Syndi.getErrorPoster();
+					const maybePoster = await FeedBlit.getPosterFromUrl(post.path);
+					return maybePoster || FeedBlit.getErrorPoster();
 				})();
 			});
 			
@@ -93,11 +93,11 @@ namespace ScrollApp
 		private async showStory(index: number)
 		{
 			const post = this.mux.posts[index];
-			const reel = await Syndi.getReelFromUrl(post.path);
+			const reel = await FeedBlit.getReelFromUrl(post.path);
 			const sections: HTMLElement[] = [];
 			
 			if (!reel)
-				return void sections.push(Syndi.getErrorPoster());
+				return void sections.push(FeedBlit.getErrorPoster());
 			
 			const ownerHat = new StoryOwnerHat();
 			const storyHat = new StoryHat(reel.sections, ownerHat);
