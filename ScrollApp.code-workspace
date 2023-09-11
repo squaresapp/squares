@@ -96,6 +96,28 @@
 					"isDefault": true
 				},
 				"isBackground": true
+			},
+			{
+				"label": "Set Active Cover Function",
+				"type": "shell",
+				"command": "node",
+				"args": [
+					"${workspaceFolder}/node_modules/moduless/build/moduless.js",
+					"set",
+					"${file}:${lineNumber}"
+				],
+				"problemMatcher": []
+			},
+			{
+				"label": "Run All Cover Functions",
+				"type": "shell",
+				"command": "${workspaceFolder}/node_modules/.bin/electron",
+				"args": [
+					"${workspaceFolder}/node_modules/moduless/build/moduless.js",
+					"moduless",
+					"all"
+				],
+				"problemMatcher": []
 			}
 		]
 	}
