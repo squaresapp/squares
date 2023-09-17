@@ -23,7 +23,7 @@ namespace ScrollApp.Build
 			`<meta charset="UTF-8">`,
 			`<meta name="apple-mobile-web-app-capable" content="yes">`,
 			`<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">`,
-			`<meta name="apple-mobile-web-app-title" content="ScrollApp">`,
+			`<meta name="apple-mobile-web-app-title" content="Scroll">`,
 			`<meta name="viewport" content="initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover, width=device-width">`,
 		];
 		

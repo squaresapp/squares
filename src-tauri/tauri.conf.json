@@ -10,7 +10,7 @@
 	},
 	"package":
 	{
-		"productName": "ScrollApp",
+		"productName": "Scroll",
 		"version": "0.1.0"
 	},
 	"tauri":

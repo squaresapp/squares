@@ -8,9 +8,10 @@
 	"scripts": {
 		"ionic:serve": "vite ./+build --host --cors",
 		"ionic:build": "cd .",
-		"ios-dev": "ionic cap run ios --target B3F46420-6EE1-4DCD-803E-E14DB66C0986 --external --livereload",
+		"ios-dev": "ionic cap run ios --external --livereload --target B3F46420-6EE1-4DCD-803E-E14DB66C0986",
 		"android-dev": "ionic cap run android --external --livereload",
-		"bundle": "tsc -p tsconfig.release.json && terser ./+build/scroll.debug.js > ./+build/scroll.min.js"
+		"icons": "npx @capacitor/assets generate --ios --android",
+		"bundle": "npm run icons && tsc -p tsconfig.release.json && terser ./+build/scroll.debug.js > ./+build/scroll.min.js"
 	},
 	"license": "MIT",
 	"dependencies": {
@@ -25,5 +26,8 @@
 	"peerDependencies": {
 		"@capacitor/cli": "^5.1.0",
 		"vite": "^2.9.13"
+	},
+	"devDependencies": {
+		"@capacitor/assets": "^2.0.4"
 	}
 }

@@ -1,6 +1,6 @@
 {
 	"appId": "org.scrollapp",
-	"appName": "ScrollApp",
+	"appName": "Scroll",
 	"webDir": "+build",
 	"server": {
 		"hostname": "localhost",

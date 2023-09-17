@@ -1,5 +1,5 @@
 {
-  "name": "ScrollApp",
+  "name": "Scroll",
   "type": "custom",
   "integrations": {
     "capacitor": {}
