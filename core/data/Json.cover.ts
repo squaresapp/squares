@@ -4,6 +4,7 @@ namespace ScrollApp.Cover
 	/** */
 	export async function coverJson()
 	{
+		FilaNode.use();
 		const app = new Data.AppJson();
 		app.scrolls.push(createScroll(), createScroll());
 		await app.write();
