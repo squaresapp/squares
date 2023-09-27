@@ -4,7 +4,7 @@ namespace ScrollApp
 	/**
 	 * A class that multiplexes a series of feeds into a single readable stream.
 	 */
-	export class Mux
+	export class ScrollProvider
 	{
 		/** */
 		constructor() { }

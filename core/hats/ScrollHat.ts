@@ -18,7 +18,7 @@ namespace ScrollApp
 		private static pinger: Pinger.Service;
 		
 		readonly head;
-		private readonly mux = new Mux();
+		private readonly scrollProvider = new ScrollProvider();
 		private readonly scrollerBox;
 		private readonly scroller: TilerHat;
 		
@@ -49,12 +49,12 @@ namespace ScrollApp
 			
 			this.scroller.handleRender(index =>
 			{
-				if (index >= this.mux.posts.length)
+				if (index >= this.scrollProvider.posts.length)
 					return null;
 				
 				return (async () =>
 				{
-					const post = this.mux.posts[index];
+					const post = this.scrollProvider.posts[index];
 					const maybePoster = await FeedBlit.getPosterFromUrl(post.path);
 					return maybePoster || FeedBlit.getErrorPoster();
 				})();
@@ -69,11 +69,11 @@ namespace ScrollApp
 			{
 				await ScrollHat.maybeSetupPinger();
 				const muxDirectory = await ScrollApp.getAppDataFila();
-				await this.mux.load(muxDirectory);
+				await this.scrollProvider.load(muxDirectory);
 				
-				for (const post of this.mux.posts)
+				for (const post of this.scrollProvider.posts)
 				{
-					const feed = this.mux.getFeed(post.feedId);
+					const feed = this.scrollProvider.getFeed(post.feedId);
 					if (!feed)
 					{
 						console.error("Feed not found for post: " + post.path);
@@ -92,7 +92,7 @@ namespace ScrollApp
 		/** */
 		private async showStory(index: number)
 		{
-			const post = this.mux.posts[index];
+			const post = this.scrollProvider.posts[index];
 			const reel = await FeedBlit.getReelFromUrl(post.path);
 			const sections: HTMLElement[] = [];
 			

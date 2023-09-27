@@ -11,9 +11,13 @@ namespace ScrollApp.Data
 		static async read()
 		{
 			const fila = await this.getFila();
+			
+			if (!fila.exists())
+				return <IScrollJsonFile>{ scrolls: [] };
+			
 			const appJsonText = await fila.readText();
 			const appJson = <IScrollJsonFile>(ScrollApp.tryParseJson(appJsonText) || { scrolls: [] });
-			
+			return appJson
 		}
 		
 		/** */
