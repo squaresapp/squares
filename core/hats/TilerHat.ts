@@ -20,11 +20,12 @@ namespace ScrollApp
 					minHeight: "100%",
 					overflowY: "auto",
 				},
+				UI.stretch(),
 				hot.css("> ." + Class.poster, {
 					display: "none",
 					position: "absolute",
-					width: "100vw",
-					height: "100vh",
+					width: "100%",
+					height: "100%",
 					overflow: "hidden",
 					outline: "2px solid black",
 					...Style.clickable,
@@ -292,9 +293,8 @@ namespace ScrollApp
 					}
 					
 					const mul = getIndex(e) > 0 ? 1 : -1;
-					const vh = (100 * this.rowOf(e) * mul || 0).toFixed(5);
-					e.style.top = `calc(${vh}dvh / var(${Class.sizeVar}))`;
-					e.style.top ||= `calc(${vh}vh / var(${Class.sizeVar}))`;
+					const pct = (100 * this.rowOf(e) * mul || 0).toFixed(5);
+					e.style.top = `calc(${pct}% / var(${Class.sizeVar}))`;
 					e.classList.add(Class.hasCssTop, showClass);
 					
 					elementsWithTop.delete(e);
@@ -430,7 +430,7 @@ namespace ScrollApp
 			{
 				params.push(
 					` .${sizeClass} > DIV:nth-of-type(${size}n + ${n + 1})`, {
-						left: (scale * 100 * n) + "vw",
+						left: (scale * 100 * n) + "%",
 						transform: `scale(${scale.toFixed(4)})`,
 						transformOrigin: "0 0",
 					}

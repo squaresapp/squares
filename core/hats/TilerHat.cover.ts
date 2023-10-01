@@ -5,19 +5,34 @@ namespace ScrollApp.Cover
 	export function coverTilerHat()
 	{
 		ScrollApp.appendCssReset();
-		const hat = new TilerHat();
+		const tilerHat = new TilerHat();
 		
-		hat.handleRender(index =>
+		tilerHat.handleRender(index =>
 		{
 			return generateFakeScene("Post " + index);
 		});
 		
-		hat.handleSelect((e, index) =>
+		tilerHat.handleSelect((e, index) =>
 		{
 			console;
 		});
 		
-		document.body.append(hat.head);
+		const container = hot.div(
+			{
+				position: "absolute",
+				top: 0,
+				left: 0,
+				bottom: 0,
+				right: 0,
+				width: "80vw",
+				height: "80vh",
+				margin: "auto",
+				outline: "10px solid white",
+			},
+			tilerHat
+		);
+		
+		document.body.append(container);
 	}
 	
 	/** */
