@@ -82,7 +82,7 @@ namespace ScrollApp
 				feeds: this.feeds.map(f => f.id),
 			};
 			
-			await scrollFila.writeText(JSON.stringify(scrollJson));
+			await scrollFila.down(scrollJsonName).writeText(JSON.stringify(scrollJson));
 			return scrollFila;
 		}
 		
@@ -92,7 +92,8 @@ namespace ScrollApp
 			const scrollFila = await getScrollDirectory(this.identifier);
 			const fileName = this.getContainingFileName(postJson.dateFound);
 			const postsFila = scrollFila.down(fileName);
-			const posts = await readPostsFile(postsFila);
+			const postsExists = await postsFila.exists();
+			const posts = postsExists ? await readPostsFile(postsFila) : [];
 			let postIndex = posts.findIndex(p => p.dateFound === postJson.dateFound);
 			
 			// If the post does not exist within the file, then it simply gets
@@ -177,5 +178,6 @@ namespace ScrollApp
 		feeds: number[];
 	}
 	
+	const scrollJsonName = "scroll.json";
 	const feedsJsonName = "feeds.json";
 }
