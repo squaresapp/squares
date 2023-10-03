@@ -6,6 +6,7 @@
 	"version": "0.0.0",
 	"main": "scroll.js",
 	"scripts": {
+		"serve-feeds": "vite ./+feeds --host --cors --port 43332",
 		"ionic:serve": "vite ./+build --host --cors",
 		"ionic:build": "cd .",
 		"ios-dev": "ionic cap run ios --external --livereload --target B3F46420-6EE1-4DCD-803E-E14DB66C0986",

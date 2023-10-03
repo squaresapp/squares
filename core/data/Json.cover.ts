@@ -8,9 +8,8 @@ namespace ScrollApp.Cover
 		const appJson = new AppJson();
 		const scroll1 = createScrollJson();
 		const scroll2 = createScrollJson();
-		appJson.addScroll(scroll1.identifier);
-		appJson.addScroll(scroll2.identifier);
-		await appJson.write();
+		await appJson.addScroll(scroll1.identifier);
+		await appJson.addScroll(scroll2.identifier);
 	}
 	
 	/** */
