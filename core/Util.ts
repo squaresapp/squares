@@ -16,7 +16,7 @@ namespace ScrollApp
 	}
 	
 	/**
-	 * Returns the environment-specific path to the application data folder
+	 * Returns the environment-specific path to the application data folder.
 	 */
 	export async function getAppDataFila()
 	{
