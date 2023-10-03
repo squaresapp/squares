@@ -4,7 +4,7 @@ namespace ScrollApp
 	const transitionDuration = "0.5s";
 	
 	/** */
-	export class ScrollHat
+	export class ScrollViewerHat
 	{
 		/** */
 		private static async maybeSetupPinger()
@@ -18,12 +18,12 @@ namespace ScrollApp
 		private static pinger: Pinger.Service;
 		
 		readonly head;
-		private readonly scrollProvider = new ScrollProvider();
+		//private readonly scrollProvider = new ScrollProvider();
 		private readonly scrollerBox;
-		private readonly scroller: TilerHat;
+		private readonly grid: GridHat;
 		
 		/** */
-		constructor()
+		constructor(private readonly scrollJson: ScrollJson)
 		{
 			this.head = hot.div(
 				{
@@ -44,34 +44,36 @@ namespace ScrollApp
 			Hat.wear(this);
 			
 			this.showScroller(true);
-			this.scroller = new TilerHat();
-			this.scroller.head.style.borderRadius = "inherit";
+			this.grid = new GridHat();
+			this.grid.head.style.borderRadius = "inherit";
 			
-			this.scroller.handleRender(index =>
+			this.grid.handleRender(index =>
 			{
-				if (index >= this.scrollProvider.posts.length)
+				const post = scrollJson.getPost(index);
+				if (post === null)
 					return null;
 				
 				return (async () =>
 				{
-					const post = this.scrollProvider.posts[index];
 					const maybePoster = await FeedBlit.getPosterFromUrl(post.path);
 					return maybePoster || FeedBlit.getErrorPoster();
 				})();
 			});
 			
-			this.scroller.handleSelect(async (e, index) =>
+			this.grid.handleSelect(async (e, index) =>
 			{
 				this.showStory(index);
 			});
 			
 			(async () =>
 			{
-				await ScrollHat.maybeSetupPinger();
+				/*
+				//! This code is trying to setup pinging in the wrong place
+				await ScrollViewerHat.maybeSetupPinger();
 				const muxDirectory = await ScrollApp.getAppDataFila();
 				await this.scrollProvider.load(muxDirectory);
 				
-				for (const post of this.scrollProvider.posts)
+				for (const post of scrollJson.getPosts())
 				{
 					const feed = this.scrollProvider.getFeed(post.feedId);
 					if (!feed)
@@ -80,19 +82,23 @@ namespace ScrollApp
 						continue;
 					}
 					
-					ScrollHat.pinger.set(feed.feedUrl);
+					ScrollViewerHat.pinger.set(feed.feedUrl);
 				}
+				*/
 				
 			})().then(() =>
 			{
-				this.scrollerBox.append(this.scroller.head);
+				this.scrollerBox.append(this.grid.head);
 			});
 		}
 		
 		/** */
 		private async showStory(index: number)
 		{
-			const post = this.scrollProvider.posts[index];
+			const post = this.scrollJson.getPost(index);
+			if (!post)
+				throw new Error();
+			
 			const reel = await FeedBlit.getReelFromUrl(post.path);
 			const sections: HTMLElement[] = [];
 			
@@ -148,7 +154,7 @@ namespace ScrollApp
 							s.pointerEvents = "all";
 					}
 				})),
-				hot.on(this.scroller.head, "scroll", () =>
+				hot.on(this.grid.head, "scroll", () =>
 				{
 					const e = storyHat.head;
 					

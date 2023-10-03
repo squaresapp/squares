@@ -6,6 +6,7 @@ namespace ScrollApp
 	{
 		static readonly cssSwipeVar = "--horizontal-swipe-amount";
 		readonly head;
+		private readonly scrollsMarker: Comment;
 		
 		/** */
 		constructor()
@@ -30,20 +31,34 @@ namespace ScrollApp
 				}),
 				
 				hot.get(new ScrollCreatorHat())(
-					
+					//?
 				),
 				
-				hot.get(new ScrollHat())(
+				this.scrollsMarker = document.createComment(""),
+			);
+			
+			Hat.wear(this);
+			this.construct();
+		}
+		
+		/** */
+		private async construct()
+		{
+			const appJson = await AppJson.read();
+			const scrollJsons = await appJson.readScrolls();
+			const nodes = scrollJsons.map(json =>
+			{
+				return hot.get(new ScrollViewerHat(json))(
 					{
 						minWidth: "100%",
 						width: "100%",
 						scrollSnapAlign: "start",
 						scrollSnapStop: "always",
 					}
-				),
-			);
+				).head
+			});
 			
-			Hat.wear(this);
+			this.scrollsMarker.replaceWith(...nodes);
 		}
 	}
 }
