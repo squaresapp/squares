@@ -1,6 +1,12 @@
 
-namespace ScrollApp.Data
+namespace ScrollApp
 {
+	/** */
+	interface IAppJson
+	{
+		scrolls: string[];
+	}
+	
 	/**
 	 * A class that describes the JSON file that stores information
 	 * specific to the app's configuration.
@@ -13,38 +19,69 @@ namespace ScrollApp.Data
 			const fila = await this.getFila();
 			
 			if (!fila.exists())
-				return <IScrollJsonFile>{ scrolls: [] };
+				return new AppJson();
 			
 			const appJsonText = await fila.readText();
-			const appJson = <IScrollJsonFile>(ScrollApp.tryParseJson(appJsonText) || { scrolls: [] });
-			return appJson
+			const appJson = <IAppJson>ScrollApp.tryParseJson(appJsonText) || { scrolls: [] };
+			return new AppJson(appJson.scrolls);
 		}
 		
 		/** */
 		private static async getFila()
 		{
-			const fila = await Data.getBaseFila();
+			const fila = await ScrollApp.getAppDataFila();
 			return fila.down(appJsonName);
+		}
+		
+		/** */
+		constructor(
+			private readonly scrolls: string[] = []
+		) { }
+		
+		/** */
+		async addScroll(identifier: string)
+		{
+			this.scrolls.push(identifier);
+			await this.write();
+		}
+		
+		/** */
+		async removeScroll(identifier: string)
+		{
+			for (let i = this.scrolls.length; i-- > 0;)
+				if (this.scrolls[i] === identifier)
+					this.scrolls.splice(i, 1);
+			
+			await this.write();
+		}
+		
+		/** */
+		async moveScroll(identifier: string, targetIndex: number)
+		{
+			const srcIndex = this.scrolls.findIndex(s => s === identifier);
+			if (srcIndex < 0)
+				return;
+			
+			this.scrolls.splice(srcIndex, 1);
+			this.scrolls.splice(targetIndex, 0, identifier);
+			await this.write();
+		}
+		
+		/** */
+		async readScrolls()
+		{
+			const promises = this.scrolls.map(id => ScrollJson.read(id));
+			const jsons = await Promise.all(promises);
+			return jsons;
 		}
 		
 		/** */
 		async write()
 		{
-			const scrolls = this.scrolls.map(s => s.identifier);
-			const promises = this.scrolls.map(s => s.write());
-			const json = JSON.stringify({ scrolls });
+			const json = JSON.stringify({ scrolls: this.scrolls });
 			const fila = await AppJson.getFila();
-			promises.push(fila.writeText(json));
-			await Promise.all(promises);
+			await fila.writeText(json);
 		}
-		
-		readonly scrolls: ScrollJson[] = [];
-	}
-	
-	/** */
-	interface IScrollJsonFile
-	{
-		scrolls: string[];
 	}
 	
 	const appJsonName = "app.json";
