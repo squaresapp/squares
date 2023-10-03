@@ -76,7 +76,7 @@ namespace ScrollApp
 		}
 		
 		/** */
-		async write()
+		private async write()
 		{
 			const json = JSON.stringify({ scrolls: this.scrolls });
 			const fila = await AppJson.getFila();
