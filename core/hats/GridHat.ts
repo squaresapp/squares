@@ -4,7 +4,7 @@ namespace ScrollApp
 	/**
 	 * 
 	 */
-	export class TilerHat
+	export class GridHat
 	{
 		/** */
 		readonly head;

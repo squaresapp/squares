@@ -5,14 +5,14 @@ namespace ScrollApp.Cover
 	export function coverTilerHat()
 	{
 		ScrollApp.appendCssReset();
-		const tilerHat = new TilerHat();
+		const gridHat = new GridHat();
 		
-		tilerHat.handleRender(index =>
+		gridHat.handleRender(index =>
 		{
 			return generateFakeScene("Post " + index);
 		});
 		
-		tilerHat.handleSelect((e, index) =>
+		gridHat.handleSelect((e, index) =>
 		{
 			console;
 		});
@@ -29,7 +29,7 @@ namespace ScrollApp.Cover
 				margin: "auto",
 				outline: "10px solid white",
 			},
-			tilerHat
+			gridHat
 		);
 		
 		document.body.append(container);
