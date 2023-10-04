@@ -158,7 +158,7 @@ namespace ScrollApp
 					// very often.
 					if (canExitLeft && e.scrollLeft <= 0 ||
 						e.scrollTop <= 0 ||
-						e.scrollTop >= e.scrollHeight - e.offsetHeight)
+						e.scrollTop >= e.scrollHeight - e.offsetHeight - 10)
 					{
 						e.remove();
 						this._disconnected();
