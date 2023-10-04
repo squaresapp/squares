@@ -6,8 +6,15 @@ namespace ScrollApp.Cover
 	{
 		FilaNode.use();
 		const urlBase = "http://localhost:43332/";
-		const scrollJson = new ScrollJson({ identifier: "scroll-id" });
-		const appJson = new AppJson([scrollJson.identifier]);
+		const identifier = "scroll-id";
+		
+		const appDataFila = await ScrollApp.getAppDataFila();
+		const scrollFila = appDataFila.down(identifier);
+		if (await scrollFila.exists())
+			await scrollFila.delete();
+		
+		const scrollJson = new ScrollJson({ identifier });
+		const appJson = new AppJson();
 		appJson.addScroll(scrollJson.identifier);
 		
 		const feedPaths = [
@@ -52,9 +59,7 @@ namespace ScrollApp.Cover
 			
 			const feedJsons = feeds[indexOfList];
 			const feedDirectory = FeedBlit.Url.folderOf(feedJsons.feedUrl);
-			const path = urlList[indexWithinList]
-				.slice(feedDirectory.length)
-				.replace(/\/$/, "");
+			const path = urlList[indexWithinList].slice(feedDirectory.length);
 			
 			await scrollJson.writePost({
 				seen: false,

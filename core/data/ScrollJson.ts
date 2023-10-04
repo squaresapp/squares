@@ -15,19 +15,27 @@ namespace ScrollApp
 		/** */
 		static async read(identifier: string)
 		{
-			const scrollFila = await getScrollDirectory(identifier);
+			const scrollDirFila = await getScrollDirectory(identifier);
+			
+			const scrollFila = scrollDirFila.down(scrollJsonName);
+			if (!await scrollFila.exists())
+				return new ScrollJson();
+			
 			const scrollJsonText = await scrollFila.readText();
 			const scrollJsonPartial = JSON.parse(scrollJsonText);
 			const scrollJson = new ScrollJson(scrollJsonPartial);
 			
 			// Read the feeds
-			const feedsFila = scrollFila.down(feedsJsonName);
-			const feedsJsonText = await feedsFila.readText();
-			const feedsJson = <IFeedJson[]>tryParseJson(feedsJsonText) || [];
-			scrollJson.feeds = feedsJson;
+			const feedsFila = scrollDirFila.down(feedsJsonName);
+			if (await feedsFila.exists())
+			{
+				const feedsJsonText = await feedsFila.readText();
+				const feedsJson = <IFeedJson[]>tryParseJson(feedsJsonText) || [];
+				scrollJson.feeds = feedsJson;
+			}
 			
 			// Read the posts
-			const contents = await scrollFila.readDirectory();
+			const contents = await scrollDirFila.readDirectory();
 			for (let i = contents.length; i-- > 0;)
 			{
 				const reg = /^\d{4}-\d{2}-\d{2}\.json$/;
@@ -129,6 +137,20 @@ namespace ScrollApp
 		getPosts(): readonly IPostJson[]
 		{
 			return this.posts;
+		}
+		
+		/**
+		 * Gets the fully qualified URL where the post resides, which is calculated
+		 * by concatenating the post path with the containing feed URL.
+		 */
+		getPostUrl(post: IPostJson)
+		{
+			const feed = this.feeds.find(feed => feed.id === post.feedId);
+			if (!feed)
+				return null;
+			
+			const feedFolder = FeedBlit.Url.folderOf(feed.feedUrl);
+			return feedFolder + post.path;
 		}
 		
 		/** */

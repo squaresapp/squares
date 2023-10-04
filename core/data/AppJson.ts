@@ -70,8 +70,11 @@ namespace ScrollApp
 		/** */
 		async readScrolls()
 		{
-			const promises = this.scrolls.map(id => ScrollJson.read(id));
-			const jsons = await Promise.all(promises);
+			const jsons: ScrollJson[] = [];
+			
+			for (const id of this.scrolls)
+				jsons.push(await ScrollJson.read(id));
+			
 			return jsons;
 		}
 		

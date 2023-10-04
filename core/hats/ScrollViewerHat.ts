@@ -18,7 +18,6 @@ namespace ScrollApp
 		private static pinger: Pinger.Service;
 		
 		readonly head;
-		//private readonly scrollProvider = new ScrollProvider();
 		private readonly scrollerBox;
 		private readonly grid: GridHat;
 		
@@ -53,9 +52,13 @@ namespace ScrollApp
 				if (post === null)
 					return null;
 				
+				const postUrl = scrollJson.getPostUrl(post);
+				if (!postUrl)
+					return null;
+				
 				return (async () =>
 				{
-					const maybePoster = await FeedBlit.getPosterFromUrl(post.path);
+					const maybePoster = await FeedBlit.getPosterFromUrl(postUrl);
 					return maybePoster || FeedBlit.getErrorPoster();
 				})();
 			});
