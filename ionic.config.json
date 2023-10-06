@@ -1,7 +1,7 @@
 {
-  "name": "Scroll",
-  "type": "custom",
-  "integrations": {
-    "capacitor": {}
-  }
+	"name": "Scroll",
+	"type": "custom",
+	"integrations": {
+		"capacitor": {}
+	}
 }

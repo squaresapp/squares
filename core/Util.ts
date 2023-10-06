@@ -33,7 +33,8 @@ namespace ScrollApp
 		}
 		else if (CAPACITOR)
 		{
-			return Fila.new(FilaCapacitor.directory.documents);
+			const path = FilaCapacitor.directory.documents;
+			return Fila.new(path);
 		}
 		
 		throw new Error("Not implemented");

@@ -143,19 +143,6 @@ namespace ScrollApp
 			return elements;
 		}
 		
-		/**
-		 * Gets a reference to the poster HTMLElement that was selected for review.
-		 */
-		get currentPoster()
-		{
-			return this._currentPoster;
-		}
-		private set currentPoster(value: HTMLElement | null)
-		{
-			this._currentPoster = value;
-		}
-		private _currentPoster: HTMLElement | null = null;
-		
 		/** */
 		get posterCount()
 		{
