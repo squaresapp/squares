@@ -117,8 +117,8 @@ namespace ScrollApp
 			if (!reel)
 				return void sections.push(FeedBlit.getErrorPoster());
 			
-			const ownerHat = new FeedMetaHat();
-			const storyHat = new StoryHat(reel.sections, ownerHat);
+			const feedMetaHat = new FeedMetaHat();
+			const storyHat = new StoryHat(reel.sections, feedMetaHat);
 			
 			hot.get(storyHat)(
 				Dock.cover(),

@@ -7,14 +7,14 @@ namespace ScrollApp
 	export class StoryHat
 	{
 		readonly head;
-		readonly ownerBox;
+		readonly metaBox;
 		readonly disconnected;
 		private readonly _disconnected;
 		
 		/** */
 		constructor(
 			sections: HTMLElement[],
-			private readonly owner: FeedMetaHat)
+			private readonly metaHat: FeedMetaHat)
 		{
 			if (sections.length < 1)
 				throw new Error("Must have at least one section.");
@@ -64,12 +64,12 @@ namespace ScrollApp
 							width: "100%",
 						}
 					),
-					this.ownerBox = hot.div(
-						"owner",
+					this.metaBox = hot.div(
+						"meta-box",
 						snap,
 						Cq.height(50, "head"),
 						canExitLeft ? { marginLeft: "50%" } : null,
-						owner
+						metaHat
 					),
 					sections.map(section =>
 					{
@@ -138,7 +138,7 @@ namespace ScrollApp
 				if (e.scrollTop < e.offsetHeight / 2)
 					pct = (1 - (e.scrollTop / (e.offsetHeight / 2))) * 100;
 					
-				this.owner.head.style.transform = `translateY(${pct}%)`;
+				this.metaHat.head.style.transform = `translateY(${pct}%)`;
 				
 				lastScrollLeft = e.scrollLeft;
 				lastScrollTop = e.scrollTop;

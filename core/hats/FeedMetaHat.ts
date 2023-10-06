@@ -14,7 +14,7 @@ namespace ScrollApp
 				{
 					display: "flex",
 					height: "100%",
-					padding: "30px",
+					padding: CAPACITOR ? 0 : "30px",
 				},
 				hot.div(
 					Style.backdropBlur(5),
