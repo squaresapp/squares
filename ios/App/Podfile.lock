@@ -1,17 +1,23 @@
 PODS:
-  - Capacitor (5.1.0):
+  - Capacitor (5.4.2):
     - CapacitorCordova
-  - CapacitorClipboard (5.0.5):
+  - CapacitorClipboard (5.0.6):
     - Capacitor
-  - CapacitorCordova (5.1.0)
-  - CapacitorFilesystem (5.1.1):
+  - CapacitorCordova (5.4.2)
+  - CapacitorDevice (5.0.6):
+    - Capacitor
+  - CapacitorFilesystem (5.1.4):
+    - Capacitor
+  - CapacitorStatusBar (5.0.6):
     - Capacitor
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorClipboard (from `../../node_modules/@capacitor/clipboard`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorDevice (from `../../node_modules/@capacitor/device`)"
   - "CapacitorFilesystem (from `../../node_modules/@capacitor/filesystem`)"
+  - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
 
 EXTERNAL SOURCES:
   Capacitor:
@@ -20,15 +26,21 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/clipboard"
   CapacitorCordova:
     :path: "../../node_modules/@capacitor/ios"
+  CapacitorDevice:
+    :path: "../../node_modules/@capacitor/device"
   CapacitorFilesystem:
     :path: "../../node_modules/@capacitor/filesystem"
+  CapacitorStatusBar:
+    :path: "../../node_modules/@capacitor/status-bar"
 
 SPEC CHECKSUMS:
-  Capacitor: 8dc4a61c44f6644fe4e0b61ad01ff175f9b538e5
-  CapacitorClipboard: 17f9418206e9de5673fac29c815f11c8d618e81c
-  CapacitorCordova: 5984fa700842461518ecd320905c7f19ecdd590b
-  CapacitorFilesystem: 38e85e56818420bed3f0aa1b77128f503a960821
+  Capacitor: 8a9db42d105f55843cd8ed2a3cb54e2b78e7f102
+  CapacitorClipboard: 77edf49827ea21da2a9c05c690a4a6a4d07199c4
+  CapacitorCordova: cfcc06b698481da655415985eeb2b8da363f8451
+  CapacitorDevice: 2c968f98a1ec4d22357418c1521e7ddc46c675e6
+  CapacitorFilesystem: af704badfbc69f6f8623d9ed313e5490e3723dcb
+  CapacitorStatusBar: 565c0a1ebd79bb40d797606a8992b4a105885309
 
-PODFILE CHECKSUM: 8a6ceda4e256020dc14a226ad3797f8af1989500
+PODFILE CHECKSUM: 9077f0eda286eadcfcc9a100e07d1c508a63c667
 
 COCOAPODS: 1.11.3
