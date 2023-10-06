@@ -10,7 +10,7 @@ namespace ScrollApp
 		constructor()
 		{
 			this.head = hot.div(
-				"story-owner-hat",
+				"feed-meta-hat",
 				{
 					display: "flex",
 					height: "100%",
