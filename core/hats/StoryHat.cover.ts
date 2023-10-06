@@ -2,7 +2,7 @@
 namespace ScrollApp.Cover
 {
 	/** */
-	export function coverStoryHat()
+	export function coverFeedMetaHat()
 	{
 		ScrollApp.appendCssReset();
 		
@@ -30,8 +30,8 @@ namespace ScrollApp.Cover
 			)
 		];
 		
-		const ownerHat = new StoryOwnerHat();
-		const hat = new StoryHat(sections, ownerHat);
+		const feedMetaHat = new FeedMetaHat();
+		const hat = new StoryHat(sections, feedMetaHat);
 		document.body.append(hat.head);
 	}
 }

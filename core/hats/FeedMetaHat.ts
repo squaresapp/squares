@@ -2,7 +2,7 @@
 namespace ScrollApp
 {
 	/** */
-	export class StoryOwnerHat
+	export class FeedMetaHat
 	{
 		readonly head;
 		

@@ -14,7 +14,7 @@ namespace ScrollApp
 		/** */
 		constructor(
 			sections: HTMLElement[],
-			private readonly owner: StoryOwnerHat)
+			private readonly owner: FeedMetaHat)
 		{
 			if (sections.length < 1)
 				throw new Error("Must have at least one section.");
