@@ -19,11 +19,15 @@ namespace ScrollApp
 			
 			const scrollFila = scrollDirFila.down(scrollJsonName);
 			if (!await scrollFila.exists())
-				return new ScrollJson();
+				return new ScrollJson(identifier);
 			
 			const scrollJsonText = await scrollFila.readText();
 			const scrollJsonPartial = JSON.parse(scrollJsonText);
-			const scrollJson = new ScrollJson(scrollJsonPartial);
+			const scrollJson = new ScrollJson(identifier);
+			
+			// Read in any attributes (for now just one)
+			if (typeof scrollJsonPartial.anchorIndex === "number")
+				scrollJson.anchorIndex = scrollJsonPartial.anchorIndex || 0;
 			
 			// Read the feeds
 			const feedsFila = scrollDirFila.down(feedsJsonName);
@@ -50,9 +54,9 @@ namespace ScrollApp
 		}
 		
 		/** */
-		constructor(data: Partial<ScrollJson> = {})
+		constructor(identifier: string)
 		{
-			Object.assign(this, data);
+			this._identifier = identifier;
 		}
 		
 		anchorIndex: number = 0;

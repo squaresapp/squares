@@ -15,7 +15,7 @@ namespace ScrollApp.Cover
 	/** */
 	function createScrollJson()
 	{
-		const scroll = new ScrollJson();
+		const scroll = new ScrollJson("scroll-created");
 		scroll.anchorIndex = 1;
 		const f1 = createFeed(++feedIndex);
 		const f2 = createFeed(++feedIndex);

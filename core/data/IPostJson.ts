@@ -7,7 +7,7 @@ namespace ScrollApp
 		/**
 		 * 
 		 */
-		seen: boolean;
+		visited: boolean;
 		
 		/**
 		 * Stores the date (in ticks) when the post was discovered on the feed.
@@ -33,7 +33,7 @@ namespace ScrollApp
 		export function create(defaults: Partial<IPostJson> = {}): IPostJson
 		{
 			return Object.assign({
-				seen: false,
+				visited: false,
 				dateFound: Date.now(),
 				feedId: 0,
 				path: "",

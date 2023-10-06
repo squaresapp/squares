@@ -18,18 +18,22 @@ namespace ScrollApp
 		private static pinger: Pinger.Service;
 		
 		readonly head;
-		private readonly scrollerBox;
+		private readonly gridContainer;
 		private readonly grid: GridHat;
+		private selectedGridItem: HTMLElement | null = null;
 		
 		/** */
 		constructor(private readonly scrollJson: ScrollJson)
 		{
 			this.head = hot.div(
 				{
-					height: "100%",
+					height: IOS || ANDROID ? "177.7777vw" : "100%",
+					alignSelf: "center",
+					borderRadius: isTouch ? "30px" : 0,
+					overflow: "hidden",
 				},
-				this.scrollerBox = hot.div(
-					"scroller-box",
+				this.gridContainer = hot.div(
+					"grid-container",
 					{
 						height: "100%",
 						borderRadius: isTouch ? "30px" : 0,
@@ -42,7 +46,7 @@ namespace ScrollApp
 			
 			Hat.wear(this);
 			
-			this.showScroller(true);
+			this.showGrid(true);
 			this.grid = new GridHat();
 			this.grid.head.style.borderRadius = "inherit";
 			
@@ -59,12 +63,16 @@ namespace ScrollApp
 				return (async () =>
 				{
 					const maybePoster = await FeedBlit.getPosterFromUrl(postUrl);
-					return maybePoster || FeedBlit.getErrorPoster();
+					const poster = maybePoster || FeedBlit.getErrorPoster();
+					return post.visited ? 
+						applyVisitedStyle(poster) :
+						poster;
 				})();
 			});
 			
 			this.grid.handleSelect(async (e, index) =>
 			{
+				this.selectedGridItem = e;
 				this.showStory(index);
 			});
 			
@@ -91,7 +99,7 @@ namespace ScrollApp
 				
 			})().then(() =>
 			{
-				this.scrollerBox.append(this.grid.head);
+				this.gridContainer.append(this.grid.head);
 			});
 		}
 		
@@ -102,7 +110,8 @@ namespace ScrollApp
 			if (!post)
 				throw new Error();
 			
-			const reel = await FeedBlit.getReelFromUrl(post.path);
+			const postUrl = this.scrollJson.getPostUrl(post) || "";
+			const reel = await FeedBlit.getReelFromUrl(postUrl);
 			const sections: HTMLElement[] = [];
 			
 			if (!reel)
@@ -126,7 +135,7 @@ namespace ScrollApp
 					
 					storyHat.head.style.transform = "translateY(0)";
 					await UI.waitTransitionEnd(storyHat.head);
-					this.scrollerBox.style.transitionDuration = "0s";
+					this.gridContainer.style.transitionDuration = "0s";
 				})),
 				hot.on("scroll", () => window.requestAnimationFrame(() =>
 				{
@@ -149,7 +158,7 @@ namespace ScrollApp
 					
 					if (pct >= 0)
 					{
-						const s = this.scrollerBox.style;
+						const s = this.gridContainer.style;
 						s.transform = translateZ(pct * translateZMax + "px");
 						s.opacity = (1 - pct).toString();
 						
@@ -191,31 +200,53 @@ namespace ScrollApp
 				},
 				ms);
 				
-				this.showScroller(true);
+				this.showGrid(true);
 			}
 			
-			const disconnected = () =>
+			const disconnected = async () =>
 			{
-				this.scrollerBox.style.transitionDuration = transitionDuration;
+				if (this.selectedGridItem)
+				{
+					const s = this.selectedGridItem.style;
+					s.transitionDuration = "0.5s";
+					s.transitionProperty = "opacity, filter";
+					await UI.wait(1);
+					applyVisitedStyle(this.selectedGridItem);
+				}
+				
+				this.selectedGridItem = null;
+				this.gridContainer.style.transitionDuration = transitionDuration;
 				
 				for (const e of Query.ancestors(this.head))
 					if (e instanceof HTMLElement)
 						e.classList.remove(noOverflowClass);
+				
+				post.visited = true;
+				await this.scrollJson.writePost(post);
 			}
 			
 			storyHat.disconnected(disconnected);
 			this.head.append(storyHat.head);
-			this.showScroller(false);
+			this.showGrid(false);
 		}
 		
 		/** */
-		private showScroller(show: boolean)
+		private showGrid(show: boolean)
 		{
-			const s = this.scrollerBox.style;
+			const s = this.gridContainer.style;
 			s.transitionDuration = transitionDuration;
 			s.transform = translateZ(show ? "0" : translateZMax + "px");
 			s.opacity = show ? "1" : "0";
 		}
+	}
+	
+	/** */
+	function applyVisitedStyle(e: HTMLElement)
+	{
+		const s = e.style;
+		s.opacity = "0.5";
+		s.filter = "saturate(0)";
+		return e;
 	}
 	
 	const translateZ = (amount: string) => `perspective(10px) translateZ(${amount})`;

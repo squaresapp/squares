@@ -6,6 +6,7 @@ declare const MACOS: boolean;
 declare const IOS: boolean;
 declare const ANDROID: boolean;
 declare const CAPACITOR: boolean;
+declare const SIMULATOR: boolean;
 declare const Moduless: { getRunningFunctionName(): string; }
 
 declare namespace Electron
@@ -68,6 +69,9 @@ if (typeof ANDROID === "undefined")
 if (typeof CAPACITOR === "undefined")
 	Object.assign(globalThis, { CAPACITOR: IOS || ANDROID });
 
+if (typeof SIMULATOR === "undefined")
+	Object.assign(globalThis, { SIMULATOR: false });
+
 if (ELECTRON)
 {
 	const g = globalThis as any;
@@ -88,3 +92,28 @@ const isPwa =
 
 const isTouch =  matchMedia("(pointer:coarse)").matches;
 const hot = new Hot();
+
+namespace ScrollApp
+{
+	/**
+	 * This is the main entry point of the app.
+	 * When running in Tauri, this function is called from the auto-generated index.html file.
+	 */
+	export async function startup()
+	{
+		if (DEBUG && CAPACITOR)
+		{
+			const g = globalThis as any;
+			const device = g.Capacitor?.Plugins?.Device;
+			const info = await device.getInfo();
+			Object.assign(globalThis, { SIMULATOR: info.isVirtual });
+		}
+		
+		const rootHat = new RootHat();
+		await rootHat.construct();
+		document.body.append(rootHat.head);
+	}
+}
+
+//@ts-ignore
+if (typeof module === "object") Object.assign(module.exports, { ScrollApp });
