@@ -40,7 +40,7 @@
 		{ "path": "../FilaNode" },
 		{ "path": "../Keyva" },
 		{ "path": "../Pinger" },
-		{ "path": "../FeedBlit" },
+		{ "path": "../HtmlFeedJS" },
 		{ "path": "../Dock" }
 	]
 }
