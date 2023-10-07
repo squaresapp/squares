@@ -62,8 +62,8 @@ namespace ScrollApp
 				
 				return (async () =>
 				{
-					const maybePoster = await FeedBlit.getPosterFromUrl(postUrl);
-					const poster = maybePoster || FeedBlit.getErrorPoster();
+					const maybePoster = await HtmlFeed.getPosterFromUrl(postUrl);
+					const poster = maybePoster || HtmlFeed.getErrorPoster();
 					return post.visited ? 
 						applyVisitedStyle(poster) :
 						poster;
@@ -111,13 +111,15 @@ namespace ScrollApp
 				throw new Error();
 			
 			const postUrl = this.scrollJson.getPostUrl(post) || "";
-			const reel = await FeedBlit.getReelFromUrl(postUrl);
+			const reel = await HtmlFeed.getReelFromUrl(postUrl);
 			const sections: HTMLElement[] = [];
 			
 			if (!reel)
-				return void sections.push(FeedBlit.getErrorPoster());
+				return void sections.push(HtmlFeed.getErrorPoster());
 			
 			const feedMetaHat = new FeedMetaHat();
+			reel.head
+			
 			const storyHat = new StoryHat(reel.sections, feedMetaHat);
 			
 			hot.get(storyHat)(

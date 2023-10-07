@@ -165,10 +165,10 @@ namespace ScrollApp
 		for (const feedPath of feedPaths)
 		{
 			const feedUrl = urlBase + feedPath + "index.txt";
-			const { urls, bytesRead } = await FeedBlit.getFeedFromUrl(feedUrl);
+			const { urls, bytesRead } = await HtmlFeed.getFeedFromUrl(feedUrl);
 			urlLists.push(urls);
 			
-			const feedMeta = await FeedBlit.getFeedMetaData(feedUrl);
+			const feedMeta = await HtmlFeed.getFeedMetaData(feedUrl);
 			feeds.push(IFeedJson.create({
 				id: Date.now(),
 				feedUrl,
@@ -194,7 +194,7 @@ namespace ScrollApp
 				continue;
 			
 			const feedJsons = feeds[indexOfList];
-			const feedDirectory = FeedBlit.Url.folderOf(feedJsons.feedUrl);
+			const feedDirectory = HtmlFeed.Url.folderOf(feedJsons.feedUrl);
 			const path = urlList[indexWithinList].slice(feedDirectory.length);
 			
 			await scrollJson.writePost({

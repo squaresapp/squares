@@ -153,7 +153,7 @@ namespace ScrollApp
 			if (!feed)
 				return null;
 			
-			const feedFolder = FeedBlit.Url.folderOf(feed.feedUrl);
+			const feedFolder = HtmlFeed.Url.folderOf(feed.feedUrl);
 			return feedFolder + post.path;
 		}
 		
