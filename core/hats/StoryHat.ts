@@ -67,7 +67,7 @@ namespace ScrollApp
 						},
 						canExitLeft ? { marginLeft: "50%" } : null,
 						{
-							padding: CAPACITOR ? 0 : "20px",
+							padding: CAPACITOR ? "20px" : 0,
 							paddingBottom: "20px",
 							display: "flex",
 						},
