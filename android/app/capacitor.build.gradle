@@ -12,6 +12,7 @@ dependencies {
     implementation project(':capacitor-clipboard')
     implementation project(':capacitor-device')
     implementation project(':capacitor-filesystem')
+    implementation project(':capacitor-share')
     implementation project(':capacitor-status-bar')
 
 }
