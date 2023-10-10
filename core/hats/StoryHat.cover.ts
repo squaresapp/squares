@@ -2,7 +2,7 @@
 namespace ScrollApp.Cover
 {
 	/** */
-	export function coverFeedMetaHat()
+	export function coverStoryHat()
 	{
 		ScrollApp.appendCssReset();
 		
@@ -30,8 +30,17 @@ namespace ScrollApp.Cover
 			)
 		];
 		
-		const feedMetaHat = new FeedMetaHat();
-		const hat = new StoryHat(sections, feedMetaHat);
+		const feedJson: IFeedJson = {
+			author: "Paul Gordon",
+			url: "http://localhost:43332/raccoons/index.txt",
+			description: "A description of the feed",
+			dateFollowed: Date.now(),
+			icon: "http://localhost:43332/raccoons/icon.jpg",
+			id: 0,
+			size: 0,
+		};
+		
+		const hat = new StoryHat(sections, feedJson);
 		document.body.append(hat.head);
 	}
 }

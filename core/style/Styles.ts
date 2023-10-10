@@ -77,5 +77,8 @@ namespace ScrollApp
 				}
 			];
 		}
+		
+		/** */
+		export const borderRadiusLarge = "30px";
 	}
 }

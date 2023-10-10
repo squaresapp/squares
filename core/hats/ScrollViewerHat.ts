@@ -117,10 +117,11 @@ namespace ScrollApp
 			if (!reel)
 				return void sections.push(HtmlFeed.getErrorPoster());
 			
-			const feedMetaHat = new FeedMetaHat();
-			reel.head
+			const feed = this.scrollJson.getFeed(post.feedId);
+			if (!feed)
+				throw new Error();
 			
-			const storyHat = new StoryHat(reel.sections, feedMetaHat);
+			const storyHat = new StoryHat(reel.sections, feed);
 			
 			hot.get(storyHat)(
 				Dock.cover(),

@@ -34,9 +34,10 @@ namespace ScrollApp.Cover
 	{
 		return {
 			id,
-			feedUrl: "https://www.scrollapp.org/feed-" + id + ".txt",
-			description: `John Smith (${id})`,
-			avatarUrl: "https://www.scrollapp.org/icon/android-icon-192x192.png",
+			url: `https://www.scrollapp.org/feed-${id}.txt`,
+			author: `John Smith (${id})`,
+			description: `Generic description (${id})`,
+			icon: "https://www.scrollapp.org/icon/android-icon-192x192.png",
 			size: 0,
 			dateFollowed: Date.now()
 		};

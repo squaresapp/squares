@@ -7,22 +7,17 @@ namespace ScrollApp
 	export class StoryHat
 	{
 		readonly head;
-		readonly metaBox;
 		readonly disconnected;
 		private readonly _disconnected;
+		private metaContainer: HTMLElement = null!;
 		
 		/** */
 		constructor(
 			sections: HTMLElement[],
-			private readonly metaHat: FeedMetaHat)
+			private readonly feed: IFeedJson)
 		{
 			if (sections.length < 1)
 				throw new Error("Must have at least one section.");
-			
-			const snap: Hot.Style = {
-				scrollSnapStop: "always",
-				scrollSnapAlign: "start",
-			};
 			
 			this.head = hot.div(
 				"head",
@@ -64,15 +59,40 @@ namespace ScrollApp
 							width: "100%",
 						}
 					),
-					this.metaBox = hot.div(
+					hot.div(
 						"meta-box",
 						snap,
-						Cq.height(50, "head"),
+						{
+							height: "200px",
+						},
 						canExitLeft ? { marginLeft: "50%" } : null,
-						metaHat
+						{
+							padding: CAPACITOR ? 0 : "20px",
+							paddingBottom: "20px",
+							display: "flex",
+						},
+						this.metaContainer = hot.div(
+							Style.backdropBlur(5),
+							{
+								flex: "1 0",
+								width: "100%",
+								height: "100%",
+								backgroundColor: "rgba(128, 128, 128, 0.33)",
+								backdropFilter: "blur(8px)",
+								borderRadius: Style.borderRadiusLarge,
+							},
+							new FeedMetaHat(this.feed)
+						)
 					),
-					sections.map(section =>
+					sections.map((section, i) =>
 					{
+						const radius: Hot.Style = !CAPACITOR && i > 0 ?
+							{} :
+							{
+								borderTopLeftRadius: Style.borderRadiusLarge,
+								borderTopRightRadius: Style.borderRadiusLarge,
+							};
+						
 						return [
 							canExitLeft && hot.div(
 								"snap-left",
@@ -81,6 +101,10 @@ namespace ScrollApp
 							),
 							hot.get(section)(
 								snap,
+								{
+									overflow: "hidden !"
+								},
+								radius,
 								Cq.width(100, "head"),
 								Cq.height(100, "head"),
 							),
@@ -138,7 +162,7 @@ namespace ScrollApp
 				if (e.scrollTop < e.offsetHeight / 2)
 					pct = (1 - (e.scrollTop / (e.offsetHeight / 2))) * 100;
 					
-				this.metaHat.head.style.transform = `translateY(${pct}%)`;
+				this.metaContainer.style.transform = `translateY(${pct}%)`;
 				
 				lastScrollLeft = e.scrollLeft;
 				lastScrollTop = e.scrollTop;
@@ -167,4 +191,9 @@ namespace ScrollApp
 			});
 		}
 	}
+	
+	const snap: Hot.Style = {
+		scrollSnapStop: "always",
+		scrollSnapAlign: "start",
+	};
 }

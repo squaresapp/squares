@@ -86,6 +86,16 @@ namespace ScrollApp
 		}
 		
 		/** */
+		getFeed(feedId: number)
+		{
+			for (const feed of this.feeds)
+				if (feedId === feed.id)
+					return feed;
+			
+			return null;
+		}
+		
+		/** */
 		private async writeScrollJson()
 		{
 			const scrollFila = await getScrollDirectory(this.identifier);
@@ -153,7 +163,7 @@ namespace ScrollApp
 			if (!feed)
 				return null;
 			
-			const feedFolder = HtmlFeed.Url.folderOf(feed.feedUrl);
+			const feedFolder = HtmlFeed.Url.folderOf(feed.url);
 			return feedFolder + post.path;
 		}
 		

@@ -28,7 +28,7 @@ namespace ScrollApp
 			
 			if (DEBUG)
 			{
-				//await debugGenerateJsonFiles();
+				await debugGenerateJsonFiles();
 				debugConnectRefreshTool();
 			}
 			
@@ -171,8 +171,9 @@ namespace ScrollApp
 			const feedMeta = await HtmlFeed.getFeedMetaData(feedUrl);
 			feeds.push(IFeedJson.create({
 				id: Date.now(),
-				feedUrl,
-				avatarUrl: feedMeta?.icon || "",
+				url: feedUrl,
+				icon: feedMeta?.icon || "",
+				author: feedMeta?.author || "",
 				description: feedMeta?.description || "",
 				size: bytesRead,
 				dateFollowed: Date.now()
@@ -194,7 +195,7 @@ namespace ScrollApp
 				continue;
 			
 			const feedJsons = feeds[indexOfList];
-			const feedDirectory = HtmlFeed.Url.folderOf(feedJsons.feedUrl);
+			const feedDirectory = HtmlFeed.Url.folderOf(feedJsons.url);
 			const path = urlList[indexWithinList].slice(feedDirectory.length);
 			
 			await scrollJson.writePost({
