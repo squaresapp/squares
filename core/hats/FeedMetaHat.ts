@@ -55,7 +55,7 @@ namespace ScrollApp
 							webkitLineClamp: "1",
 							overflow: "hidden",
 						},
-						hot.text(author.repeat(100)),
+						hot.text(author),
 					),
 					!!data.description && hot.div(
 						{
@@ -65,7 +65,7 @@ namespace ScrollApp
 							webkitLineClamp: "2",
 							overflow: "hidden",
 						},
-						hot.text(data.description.repeat(100))
+						hot.text(data.description)
 					),
 					
 					this.renderButton("Share"),
