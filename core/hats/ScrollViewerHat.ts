@@ -291,7 +291,7 @@ namespace ScrollApp
 				reel.sections.slice() :
 				[HtmlFeed.getErrorPoster()];
 			
-			const feed = this.scrollJson.getFeed(post.feedId);
+			const feed = this.scrollJson.getFeedById(post.feedId);
 			if (!feed)
 				throw new Error();
 			

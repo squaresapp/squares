@@ -10,7 +10,7 @@ namespace ScrollApp
 		constructor(data: IFeedJson)
 		{
 			const iconUrl = IFeedJson.getIconUrl(data);
-			const author = data.author || `(${Strings.unknownAuthor})`;
+			const author = data.author || Strings.unknownAuthor;
 			
 			this.head = hot.div(
 				{
@@ -68,8 +68,8 @@ namespace ScrollApp
 						hot.text(data.description)
 					),
 					
-					this.renderButton("Share"),
-					this.renderButton("Unfollow"),
+					this.renderButton(Strings.share),
+					this.renderButton(Strings.unfollow),
 				),
 			);
 			
@@ -79,23 +79,16 @@ namespace ScrollApp
 		/** */
 		private renderButton(label: string)
 		{
-			return hot.div(
+			return Widget.fillButton(
 				{
-					display: "inline-block",
 					marginRight: "15px",
-					padding: "10px",
-					borderRadius: "5px",
-					backgroundColor: "rgba(128, 128, 128, 0.5)",
-					fontWeight: 500,
 				},
-				Style.clickable,
-				Style.backdropBlur(5),
 				hot.text(label),
 				hot.on("click", () =>
 				{
 					
 				})
-			)
+			);
 		}
 	}
 }

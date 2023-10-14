@@ -3,6 +3,9 @@ namespace ScrollApp
 {
 	export const enum Strings
 	{
-		unknownAuthor = "Unknown Author"
+		following = "Following",
+		unfollow = "Unfollow",
+		share = "Share",
+		unknownAuthor = "(Author Unknown)"
 	}
 }

@@ -153,5 +153,56 @@ namespace ScrollApp
 		{
 			new MutationObserver(() => fn()).observe(e, { childList: true });
 		}
+		
+		/** */
+		export namespace screenTransition
+		{
+			/** */
+			export function execute(
+				activeElement: HTMLElement,
+				overlayElement: HTMLElement)
+			{
+				hot.get(activeElement)(
+					
+				);
+				
+				hot.get(overlayElement)(
+					Dock.cover(), // Necessary?
+					{
+						transitionDuration: duration,
+						transitionProperty: "transform",
+						transform: "translateY(110%)",
+					},
+				);
+				
+				
+			}
+			
+			/** */
+			function slideAway(axis: "x" | "y", amount: number)
+			{
+				/*
+				const ms = 250;
+				const e = storyHat.head;
+				e.style.transitionDuration = ms + "ms";
+				e.style.transitionProperty = "transform";
+				e.style.transform = `translate${axis.toLocaleUpperCase()}(${amount}px)`;
+				e.style.pointerEvents = "none";
+				
+				setTimeout(() =>
+				{
+					storyHat.head.remove();
+					disconnected();
+				},
+				ms);
+				
+				this.showGrid(true);
+				*/
+			}
+			
+			const translateZ = (amount: string) => `perspective(10px) translateZ(${amount})`;
+			const translateZMax = -3;
+			export const duration = "0.5s";
+		}
 	}
 }

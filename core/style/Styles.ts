@@ -78,7 +78,7 @@ namespace ScrollApp
 			];
 		}
 		
-		/** */
 		export const borderRadiusLarge = "30px";
+		export const borderRadiusSmall = "10px";
 	}
 }

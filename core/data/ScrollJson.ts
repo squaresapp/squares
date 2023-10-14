@@ -35,7 +35,7 @@ namespace ScrollApp
 			{
 				const feedsJsonText = await feedsFila.readText();
 				const feedsJson = <IFeedJson[]>tryParseJson(feedsJsonText) || [];
-				scrollJson.feeds = feedsJson;
+				scrollJson._feeds = feedsJson;
 			}
 			
 			// Read the posts
@@ -60,8 +60,15 @@ namespace ScrollApp
 		}
 		
 		anchorIndex: number = 0;
-		private feeds: IFeedJson[] = [];
 		private posts: IPostJson[] = [];
+		
+		
+		/** */
+		get feeds(): readonly IFeedJson[]
+		{
+			return this._feeds;
+		}
+		private _feeds: IFeedJson[] = [];
 		
 		/** */
 		get identifier()
@@ -77,7 +84,7 @@ namespace ScrollApp
 		/** */
 		async addFeeds(...feedJsons: IFeedJson[])
 		{
-			this.feeds.push(...feedJsons);
+			this._feeds.push(...feedJsons);
 			const scrollFila = await this.writeScrollJson();
 			const feedsFila = scrollFila.down(feedsJsonName);
 			const feedJson = JSON.stringify(this.feeds);
@@ -86,7 +93,7 @@ namespace ScrollApp
 		}
 		
 		/** */
-		getFeed(feedId: number)
+		getFeedById(feedId: number)
 		{
 			for (const feed of this.feeds)
 				if (feedId === feed.id)

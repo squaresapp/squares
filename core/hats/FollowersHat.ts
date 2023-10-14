@@ -9,48 +9,74 @@ namespace ScrollApp
 		/** */
 		constructor()
 		{
-			const size = 2;
-			
 			this.head = hot.div(
 				{
-					display: "grid",
-					width: "100%",
-					gridTemplateColumns: `repeat(${size}, 1fr)`,
-					gridAutoRows: (100 / size).toFixed(4) + "%",
+					padding: "20px",
 				},
-				hot.css("> DIV", {
-					background: "linear-gradient(45deg, black, rgb(50, 50,50))"
-				}),
+				hot.on("connected", () => this.construct()),
 				hot.div(
-					new Text("Follower 1"),
-				),
-				hot.div(
-					new Text("Follower 2"),
-				),
-				hot.div(
-					new Text("Follower 3"),
-				),
-				hot.div(
-					new Text("Follower 4"),
-				),
-				hot.div(
-					new Text("Follower 5"),
-				),
-				hot.div(
-					new Text("Follower 6"),
-				),
-				hot.div(
-					new Text("Follower 7"),
-				),
-				hot.div(
-					new Text("Follower 8"),
-				),
-				hot.div(
-					new Text("Follower 9"),
-				),
+					{
+						fontSize: "22px",
+						fontWeight: 600,
+						marginBottom: "20px",
+					},
+					hot.text(Strings.following)
+				)
 			);
 			
 			Hat.wear(this);
+		}
+		
+		/** */
+		private construct()
+		{
+			const feeds = Hat.over(this, RootHat).scrollJsons
+				.flatMap(json => json.feeds)
+				.filter((v, i, a) => a.findIndex(json => json.id === v.id) === i);
+			
+			for (const feed of feeds)
+				this.head.append(this.renderIdentity(feed));
+		}
+		
+		/** */
+		private renderIdentity(feed: IFeedJson)
+		{
+			const iconUrl = IFeedJson.getIconUrl(feed);
+			const author = feed.author || Strings.unknownAuthor;
+			
+			return hot.div(
+				{
+					display: "flex",
+					alignContent: "center",
+					alignItems: "center",
+					marginBottom: "10px",
+					padding: "10px",
+					fontSize: "15px",
+					backgroundColor: "rgba(128, 128, 128, 0.25)",
+					borderRadius: Style.borderRadiusSmall,
+				},
+				hot.div(
+					{
+						width: "50px",
+						padding: "10px",
+						marginRight: "20px",
+						aspectRatio: "1/1",
+						borderRadius: "100%",
+						backgroundImage: `url(${iconUrl})`,
+						backgroundSize: "cover",
+					},
+				),
+				hot.div(
+					{
+						fontWeight: 500,
+						flex: "1 0",
+					},
+					hot.text(author)
+				),
+				Widget.fillButton(
+					hot.text(Strings.unfollow)
+				)
+			);
 		}
 	}
 }
