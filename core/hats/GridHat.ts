@@ -26,6 +26,7 @@ namespace ScrollApp
 					position: "absolute",
 					width: "100%",
 					height: "100%",
+					//aspectRatio: ratioX + "/" + ratioY,
 					overflow: "hidden",
 					outline: "2px solid black",
 					...Style.clickable,
@@ -259,7 +260,9 @@ namespace ScrollApp
 			if (this.posterCount > 0)
 			{
 				const y = this.head.scrollTop;
-				const rowHeight = this.height / this.size;
+				//const ratio = ratioX / ratioY;
+				const ratio = 1;
+				const rowHeight = (this.height / this.size) / ratio;
 				const rowCount = this.posterCount / this.size;
 				const visibleRowStart = Math.floor(y / rowHeight);
 				const visibleItemStart = visibleRowStart * this.size;
@@ -458,6 +461,8 @@ namespace ScrollApp
 	
 	const minSize = 2;
 	const maxSize = 7;
+	//const ratioX = 9;
+	//const ratioY = 16;
 	
 	/** */
 	function getIndex(e: Element)
