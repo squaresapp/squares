@@ -17,7 +17,6 @@ namespace ScrollApp
 					fontSize: "inherit",
 				},
 				":root", {
-					display: "flex",
 					height: isPwa ? "100vh" : "100dvh",
 					fontSize: "20px",
 					fontFamily: "Inter, -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif",
@@ -25,8 +24,7 @@ namespace ScrollApp
 					backgroundColor: "black",
 				},
 				"BODY", {
-					display: "flex",
-					flex: "1 0",
+					height: "inherit",
 				},
 				// Eliminate margin collapsing
 				"ADDRESS, ARTICLE, ASIDE, BLOCKQUOTE, DD, DIV, FORM, "+

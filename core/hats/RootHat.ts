@@ -4,13 +4,19 @@ namespace ScrollApp
 	/** */
 	export class RootHat
 	{
-		static readonly cssSwipeVar = "--horizontal-swipe-amount";
 		readonly head;
 		
 		/** */
 		constructor()
 		{
-			this.head = hot.div();
+			this.head = hot.div(
+				UI.noScrollBars,
+				{
+					height: "inherit",
+					top: "env(safe-area-inset-top)",
+				}
+			);
+			
 			Hat.wear(this);
 		}
 		
@@ -32,8 +38,6 @@ namespace ScrollApp
 				debugConnectRefreshTool();
 			}
 			
-			ScrollApp.appendCssReset();
-			
 			TAURI && window.addEventListener("focus", () =>
 			{
 				
@@ -41,44 +45,34 @@ namespace ScrollApp
 			
 			this._appJson = await AppJson.read();
 			this._scrollJsons = await this._appJson.readScrolls();
+			const paneSwiper = new PaneSwiper();
 			
-			const scrollViewerHats = this.scrollJsons.map(json =>
+			for (const scrollJson of this.scrollJsons)
 			{
-				return hot.get(new ScrollViewerHat(json))(
-					{
-						minWidth: "100%",
-						width: "100%",
-						scrollSnapAlign: "start",
-						scrollSnapStop: "always",
-					}
-				).head
+				const viewer = new ScrollMuxViewerHat(scrollJson);
+				paneSwiper.addPane(viewer.head);
+			}
+			
+			paneSwiper.addPane(new FollowersHat().head);
+			this.head.append(paneSwiper.head);
+			
+			const dotsHat = new DotsHat();
+			dotsHat.insert(2);
+			dotsHat.highlight(0);
+			
+			hot.get(dotsHat.head)({
+				position: "absolute",
+				left: 0,
+				right: 0,
+				bottom: "105px",
 			});
 			
-			hot.get(this.head)(
-				"root-hat",
-				UI.noScrollBars,
-				{
-					display: "flex",
-					width: "100%",
-					height: "100%",
-					scrollSnapType: "x mandatory",
-					overflowX: "auto",
-					overflowY: "hidden",
-				},
-				
-				hot.on("scroll", () =>
-				{
-					let pct = (this.head.scrollLeft / window.innerWidth) * 100;
-					pct = 100 - (pct < 50 ? Math.floor(pct) : Math.ceil(pct));
-					this.head.style.setProperty(RootHat.cssSwipeVar, `inset(0 0 0 ${pct}%)`);
-				}),
-				
-				hot.get(new ScrollCreatorHat())(
-					//?
-				),
-				
-				scrollViewerHats
-			);
+			this.head.append(dotsHat.head);
+			
+			paneSwiper.visiblePaneChanged(index =>
+			{
+				dotsHat.highlight(index);
+			});
 		}
 		
 		/** */
