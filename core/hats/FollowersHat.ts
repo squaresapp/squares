@@ -19,7 +19,7 @@ namespace ScrollApp
 					gridAutoRows: (100 / size).toFixed(4) + "%",
 				},
 				hot.css("> DIV", {
-					background: "linear-gradient(45deg, crimson, orange)"
+					background: "linear-gradient(45deg, black, rgb(50, 50,50))"
 				}),
 				hot.div(
 					new Text("Follower 1"),

@@ -109,6 +109,7 @@ namespace ScrollApp
 			Object.assign(globalThis, { SIMULATOR: info.isVirtual });
 		}
 		
+		ScrollApp.appendCssReset();
 		const rootHat = new RootHat();
 		await rootHat.construct();
 		document.body.append(rootHat.head);
