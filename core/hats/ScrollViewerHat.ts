@@ -4,7 +4,7 @@ namespace ScrollApp
 	const transitionDuration = "0.5s";
 	
 	/** */
-	export class ScrollViewerHat
+	export abstract class ScrollViewerHat
 	{
 		/** */
 		private static async maybeSetupPinger()
@@ -23,7 +23,7 @@ namespace ScrollApp
 		private selectedGridItem: HTMLElement | null = null;
 		
 		/** */
-		constructor(private readonly scrollJson: ScrollJson)
+		constructor()
 		{
 			this.head = hot.div(
 				{
@@ -49,32 +49,7 @@ namespace ScrollApp
 			this.showGrid(true);
 			this.grid = new GridHat();
 			this.grid.head.style.borderRadius = "inherit";
-			
-			this.grid.handleRender(index =>
-			{
-				const post = scrollJson.getPost(index);
-				if (post === null)
-					return null;
-				
-				const postUrl = scrollJson.getPostUrl(post);
-				if (!postUrl)
-					return null;
-				
-				return (async () =>
-				{
-					const maybePoster = await HtmlFeed.getPosterFromUrl(postUrl);
-					const poster = maybePoster || HtmlFeed.getErrorPoster();
-					return post.visited ? 
-						applyVisitedStyle(poster) :
-						poster;
-				})();
-			});
-			
-			this.grid.handleSelect(async (e, index) =>
-			{
-				this.selectedGridItem = e;
-				this.showStory(index);
-			});
+			this.constructGrid();
 			
 			(async () =>
 			{
@@ -104,24 +79,50 @@ namespace ScrollApp
 		}
 		
 		/** */
+		protected abstract getPost(index: number): ReturnType<RenderFn>;
+		
+		/** */
+		protected abstract getStory(index: number): Promise<{
+			readonly sections: HTMLElement[];
+			readonly feed: IFeedJson;
+		}>;
+		
+		/** */
+		protected abstract handlePostVisited(index: number): void;
+		
+		/** */
+		private constructGrid()
+		{
+			this.grid.handleRender(index => this.getPost(index));
+			
+			this.grid.handleSelect(async (e, index) =>
+			{
+				this.selectedGridItem = e;
+				this.showStory(index);
+			});
+		}
+		
+		/** */
 		private async showStory(index: number)
 		{
+			/*
 			const post = this.scrollJson.getPost(index);
 			if (!post)
 				throw new Error();
 			
 			const postUrl = this.scrollJson.getPostUrl(post) || "";
 			const reel = await HtmlFeed.getReelFromUrl(postUrl);
-			const sections: HTMLElement[] = [];
-			
-			if (!reel)
-				return void sections.push(HtmlFeed.getErrorPoster());
+			const sections: HTMLElement[] = reel ?
+				reel.sections.slice() :
+				[HtmlFeed.getErrorPoster()];
 			
 			const feed = this.scrollJson.getFeed(post.feedId);
 			if (!feed)
 				throw new Error();
+			*/
 			
-			const storyHat = new StoryHat(reel.sections, feed);
+			const story = await this.getStory(index);
+			const storyHat = new StoryHat(story.sections, story.feed);
 			
 			hot.get(storyHat)(
 				Dock.cover(),
@@ -224,12 +225,13 @@ namespace ScrollApp
 					if (e instanceof HTMLElement)
 						e.classList.remove(noOverflowClass);
 				
-				post.visited = true;
-				await this.scrollJson.writePost(post);
+				const info = this.getPost(index);
+				if (info)
+					this.handlePostVisited(index);
 			}
 			
 			storyHat.disconnected(disconnected);
-			this.head.append(storyHat.head);
+			this.gridContainer.after(storyHat.head);
 			this.showGrid(false);
 		}
 		
@@ -241,6 +243,113 @@ namespace ScrollApp
 			s.transform = translateZ(show ? "0" : translateZMax + "px");
 			s.opacity = show ? "1" : "0";
 		}
+	}
+	
+	/**
+	 * A specialization of the ScrollViewerHat that supports scenarios where
+	 * multiple feeds are multiplexed into a single view.
+	 */
+	export class ScrollMuxViewerHat extends ScrollViewerHat
+	{
+		/** */
+		constructor(private readonly scrollJson: ScrollJson)
+		{
+			super();
+		}
+		
+		/** */
+		protected getPost(index: number)
+		{
+			const post = this.scrollJson.getPost(index);
+			if (post === null)
+				return null;
+			
+			const url = this.scrollJson.getPostUrl(post);
+			if (!url)
+				return null;
+			
+			return (async () =>
+			{
+				const maybePoster = await HtmlFeed.getPosterFromUrl(url);
+				const poster = maybePoster || HtmlFeed.getErrorPoster();
+				return post.visited ? 
+					applyVisitedStyle(poster) :
+					poster;
+			})();
+		}
+		
+		/** */
+		protected async getStory(index: number)
+		{
+			const post = this.scrollJson.getPost(index);
+			if (!post)
+				throw new Error();
+			
+			const postUrl = this.scrollJson.getPostUrl(post) || "";
+			const reel = await HtmlFeed.getReelFromUrl(postUrl);
+			const sections: HTMLElement[] = reel ?
+				reel.sections.slice() :
+				[HtmlFeed.getErrorPoster()];
+			
+			const feed = this.scrollJson.getFeed(post.feedId);
+			if (!feed)
+				throw new Error();
+			
+			return { sections, feed };
+		}
+		
+		/** */
+		protected handlePostVisited(index: number): void
+		{
+			const post = this.scrollJson.getPost(index);
+			if (post)
+			{
+				post.visited = true;
+				this.scrollJson.writePost(post);
+			}
+		}
+	}
+	
+	/**
+	 * A specialization of the ScrollViewerHat that supports scenarios where
+	 * a single feed is displayed within a single view.
+	 */
+	export class ScrollFeedViewerHat extends ScrollViewerHat
+	{
+		/** */
+		constructor(
+			private readonly feed: IFeedJson,
+			private readonly urls: string[])
+		{
+			super();
+		}
+		
+		/** */
+		protected getPost(index: number)
+		{
+			if (index < 0 || index >= this.urls.length)
+				return null;
+			
+			const url = this.urls[index];
+			
+			return (async () =>
+			{
+				const maybePoster = await HtmlFeed.getPosterFromUrl(url);
+				return maybePoster || HtmlFeed.getErrorPoster();
+			})();
+		}
+		
+		/** */
+		protected async getStory(index: number)
+		{
+			return {
+				sections: [],
+				feed: this.feed,
+			};
+		}
+		
+		/** */
+		protected handlePostVisited(index: number) { }
 	}
 	
 	/** */
