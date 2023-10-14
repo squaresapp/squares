@@ -31,6 +31,7 @@ namespace ScrollApp
 					alignSelf: "center",
 					borderRadius: isTouch ? "30px" : 0,
 					overflow: "hidden",
+					backgroundColor: "rgba(128, 128, 128, 0.25)",
 				},
 				this.gridContainer = hot.div(
 					"grid-container",
