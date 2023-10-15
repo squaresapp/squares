@@ -13,7 +13,7 @@ Scroll is designed to be an ultra-minimalistic, distraction-free, non-addictive,
 
 Scroll is currently pre-alpha. You can follow [Paul Gordon](https://www.twitter.com/heropaulg) on Twitter, who is developing this project under the principles of build-in-public.
 
-The 1.0 release will be a focused HTML feed reader app without any tools to develop new feeds. Future versions of Scroll will likely include this functionality.
+The 1.0 release will be a focused HTML feed reader app without any tools to develop new feeds. In the meantime, feeds will need to be developed separately. Future versions of Scroll will likely address this need.
 
 ## Contribution
 
