@@ -11,7 +11,7 @@ Scroll is designed to be an ultra-minimalistic, distraction-free, non-addictive,
 
 ## Project Status
 
-Scroll is currently pre-alpha. You can follow [Paul Gordon](https://www.twitter.com/heropaulg) on twitter, who is developing this project under the principles of build-in-public.
+Scroll is currently pre-alpha. You can follow [Paul Gordon](https://www.twitter.com/heropaulg) on Twitter, who is developing this project under the principles of build-in-public.
 
 ## Contribution
 
