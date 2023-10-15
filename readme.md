@@ -7,7 +7,7 @@ Scroll is an ambitious project, designed to replace social media. It's an app th
 
 The feeds must conform to the HTML feeds protocol, which is an emerging technology for self-hosted media distribution. If you're familiar with RSS, HTML feeds are conceptually similar, except the underlying format is a slight subset of HTML and CSS, rather that some bizarre XML format.
 
-Scroll is designed to be an ultra-minimalistic, distraction-free, non-addictive, ad-free, tracker-free media consumption experience.
+Scroll is designed to bring an ultra-minimalistic, distraction-free, non-addictive, ad-free, tracker-free media consumption experience to the world.
 
 ## Project Status
 
