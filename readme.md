@@ -3,7 +3,7 @@
 <img src="readme.logo.svg" width="30%">
 </p>
 
-Scroll is an ambitious project, designed to replace social media. It's an app that lets you follow and aggregate media feeds sourced from any compatible URL. The app is a downloadable product for iOS & Android (via Capacitor) and for macOS / Windows / Linux desktop (via Tauri).
+Scroll is an ambitious project, designed to replace social media. It's an app that lets you follow and aggregate media feeds sourced from any compatible URL. The app is a downloadable product for iOS & Android (built on Capacitor) and for macOS / Windows / Linux desktop (built on Tauri).
 
 The feeds must conform to the HTML feeds protocol, which is an emerging technology for self-hosted media distribution. If you're familiar with RSS, HTML feeds are conceptually similar, except the underlying format is a slight subset of HTML and CSS, rather that some bizarre XML format.
 
@@ -12,6 +12,8 @@ Scroll is designed to be an ultra-minimalistic, distraction-free, non-addictive,
 ## Project Status
 
 Scroll is currently pre-alpha. You can follow [Paul Gordon](https://www.twitter.com/heropaulg) on Twitter, who is developing this project under the principles of build-in-public.
+
+The 1.0 release will be a focused HTML feed reader app without any tools to develop new feeds. Future versions of Scroll will likely include this functionality.
 
 ## Contribution
 
