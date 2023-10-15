@@ -1,5 +1,5 @@
 
-<img src="readme.logo.svg" width="30%">
+<img src="readme.logo.svg" width="30%" align="center">
 
 Scroll is an ambitious project, designed to replace social media. It's an app that lets you follow and aggregate media feeds sourced from any compatible URL. The app is a downloadable product for iOS & Android (via Capacitor) and for macOS / Windows / Linux desktop (via Tauri).
 
