@@ -7,8 +7,6 @@ The feeds must conform to the HTML feeds protocol, which is an emerging technolo
 
 Scroll brings a media consumption experience to the world which is ultra-minimalistic, distraction-free, ad & tracker free, and non-addictive.
 
-## Screendemo
-
 <p align="center"><img src="readme.demo.gif"></p>
 
 ## Project Status
