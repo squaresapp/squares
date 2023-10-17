@@ -265,7 +265,7 @@ namespace ScrollApp
 			if (post === null)
 				return null;
 			
-			const url = this.scrollJson.getPostUrl(post);
+			const url = Hat.over(this, RootHat).getPostUrl(post);
 			if (!url)
 				return null;
 			
@@ -286,13 +286,14 @@ namespace ScrollApp
 			if (!post)
 				throw new Error();
 			
-			const postUrl = this.scrollJson.getPostUrl(post) || "";
+			const root = Hat.over(this, RootHat);
+			const postUrl = root.getPostUrl(post) || "";
 			const reel = await HtmlFeed.getReelFromUrl(postUrl);
 			const sections: HTMLElement[] = reel ?
 				reel.sections.slice() :
 				[HtmlFeed.getErrorPoster()];
 			
-			const feed = this.scrollJson.getFeedById(post.feedId);
+			const feed = root.feedsJson.getFeed(post.feedId);
 			if (!feed)
 				throw new Error();
 			

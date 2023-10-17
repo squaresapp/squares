@@ -44,6 +44,7 @@ namespace ScrollApp
 			});
 			
 			this._appJson = await AppJson.read();
+			this._feedsJson = await FeedsJson.read();
 			this._scrollJsons = await this._appJson.readScrolls();
 			const paneSwiper = new PaneSwiper();
 			
@@ -86,6 +87,16 @@ namespace ScrollApp
 		private _appJson: AppJson | null = null;
 		
 		/** */
+		get feedsJson()
+		{
+			if (!this._feedsJson)
+				throw new Error();
+			
+			return this._feedsJson;
+		}
+		private _feedsJson: FeedsJson | null = null;
+		
+		/** */
 		get scrollJsons()
 		{
 			if (!this._scrollJsons)
@@ -94,6 +105,20 @@ namespace ScrollApp
 			return this._scrollJsons;
 		}
 		private _scrollJsons: ScrollJson[] = [];
+		
+		/**
+		 * Gets the fully qualified URL where the post resides, which is calculated
+		 * by concatenating the post path with the containing feed URL.
+		 */
+		getPostUrl(post: IPostJson)
+		{
+			const feed = this.feedsJson.getFeed(post.feedId);
+			if (!feed)
+				return null;
+			
+			const feedFolder = HtmlFeed.Url.folderOf(feed.url);
+			return feedFolder + post.path;
+		}
 	}
 	
 	//@ts-ignore
@@ -134,9 +159,7 @@ namespace ScrollApp
 	export async function debugGenerateJsonFiles()
 	{
 		const identifier = "scroll-id";
-		const urlBase = ELECTRON || TAURI || SIMULATOR ?
-			"http://localhost:43332/" :
-			"https://htmlfeeds.github.io/Examples/";
+		const urlBase = "https://htmlfeeds.github.io/Examples/";
 		
 		const appDataFila = await ScrollApp.getAppDataFila();
 		const scrollFila = appDataFila.down(identifier);
@@ -153,7 +176,8 @@ namespace ScrollApp
 			"trees/",
 		];
 		
-		const feeds: IFeedJson[] = [];
+		const feedsJson = new FeedsJson();
+		const feedsArray: IFeedJson[] = [];
 		const urlLists: string[][] = [];
 		
 		for (const feedPath of feedPaths)
@@ -163,7 +187,7 @@ namespace ScrollApp
 			urlLists.push(urls);
 			
 			const feedMeta = await HtmlFeed.getFeedMetaData(feedUrl);
-			feeds.push(IFeedJson.create({
+			const feedJson = IFeedJson.create({
 				id: Date.now(),
 				url: feedUrl,
 				icon: feedMeta?.icon || "",
@@ -171,10 +195,12 @@ namespace ScrollApp
 				description: feedMeta?.description || "",
 				size: bytesRead,
 				dateFollowed: Date.now()
-			}));
+			});
+			
+			feedsArray.push(feedJson);
+			feedsJson.addFeed(feedJson);
+			scrollJson.addFeeds(feedJson.id);
 		}
-		
-		await scrollJson.addFeeds(...feeds);
 		
 		const maxLength = urlLists.reduce((a, b) => a > b.length ? a : b.length, 0);
 		let incrementingDate = Date.now() - 10 ** 7;
@@ -188,14 +214,14 @@ namespace ScrollApp
 			if (urlList.length <= indexWithinList)
 				continue;
 			
-			const feedJsons = feeds[indexOfList];
-			const feedDirectory = HtmlFeed.Url.folderOf(feedJsons.url);
+			const feedJson = feedsArray[indexOfList];
+			const feedDirectory = HtmlFeed.Url.folderOf(feedJson.url);
 			const path = urlList[indexWithinList].slice(feedDirectory.length);
 			
 			await scrollJson.writePost({
 				visited: false,
 				dateFound: incrementingDate++,
-				feedId: feedJsons.id,
+				feedId: feedJson.id,
 				path,
 			});
 		}

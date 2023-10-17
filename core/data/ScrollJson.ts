@@ -29,14 +29,8 @@ namespace ScrollApp
 			if (typeof scrollJsonPartial.anchorIndex === "number")
 				scrollJson.anchorIndex = scrollJsonPartial.anchorIndex || 0;
 			
-			// Read the feeds
-			const feedsFila = scrollDirFila.down(feedsJsonName);
-			if (await feedsFila.exists())
-			{
-				const feedsJsonText = await feedsFila.readText();
-				const feedsJson = <IFeedJson[]>tryParseJson(feedsJsonText) || [];
-				scrollJson._feeds = feedsJson;
-			}
+			const feedIds = scrollJsonPartial.feeds as number[];
+			scrollJson.feedIds.push(...feedIds);
 			
 			// Read the posts
 			const contents = await scrollDirFila.readDirectory();
@@ -61,14 +55,7 @@ namespace ScrollApp
 		
 		anchorIndex: number = 0;
 		private posts: IPostJson[] = [];
-		
-		
-		/** */
-		get feeds(): readonly IFeedJson[]
-		{
-			return this._feeds;
-		}
-		private _feeds: IFeedJson[] = [];
+		private readonly feedIds: number[] = [];
 		
 		/** */
 		get identifier()
@@ -82,24 +69,10 @@ namespace ScrollApp
 		private _identifier = "scroll-" + Date.now().toString(36);
 		
 		/** */
-		async addFeeds(...feedJsons: IFeedJson[])
+		async addFeeds(...feedIds: number[])
 		{
-			this._feeds.push(...feedJsons);
-			const scrollFila = await this.writeScrollJson();
-			const feedsFila = scrollFila.down(feedsJsonName);
-			const feedJson = JSON.stringify(this.feeds);
-			await feedsFila.writeText(feedJson);
+			this.feedIds.push(...feedIds);
 			await this.writeScrollJson();
-		}
-		
-		/** */
-		getFeedById(feedId: number)
-		{
-			for (const feed of this.feeds)
-				if (feedId === feed.id)
-					return feed;
-			
-			return null;
 		}
 		
 		/** */
@@ -108,7 +81,7 @@ namespace ScrollApp
 			const scrollFila = await getScrollDirectory(this.identifier);
 			const scrollJson: IScrollJson = {
 				anchorIndex: this.anchorIndex,
-				feeds: this.feeds.map(f => f.id),
+				feeds: this.feedIds,
 			};
 			
 			await scrollFila.down(scrollJsonName).writeText(JSON.stringify(scrollJson));
@@ -160,20 +133,6 @@ namespace ScrollApp
 			return this.posts;
 		}
 		
-		/**
-		 * Gets the fully qualified URL where the post resides, which is calculated
-		 * by concatenating the post path with the containing feed URL.
-		 */
-		getPostUrl(post: IPostJson)
-		{
-			const feed = this.feeds.find(feed => feed.id === post.feedId);
-			if (!feed)
-				return null;
-			
-			const feedFolder = HtmlFeed.Url.folderOf(feed.url);
-			return feedFolder + post.path;
-		}
-		
 		/** */
 		private getContainingFileName(dateFound: number)
 		{
@@ -222,5 +181,4 @@ namespace ScrollApp
 	}
 	
 	const scrollJsonName = "scroll.json";
-	const feedsJsonName = "feeds.json";
 }

@@ -30,12 +30,9 @@ namespace ScrollApp
 		/** */
 		private construct()
 		{
-			const feeds = Hat.over(this, RootHat).scrollJsons
-				.flatMap(json => json.feeds)
-				.filter((v, i, a) => a.findIndex(json => json.id === v.id) === i);
-			
-			for (const feed of feeds)
-				this.head.append(this.renderIdentity(feed));
+			const feeds = Hat.over(this, RootHat).feedsJson.feeds;
+			for (let i = feeds.length; i-- > 0;)
+				this.head.append(this.renderIdentity(feeds[i]));
 		}
 		
 		/** */
