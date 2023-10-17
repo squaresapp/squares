@@ -69,13 +69,27 @@ namespace ScrollApp
 		private _identifier = "scroll-" + Date.now().toString(36);
 		
 		/**
+		 * CALLED EXCLUSIVELY FROM AppData.
 		 * Adds a reference to the specified feed from this ScrollData,
 		 * so that the posts within the feed display within the corresponding
 		 * scrollable element.
 		 */
-		async includeFeed(feedId: number)
+		async addFeedReference(feedId: number)
 		{
 			this.feedIds.push(feedId);
+			await this.writeScrollJson();
+		}
+		
+		/**
+		 * CALLED EXCLUSIVELY FROM AppData.
+		 * Removes a reference to the specified feed from this ScrollData,
+		 */
+		async removeFeedReference(feedId: number)
+		{
+			for (let i = this.feedIds.length; i-- > 0;)
+				if (this.feedIds[i] === feedId)
+					this.feedIds.splice(i, 1);
+			
 			await this.writeScrollJson();
 		}
 		

@@ -186,8 +186,7 @@ namespace ScrollApp
 			});
 			
 			feedsArray.push(feedJson);
-			appData.addFeed(feedJson);
-			scrollData.includeFeed(feedJson.id);
+			appData.followFeed(feedJson, scrollData.identifier);
 		}
 		
 		const maxLength = urlLists.reduce((a, b) => a > b.length ? a : b.length, 0);

@@ -105,16 +105,29 @@ namespace ScrollApp
 			return null;
 		}
 		
-		/** */
-		async addFeed(feedJson: IFeedJson)
+		/**
+		 * 
+		 */
+		async followFeed(feedJson: IFeedJson, scrollName: string)
 		{
 			this._feeds.push(feedJson);
 			await this.writeFeedsJson();
+			
+			const scrollDatas = await this.readScrolls();
+			const sd = scrollDatas.find(s => s.identifier === scrollName);
+			sd?.addFeedReference(feedJson.id);
 		}
 		
-		/** */
-		async removeFeed(identifier: number)
+		/**
+		 * 
+		 */
+		async unfollowFeed(identifier: number)
 		{
+			const scrollDatas = await this.readScrolls();
+			
+			for (const scrollData of scrollDatas)
+				scrollData.removeFeedReference(identifier);
+			
 			for (let i = this._feeds.length; i-- > 0;)
 				if (this._feeds[i].id === identifier)
 					this._feeds.splice(i, 1);

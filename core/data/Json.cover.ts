@@ -22,8 +22,6 @@ namespace ScrollApp.Cover
 		
 		const f1 = createFeed(++feedIndex);
 		const f2 = createFeed(++feedIndex);
-		appJson.addFeed(f1);
-		appJson.addFeed(f2);
 		
 		const createPost = (feedId: number) =>
 		{
@@ -33,13 +31,10 @@ namespace ScrollApp.Cover
 			});
 		}
 		
-		const createScrollJson = () =>
+		const createScroll = () =>
 		{
 			const scroll = new ScrollData("scroll-created");
 			scroll.anchorIndex = 1;
-			
-			scroll.includeFeed(f1.id);
-			scroll.includeFeed(f2.id);
 			scroll.writePost(createPost(f1.id));
 			scroll.writePost(createPost(f1.id));
 			scroll.writePost(createPost(f2.id));
@@ -47,10 +42,12 @@ namespace ScrollApp.Cover
 			return scroll;
 		}
 		
-		const scroll1 = createScrollJson();
-		const scroll2 = createScrollJson();
+		const scroll1 = createScroll();
+		const scroll2 = createScroll();
 		await appJson.addScroll(scroll1.identifier);
 		await appJson.addScroll(scroll2.identifier);
+		await appJson.followFeed(f1, scroll1.identifier);
+		await appJson.followFeed(f2, scroll2.identifier);
 	}
 	
 	let feedIndex = 0;
