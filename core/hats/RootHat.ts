@@ -136,7 +136,7 @@ namespace ScrollApp
 		const identifier = "scroll-id";
 		const urlBase = ELECTRON || TAURI || SIMULATOR ?
 			"http://localhost:43332/" :
-			"https://htmlreels.b-cdn.net/";
+			"https://htmlfeeds.github.io/Examples/";
 		
 		const appDataFila = await ScrollApp.getAppDataFila();
 		const scrollFila = appDataFila.down(identifier);
