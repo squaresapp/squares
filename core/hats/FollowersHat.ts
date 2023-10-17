@@ -30,7 +30,7 @@ namespace ScrollApp
 		/** */
 		private construct()
 		{
-			const feeds = Hat.over(this, RootHat).feedsJson.feeds;
+			const feeds = Hat.over(this, RootHat).appData.feeds;
 			for (let i = feeds.length; i-- > 0;)
 				this.head.append(this.renderIdentity(feeds[i]));
 		}

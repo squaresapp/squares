@@ -7,10 +7,10 @@ namespace ScrollApp
 	// without caching.
 	
 	/**
-	 * A class that describes one of many possible JSON files that store
-	 * information about a Scroll (which is a composition of multiple feeds).
+	 * A class that manages the data that relates to a single scrollable element,
+	 * such as the feeds it includes and the posts.
 	 */
-	export class ScrollJson
+	export class ScrollData
 	{
 		/** */
 		static async read(identifier: string)
@@ -19,18 +19,18 @@ namespace ScrollApp
 			
 			const scrollFila = scrollDirFila.down(scrollJsonName);
 			if (!await scrollFila.exists())
-				return new ScrollJson(identifier);
+				return new ScrollData(identifier);
 			
 			const scrollJsonText = await scrollFila.readText();
-			const scrollJsonPartial = JSON.parse(scrollJsonText);
-			const scrollJson = new ScrollJson(identifier);
+			const scrollJson = JSON.parse(scrollJsonText);
+			const scrollData = new ScrollData(identifier);
 			
 			// Read in any attributes (for now just one)
-			if (typeof scrollJsonPartial.anchorIndex === "number")
-				scrollJson.anchorIndex = scrollJsonPartial.anchorIndex || 0;
+			if (typeof scrollJson.anchorIndex === "number")
+				scrollData.anchorIndex = scrollJson.anchorIndex || 0;
 			
-			const feedIds = scrollJsonPartial.feeds as number[];
-			scrollJson.feedIds.push(...feedIds);
+			const feedIds = scrollJson.feeds as number[];
+			scrollData.feedIds.push(...feedIds);
 			
 			// Read the posts
 			const contents = await scrollDirFila.readDirectory();
@@ -41,10 +41,10 @@ namespace ScrollApp
 					continue;
 				
 				const postsRead = await readPostsFile(contents[i]);
-				scrollJson.posts.push(...postsRead);
+				scrollData.posts.push(...postsRead);
 			}
 			
-			return scrollJson;
+			return scrollData;
 		}
 		
 		/** */
@@ -68,10 +68,14 @@ namespace ScrollApp
 		}
 		private _identifier = "scroll-" + Date.now().toString(36);
 		
-		/** */
-		async addFeeds(...feedIds: number[])
+		/**
+		 * Adds a reference to the specified feed from this ScrollData,
+		 * so that the posts within the feed display within the corresponding
+		 * scrollable element.
+		 */
+		async includeFeed(feedId: number)
 		{
-			this.feedIds.push(...feedIds);
+			this.feedIds.push(feedId);
 			await this.writeScrollJson();
 		}
 		

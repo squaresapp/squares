@@ -60,7 +60,7 @@ namespace ScrollApp
 				const muxDirectory = await ScrollApp.getAppDataFila();
 				await this.scrollProvider.load(muxDirectory);
 				
-				for (const post of scrollJson.getPosts())
+				for (const post of scrollData.getPosts())
 				{
 					const feed = this.scrollProvider.getFeed(post.feedId);
 					if (!feed)
@@ -107,17 +107,17 @@ namespace ScrollApp
 		private async showStory(index: number)
 		{
 			/*
-			const post = this.scrollJson.getPost(index);
+			const post = this.scrollData.getPost(index);
 			if (!post)
 				throw new Error();
 			
-			const postUrl = this.scrollJson.getPostUrl(post) || "";
+			const postUrl = this.scrollData.getPostUrl(post) || "";
 			const reel = await HtmlFeed.getReelFromUrl(postUrl);
 			const sections: HTMLElement[] = reel ?
 				reel.sections.slice() :
 				[HtmlFeed.getErrorPoster()];
 			
-			const feed = this.scrollJson.getFeed(post.feedId);
+			const feed = this.scrollData.getFeed(post.feedId);
 			if (!feed)
 				throw new Error();
 			*/
@@ -253,7 +253,7 @@ namespace ScrollApp
 	export class ScrollMuxViewerHat extends ScrollViewerHat
 	{
 		/** */
-		constructor(private readonly scrollJson: ScrollJson)
+		constructor(private readonly scrollData: ScrollData)
 		{
 			super();
 		}
@@ -261,7 +261,7 @@ namespace ScrollApp
 		/** */
 		protected getPost(index: number)
 		{
-			const post = this.scrollJson.getPost(index);
+			const post = this.scrollData.getPost(index);
 			if (post === null)
 				return null;
 			
@@ -282,7 +282,7 @@ namespace ScrollApp
 		/** */
 		protected async getStory(index: number)
 		{
-			const post = this.scrollJson.getPost(index);
+			const post = this.scrollData.getPost(index);
 			if (!post)
 				throw new Error();
 			
@@ -293,7 +293,7 @@ namespace ScrollApp
 				reel.sections.slice() :
 				[HtmlFeed.getErrorPoster()];
 			
-			const feed = root.feedsJson.getFeed(post.feedId);
+			const feed = root.appData.getFeed(post.feedId);
 			if (!feed)
 				throw new Error();
 			
@@ -303,11 +303,11 @@ namespace ScrollApp
 		/** */
 		protected handlePostVisited(index: number): void
 		{
-			const post = this.scrollJson.getPost(index);
+			const post = this.scrollData.getPost(index);
 			if (post)
 			{
 				post.visited = true;
-				this.scrollJson.writePost(post);
+				this.scrollData.writePost(post);
 			}
 		}
 	}

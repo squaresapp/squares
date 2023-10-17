@@ -43,14 +43,13 @@ namespace ScrollApp
 				
 			});
 			
-			this._appJson = await AppJson.read();
-			this._feedsJson = await FeedsJson.read();
-			this._scrollJsons = await this._appJson.readScrolls();
+			this._appData = await AppData.read();
+			this._scrollDatas = await this._appData.readScrolls();
 			const paneSwiper = new PaneSwiper();
 			
-			for (const scrollJson of this.scrollJsons)
+			for (const scrollData of this.scrollDatas)
 			{
-				const viewer = new ScrollMuxViewerHat(scrollJson);
+				const viewer = new ScrollMuxViewerHat(scrollData);
 				paneSwiper.addPane(viewer.head);
 			}
 			
@@ -77,34 +76,24 @@ namespace ScrollApp
 		}
 		
 		/** */
-		get appJson()
+		get appData()
 		{
-			if (!this._appJson)
+			if (!this._appData)
 				throw new Error();
 			
-			return this._appJson;
+			return this._appData;
 		}
-		private _appJson: AppJson | null = null;
+		private _appData: AppData | null = null;
 		
 		/** */
-		get feedsJson()
+		get scrollDatas()
 		{
-			if (!this._feedsJson)
+			if (!this._scrollDatas)
 				throw new Error();
 			
-			return this._feedsJson;
+			return this._scrollDatas;
 		}
-		private _feedsJson: FeedsJson | null = null;
-		
-		/** */
-		get scrollJsons()
-		{
-			if (!this._scrollJsons)
-				throw new Error();
-			
-			return this._scrollJsons;
-		}
-		private _scrollJsons: ScrollJson[] = [];
+		private _scrollDatas: ScrollData[] = [];
 		
 		/**
 		 * Gets the fully qualified URL where the post resides, which is calculated
@@ -112,7 +101,7 @@ namespace ScrollApp
 		 */
 		getPostUrl(post: IPostJson)
 		{
-			const feed = this.feedsJson.getFeed(post.feedId);
+			const feed = this.appData.getFeed(post.feedId);
 			if (!feed)
 				return null;
 			
@@ -166,9 +155,9 @@ namespace ScrollApp
 		if (await scrollFila.exists())
 			await scrollFila.delete();
 		
-		const scrollJson = new ScrollJson(identifier);
-		const appJson = new AppJson();
-		appJson.addScroll(scrollJson.identifier);
+		const scrollData = new ScrollData(identifier);
+		const appData = new AppData();
+		appData.addScroll(scrollData.identifier);
 		
 		const feedPaths = [
 			"raccoons/",
@@ -176,7 +165,6 @@ namespace ScrollApp
 			"trees/",
 		];
 		
-		const feedsJson = new FeedsJson();
 		const feedsArray: IFeedJson[] = [];
 		const urlLists: string[][] = [];
 		
@@ -198,8 +186,8 @@ namespace ScrollApp
 			});
 			
 			feedsArray.push(feedJson);
-			feedsJson.addFeed(feedJson);
-			scrollJson.addFeeds(feedJson.id);
+			appData.addFeed(feedJson);
+			scrollData.includeFeed(feedJson.id);
 		}
 		
 		const maxLength = urlLists.reduce((a, b) => a > b.length ? a : b.length, 0);
@@ -218,7 +206,7 @@ namespace ScrollApp
 			const feedDirectory = HtmlFeed.Url.folderOf(feedJson.url);
 			const path = urlList[indexWithinList].slice(feedDirectory.length);
 			
-			await scrollJson.writePost({
+			await scrollData.writePost({
 				visited: false,
 				dateFound: incrementingDate++,
 				feedId: feedJson.id,

@@ -5,8 +5,7 @@ namespace ScrollApp.Cover
 	export async function coverJson()
 	{
 		FilaNode.use();
-		const appJson = new AppJson();
-		const feedsJson = new FeedsJson();
+		const appJson = new AppData();
 		
 		const createFeed = (id: number) =>
 		{
@@ -23,8 +22,8 @@ namespace ScrollApp.Cover
 		
 		const f1 = createFeed(++feedIndex);
 		const f2 = createFeed(++feedIndex);
-		feedsJson.addFeed(f1);
-		feedsJson.addFeed(f2);
+		appJson.addFeed(f1);
+		appJson.addFeed(f2);
 		
 		const createPost = (feedId: number) =>
 		{
@@ -36,10 +35,11 @@ namespace ScrollApp.Cover
 		
 		const createScrollJson = () =>
 		{
-			const scroll = new ScrollJson("scroll-created");
+			const scroll = new ScrollData("scroll-created");
 			scroll.anchorIndex = 1;
 			
-			scroll.addFeeds(f1.id, f2.id);
+			scroll.includeFeed(f1.id);
+			scroll.includeFeed(f2.id);
 			scroll.writePost(createPost(f1.id));
 			scroll.writePost(createPost(f1.id));
 			scroll.writePost(createPost(f2.id));
