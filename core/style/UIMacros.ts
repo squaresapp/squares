@@ -155,6 +155,21 @@ namespace ScrollApp
 		}
 		
 		/** */
+		export async function collapse(e: HTMLElement)
+		{
+			const height = e.offsetHeight;
+			e.style.marginBottom = "0px";
+			e.style.clipPath = "inset(0 0 0 0)";
+			e.style.transitionProperty = "opacity, margin-bottom, clip-path";
+			e.style.transitionDuration = "0.5s";
+			await UI.wait();
+			e.style.opacity = "0";
+			e.style.marginBottom = "-" + height + "px";
+			e.style.clipPath = "inset(0 0 100% 0)";
+			await UI.waitTransitionEnd(e);
+		}
+		
+		/** */
 		export namespace screenTransition
 		{
 			/** */

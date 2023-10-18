@@ -41,7 +41,7 @@ namespace ScrollApp
 			const iconUrl = IFeedJson.getIconUrl(feed);
 			const author = feed.author || Strings.unknownAuthor;
 			
-			return hot.div(
+			const e = hot.div(
 				{
 					display: "flex",
 					alignContent: "center",
@@ -71,9 +71,17 @@ namespace ScrollApp
 					hot.text(author)
 				),
 				Widget.fillButton(
-					hot.text(Strings.unfollow)
+					hot.text(Strings.unfollow),
+					hot.on("click", async () =>
+					{
+						await Hat.over(this, RootHat).appData.unfollowFeed(feed.id);
+						await UI.collapse(e);
+						e.remove();
+					}),
 				)
 			);
+			
+			return e;
 		}
 	}
 }
