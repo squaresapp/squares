@@ -2,6 +2,11 @@
 	"appId": "org.scrollapp",
 	"appName": "Scroll",
 	"webDir": "+build",
+	"plugins": {
+		"CapacitorHttp": {
+			"enabled": true
+		}
+	},
 	"server": {
 		"hostname": "localhost",
 		"androidScheme": "https"

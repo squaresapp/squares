@@ -6,6 +6,8 @@ PODS:
   - CapacitorCordova (5.4.2)
   - CapacitorDevice (5.0.6):
     - Capacitor
+  - CapacitorDialog (5.0.6):
+    - Capacitor
   - CapacitorFilesystem (5.1.4):
     - Capacitor
   - CapacitorShare (5.0.6):
@@ -18,6 +20,7 @@ DEPENDENCIES:
   - "CapacitorClipboard (from `../../node_modules/@capacitor/clipboard`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorDevice (from `../../node_modules/@capacitor/device`)"
+  - "CapacitorDialog (from `../../node_modules/@capacitor/dialog`)"
   - "CapacitorFilesystem (from `../../node_modules/@capacitor/filesystem`)"
   - "CapacitorShare (from `../../node_modules/@capacitor/share`)"
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
@@ -31,6 +34,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorDevice:
     :path: "../../node_modules/@capacitor/device"
+  CapacitorDialog:
+    :path: "../../node_modules/@capacitor/dialog"
   CapacitorFilesystem:
     :path: "../../node_modules/@capacitor/filesystem"
   CapacitorShare:
@@ -43,10 +48,11 @@ SPEC CHECKSUMS:
   CapacitorClipboard: 77edf49827ea21da2a9c05c690a4a6a4d07199c4
   CapacitorCordova: cfcc06b698481da655415985eeb2b8da363f8451
   CapacitorDevice: 2c968f98a1ec4d22357418c1521e7ddc46c675e6
+  CapacitorDialog: 0f3c15dfe9414b83bc64aef4078f1b92bcfead26
   CapacitorFilesystem: af704badfbc69f6f8623d9ed313e5490e3723dcb
   CapacitorShare: cd41743331cb71d217c029de54b681cbd91e0fcc
   CapacitorStatusBar: 565c0a1ebd79bb40d797606a8992b4a105885309
 
-PODFILE CHECKSUM: 4d49f10a75be8134cca50f3e18606a1ef63a689c
+PODFILE CHECKSUM: de693b17f2fa2e4a44177c421f49c4cebc77be25
 
 COCOAPODS: 1.11.3
