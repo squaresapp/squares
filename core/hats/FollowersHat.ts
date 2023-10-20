@@ -2,6 +2,9 @@
 namespace ScrollApp
 {
 	/** */
+	export function UnfollowSignal(feedId: number) {}
+	
+	/** */
 	export class FollowersHat
 	{
 		readonly head;
@@ -24,7 +27,18 @@ namespace ScrollApp
 				)
 			);
 			
-			Hat.wear(this);
+			Hat
+				.wear(this)
+				.wear(UnfollowSignal, this.handleUnfollow);
+		}
+		
+		/** */
+		private handleUnfollow(feedId: number)
+		{
+			const cls = idPrefix + feedId;
+			Array.from(this.head.children)
+				.filter(e => e instanceof HTMLElement && e.classList.contains(cls))
+				.map(e => e.remove());
 		}
 		
 		/** */
@@ -52,6 +66,7 @@ namespace ScrollApp
 					backgroundColor: "rgba(128, 128, 128, 0.25)",
 					borderRadius: Style.borderRadiusSmall,
 				},
+				idPrefix + feed.id,
 				hot.div(
 					{
 						width: "50px",
@@ -84,4 +99,6 @@ namespace ScrollApp
 			return e;
 		}
 	}
+	
+	const idPrefix = "id:";
 }

@@ -68,8 +68,12 @@ namespace ScrollApp
 						hot.text(data.description)
 					),
 					
-					this.renderButton(Strings.share),
-					this.renderButton(Strings.unfollow),
+					this.renderButton(Strings.share, () => {}),
+					e => this.renderButton(Strings.unfollow, () =>
+					{
+						Hat.over(this, StoryHat).head.scrollBy({ top: -1 });
+						Hat.signal(UnfollowSignal, data.id);
+					}),
 				),
 			);
 			
@@ -77,17 +81,14 @@ namespace ScrollApp
 		}
 		
 		/** */
-		private renderButton(label: string)
+		private renderButton(label: string, clickFn: () => void)
 		{
 			return Widget.fillButton(
 				{
 					marginRight: "15px",
 				},
 				hot.text(label),
-				hot.on("click", () =>
-				{
-					
-				})
+				hot.on("click", () => clickFn())
 			);
 		}
 	}
