@@ -170,6 +170,22 @@ namespace ScrollApp
 		}
 		
 		/** */
+		export async function fade(e: HTMLElement)
+		{
+			e.style.transitionProperty = "opacity";
+			e.style.transitionDuration = "0.5s";
+			e.style.pointerEvents = "none";
+			
+			if (!e.style.opacity)
+				e.style.opacity = "1";
+			
+			await UI.wait();
+			e.style.opacity = "0";
+			await UI.waitTransitionEnd(e);
+			e.style.visibility = "hidden";
+		}
+		
+		/** */
 		export namespace screenTransition
 		{
 			/** */

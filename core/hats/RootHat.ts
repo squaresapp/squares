@@ -17,7 +17,8 @@ namespace ScrollApp
 				}
 			);
 			
-			Hat.wear(this);
+			Hat.wear(this)
+				.wear(UnfollowSignal, id => this.appData.unfollowFeed(id));
 		}
 		
 		/** */

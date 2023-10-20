@@ -2,9 +2,6 @@
 namespace ScrollApp
 {
 	/** */
-	export function UnfollowSignal(feedId: number) {}
-	
-	/** */
 	export class FollowersHat
 	{
 		readonly head;
@@ -89,7 +86,7 @@ namespace ScrollApp
 					hot.text(Strings.unfollow),
 					hot.on("click", async () =>
 					{
-						await Hat.over(this, RootHat).appData.unfollowFeed(feed.id);
+						Hat.signal(UnfollowSignal, feed.id);
 						await UI.collapse(e);
 						e.remove();
 					}),

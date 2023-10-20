@@ -129,8 +129,11 @@ namespace ScrollApp
 				scrollData.removeFeedReference(identifier);
 			
 			for (let i = this._feeds.length; i-- > 0;)
-				if (this._feeds[i].id === identifier)
-					this._feeds.splice(i, 1);
+			{
+				const feed = this._feeds[i];
+				if (feed.id === identifier)
+					feed.dateFollowed = -Math.abs(feed.dateFollowed);
+			}
 			
 			await this.writeFeedsJson();
 		}

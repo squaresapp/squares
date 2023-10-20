@@ -11,6 +11,7 @@ namespace ScrollApp
 		{
 			const iconUrl = IFeedJson.getIconUrl(data);
 			const author = data.author || Strings.unknownAuthor;
+			const isFollowing = data.dateFollowed > 0;
 			
 			this.head = hot.div(
 				{
@@ -69,11 +70,12 @@ namespace ScrollApp
 					),
 					
 					this.renderButton(Strings.share, () => {}),
-					e => this.renderButton(Strings.unfollow, () =>
+					isFollowing && (e => this.renderButton(Strings.unfollow, () =>
 					{
 						Hat.over(this, StoryHat).head.scrollBy({ top: -1 });
 						Hat.signal(UnfollowSignal, data.id);
-					}),
+						UI.fade(e);
+					})),
 				),
 			);
 			
