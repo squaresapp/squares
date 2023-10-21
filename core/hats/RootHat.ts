@@ -1,6 +1,11 @@
 
 namespace ScrollApp
 {
+	// 
+	
+	
+	
+	
 	/** */
 	export class RootHat
 	{
@@ -39,9 +44,15 @@ namespace ScrollApp
 				debugConnectRefreshTool();
 			}
 			
-			TAURI && window.addEventListener("focus", () =>
+			window.addEventListener("focus", () =>
 			{
 				
+			});
+			
+			window.addEventListener("follow", ev =>
+			{
+				const followUrl: string = (ev as any).data;
+				//! TODO: Capture the follow message here.
 			});
 			
 			this._appData = await AppData.read();
@@ -65,7 +76,8 @@ namespace ScrollApp
 				position: "absolute",
 				left: 0,
 				right: 0,
-				bottom: "105px",
+				bottom: CAPACITOR ? "105px" : "15px",
+				margin: "auto",
 			});
 			
 			this.head.append(dotsHat.head);
