@@ -11,8 +11,13 @@ namespace ScrollApp
 		{
 			this.head = hot.div(
 				{
+					width: "fit-content",
+					padding: "5px 10px",
+					borderRadius: "1000px",
+					backgroundColor: "rgba(0, 0, 0, 0.75)",
 					textAlign: "center",
 				},
+				Style.backdropBlur(5),
 				hot.css(" > SPAN", {
 					display: "inline-block",
 					width: "10px",
@@ -25,6 +30,8 @@ namespace ScrollApp
 					backgroundColor: "hsl(205, 100%, 50%)",
 				})
 			);
+			
+			Hat.wear(this);
 		}
 		
 		/** */

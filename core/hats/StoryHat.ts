@@ -78,9 +78,9 @@ namespace ScrollApp
 								width: "100%",
 								height: "100%",
 								backgroundColor: "rgba(128, 128, 128, 0.33)",
-								backdropFilter: "blur(8px)",
 								borderRadius: Style.borderRadiusLarge,
 							},
+							Style.backdropBlur(8),
 							new FeedMetaHat(this.feed)
 						)
 					),
