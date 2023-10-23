@@ -47,17 +47,19 @@ namespace ScrollApp
 	export namespace IFeedJson
 	{
 		/** */
-		export function create(defaults: Partial<IFeedJson> = {}): IFeedJson
+		export function create(...defaults: Partial<IFeedJson>[]): IFeedJson
 		{
-			return Object.assign({
-				id: 0,
-				url: "",
-				icon: "",
-				author: "",
-				description: "",
-				size: 0,
-				dateFollowed: Date.now(),
-			}, defaults);
+			return Object.assign(
+				{
+					id: Date.now(),
+					url: "",
+					icon: "",
+					author: "",
+					description: "",
+					size: 0,
+					dateFollowed: Date.now(),
+				},
+				...defaults);
 		}
 		
 		/**

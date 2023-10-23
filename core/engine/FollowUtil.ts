@@ -2,8 +2,34 @@
 namespace ScrollApp
 {
 	/** */
-	export namespace ClipboardMonitor
+	export namespace FollowUtil
 	{
+		/**
+		 * Parses URIs as specified in the HTML feeds specification found at:
+		 * https://www.scrollapp.org/specs/htmlfeeds/
+		 */
+		export function parseFollowUri(uri: string)
+		{
+			uri = uri.trim();
+			const prefix = "html://follow?"
+			if (!uri.startsWith(prefix))
+				return "";
+			
+			uri = uri.slice(prefix.length);
+			
+			if (uri.length > 2048)
+				return "";
+			
+			try
+			{
+				const url = new URL(uri);
+				return url.toString();
+			}
+			catch (e) { }
+			
+			return "";
+		}
+		
 		/**
 		 * Scans the clipboard for content in the form of a text/uri-list that starts with the
 		 * html://subscribe/ URI prefix, and returns a list of the URLs that are stored within

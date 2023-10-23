@@ -5,7 +5,8 @@ namespace ScrollApp
 	{
 		following = "Following",
 		unfollow = "Unfollow",
+		nowFollowing = "Now following",
 		share = "Share",
-		unknownAuthor = "(Author Unknown)"
+		unknownAuthor = "(Author Unknown)",
 	}
 }

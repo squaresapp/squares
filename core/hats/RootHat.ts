@@ -1,11 +1,6 @@
 
 namespace ScrollApp
 {
-	// 
-	
-	
-	
-	
 	/** */
 	export class RootHat
 	{
@@ -19,7 +14,20 @@ namespace ScrollApp
 				{
 					height: "inherit",
 					top: "env(safe-area-inset-top)",
-				}
+				},
+				hot.on(window, "follow" as any, async ev =>
+				{
+					const htmlUri: string = (ev as any).data;
+					const feedJson = await this.followFeedFromUri(htmlUri);
+					if (!feedJson)
+						return;
+					
+					await Toast.show({
+						position: "center",
+						duration: "long",
+						text: Strings.nowFollowing + " " + feedJson.author
+					});
+				})
 			);
 			
 			Hat.wear(this)
@@ -43,17 +51,6 @@ namespace ScrollApp
 				await debugGenerateJsonFiles();
 				debugConnectRefreshTool();
 			}
-			
-			window.addEventListener("focus", () =>
-			{
-				
-			});
-			
-			window.addEventListener("follow", ev =>
-			{
-				const followUrl: string = (ev as any).data;
-				//! TODO: Capture the follow message here.
-			});
 			
 			this._appData = await AppData.read();
 			this._scrollDatas = await this._appData.readScrolls();
@@ -109,6 +106,27 @@ namespace ScrollApp
 		private _scrollDatas: ScrollData[] = [];
 		
 		/**
+		 * 
+		 */
+		async followFeedFromUri(htmlUri: string)
+		{
+			const followUri = FollowUtil.parseFollowUri(htmlUri);
+			if (!followUri)
+				return null;
+			
+			const feedContents = await HtmlFeed.getFeedContents(followUri);
+			if (!feedContents)
+				return null;
+			
+			const feedMeta = await HtmlFeed.getFeedMetaData(followUri);
+			const feedJson = IFeedJson.create(feedMeta || {}, { size: feedContents.bytesRead });
+			await this.appData.followFeed(feedJson, this.scrollDatas[0].identifier);
+			
+			Hat.signal(FollowSignal, feedJson);
+			return feedJson;
+		}
+		
+		/**
 		 * Gets the fully qualified URL where the post resides, which is calculated
 		 * by concatenating the post path with the containing feed URL.
 		 */
@@ -162,7 +180,6 @@ namespace ScrollApp
 	{
 		const identifier = "scroll-id";
 		const urlBase = "https://htmlfeeds.github.io/Examples/";
-		
 		const appDataFila = await ScrollApp.getAppDataFila();
 		const scrollFila = appDataFila.down(identifier);
 		if (await scrollFila.exists())
@@ -173,7 +190,6 @@ namespace ScrollApp
 		appData.addScroll(scrollData.identifier);
 		
 		const feedPaths = [
-			"raccoons/",
 			"red-flowers/",
 			"trees/",
 		];
@@ -183,21 +199,15 @@ namespace ScrollApp
 		
 		for (const feedPath of feedPaths)
 		{
-			const feedUrl = urlBase + feedPath + "index.txt";
-			const { urls, bytesRead } = await HtmlFeed.getFeedFromUrl(feedUrl);
-			urlLists.push(urls);
+			const url = urlBase + feedPath + "index.txt";
+			const contents = await HtmlFeed.getFeedContents(url);
+			if (!contents)
+				continue;
 			
-			const feedMeta = await HtmlFeed.getFeedMetaData(feedUrl);
-			const feedJson = IFeedJson.create({
-				id: Date.now(),
-				url: feedUrl,
-				icon: feedMeta?.icon || "",
-				author: feedMeta?.author || "",
-				description: feedMeta?.description || "",
-				size: bytesRead,
-				dateFollowed: Date.now()
-			});
+			urlLists.push(contents.urls);
 			
+			const feedMeta = await HtmlFeed.getFeedMetaData(url);
+			const feedJson = IFeedJson.create(feedMeta || {}, { size: contents.bytesRead });
 			feedsArray.push(feedJson);
 			appData.followFeed(feedJson, scrollData.identifier);
 		}

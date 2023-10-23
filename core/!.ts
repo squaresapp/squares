@@ -93,6 +93,9 @@ const isPwa =
 const isTouch =  matchMedia("(pointer:coarse)").matches;
 const hot = new Hot();
 
+// Bindings for the Toast plugin
+declare const Toast: typeof import("@capacitor/toast").Toast;
+
 namespace ScrollApp
 {
 	/**
@@ -101,9 +104,13 @@ namespace ScrollApp
 	 */
 	export async function startup()
 	{
+		const g = globalThis as any;
+		
+		if (CAPACITOR)
+			g.Toast = g.Capacitor?.Plugins?.Toast;
+		
 		if (DEBUG && CAPACITOR)
 		{
-			const g = globalThis as any;
 			const device = g.Capacitor?.Plugins?.Device;
 			const info = await device.getInfo();
 			Object.assign(globalThis, { SIMULATOR: info.isVirtual });

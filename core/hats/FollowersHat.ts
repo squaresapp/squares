@@ -5,6 +5,7 @@ namespace ScrollApp
 	export class FollowersHat
 	{
 		readonly head;
+		private readonly feedElements;
 		
 		/** */
 		constructor()
@@ -21,12 +22,14 @@ namespace ScrollApp
 						marginBottom: "20px",
 					},
 					hot.text(Strings.following)
-				)
+				),
+				this.feedElements = hot.div()
 			);
 			
 			Hat
 				.wear(this)
-				.wear(UnfollowSignal, this.handleUnfollow);
+				.wear(UnfollowSignal, this.handleUnfollow)
+				.wear(FollowSignal, this.handleFollow);
 		}
 		
 		/** */
@@ -39,11 +42,17 @@ namespace ScrollApp
 		}
 		
 		/** */
+		private handleFollow(feed: IFeedJson)
+		{
+			this.feedElements.prepend(this.renderIdentity(feed));
+		}
+		
+		/** */
 		private construct()
 		{
 			const feeds = Hat.over(this, RootHat).appData.feeds;
 			for (let i = feeds.length; i-- > 0;)
-				this.head.append(this.renderIdentity(feeds[i]));
+				this.feedElements.append(this.renderIdentity(feeds[i]));
 		}
 		
 		/** */
