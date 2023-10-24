@@ -2,6 +2,9 @@
 include ':capacitor-android'
 project(':capacitor-android').projectDir = new File('../node_modules/@capacitor/android/capacitor')
 
+include ':capacitor-background-runner'
+project(':capacitor-background-runner').projectDir = new File('../node_modules/@capacitor/background-runner/android')
+
 include ':capacitor-clipboard'
 project(':capacitor-clipboard').projectDir = new File('../node_modules/@capacitor/clipboard/android')
 

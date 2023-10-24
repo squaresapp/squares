@@ -1,6 +1,8 @@
 PODS:
   - Capacitor (5.4.2):
     - CapacitorCordova
+  - CapacitorBackgroundRunner (1.0.5):
+    - Capacitor
   - CapacitorClipboard (5.0.6):
     - Capacitor
   - CapacitorCordova (5.4.2)
@@ -19,6 +21,7 @@ PODS:
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorBackgroundRunner (from `../../node_modules/@capacitor/background-runner`)"
   - "CapacitorClipboard (from `../../node_modules/@capacitor/clipboard`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorDevice (from `../../node_modules/@capacitor/device`)"
@@ -31,6 +34,8 @@ DEPENDENCIES:
 EXTERNAL SOURCES:
   Capacitor:
     :path: "../../node_modules/@capacitor/ios"
+  CapacitorBackgroundRunner:
+    :path: "../../node_modules/@capacitor/background-runner"
   CapacitorClipboard:
     :path: "../../node_modules/@capacitor/clipboard"
   CapacitorCordova:
@@ -50,6 +55,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Capacitor: 8a9db42d105f55843cd8ed2a3cb54e2b78e7f102
+  CapacitorBackgroundRunner: f2415aebbcea4e744eb45f785a50f07ba72f1d0b
   CapacitorClipboard: 77edf49827ea21da2a9c05c690a4a6a4d07199c4
   CapacitorCordova: cfcc06b698481da655415985eeb2b8da363f8451
   CapacitorDevice: 2c968f98a1ec4d22357418c1521e7ddc46c675e6
@@ -59,6 +65,6 @@ SPEC CHECKSUMS:
   CapacitorStatusBar: 565c0a1ebd79bb40d797606a8992b4a105885309
   CapacitorToast: bb0d79b78d9c27c0199b57f735dd50b8fc363489
 
-PODFILE CHECKSUM: 23af09db10b93ef68c7e9f05fff5cf6e8d31c299
+PODFILE CHECKSUM: 6a9d8377de3584e06dcd21d60055ddbe0dde5e17
 
 COCOAPODS: 1.11.3
