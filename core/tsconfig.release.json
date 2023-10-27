@@ -1,0 +1,22 @@
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"outFile": "+build/scroll.js",
+	},
+	"exclude": [
+		"**/+build/**/*.ts",
+		"**/*.cover.ts",
+	],
+	"references": [
+		{ "path": "../Hot" },
+		{ "path": "../Hat" },
+		{ "path": "../Query" },
+		{ "path": "../Not" },
+		{ "path": "../Fila" },
+		{ "path": "../FilaNode" },
+		{ "path": "../FilaTauri" },
+		{ "path": "../Pinger" },
+		{ "path": "../HtmlFeedJS" },
+		{ "path": "../Dock" },
+	]
+}

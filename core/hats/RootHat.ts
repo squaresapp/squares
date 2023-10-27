@@ -190,7 +190,6 @@ namespace ScrollApp
 		appData.addScroll(scrollData.identifier);
 		
 		const feedPaths = [
-			"red-flowers/",
 			"trees/",
 		];
 		

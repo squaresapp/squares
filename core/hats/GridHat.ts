@@ -10,9 +10,20 @@ namespace ScrollApp
 		readonly head;
 		
 		/** */
+		private readonly cornersElement;
+		
+		/** */
 		constructor()
 		{
 			maybeAppendDefaultCss();
+			const size = parseInt(Style.borderRadiusLarge);
+			const cornerStyles: Hot.Style = {
+				position: "absolute",
+				zIndex: 1,
+				width: size + "px",
+				height: size + "px",
+				pointerEvents: "none",
+			};
 			
 			this.head = hot.div(
 				Style.unselectable,
@@ -26,7 +37,6 @@ namespace ScrollApp
 					position: "absolute",
 					width: "100%",
 					height: "100%",
-					//aspectRatio: ratioX + "/" + ratioY,
 					overflow: "hidden",
 					outline: "2px solid black",
 					...Style.clickable,
@@ -39,7 +49,26 @@ namespace ScrollApp
 					this._height = this.head.offsetHeight;
 					Resize.watch(this.head, (w, h) => [this._width, this._height] = [w, h]);
 					this.tryAppendPosters(3);
-				})
+				}),
+				
+				CAPACITOR && [
+					hot.get(UI.corner("tl"))(cornerStyles, { top: 0, left: 0 }),
+					hot.get(UI.corner("tr"))(cornerStyles, { top: 0, right: 0 }),
+					
+					this.cornersElement = hot.span(
+						{
+							display: "block",
+							position: "absolute",
+							pointerEvents: "none",
+							top: 0,
+							left: 0,
+							right: 0,
+							zIndex: 2,
+						},
+						hot.get(UI.corner("bl"))(cornerStyles, { bottom: 0, left: 0 }),
+						hot.get(UI.corner("br"))(cornerStyles, { bottom: 0, right: 0 }),
+					)
+				]
 			);
 			
 			Hat.wear(this);
@@ -260,21 +289,19 @@ namespace ScrollApp
 			if (this.posterCount > 0)
 			{
 				const y = this.head.scrollTop;
-				//const ratio = ratioX / ratioY;
-				const ratio = 1;
-				const rowHeight = (this.height / this.size) / ratio;
+				const rowHeight = this.height / this.size;
 				const rowCount = this.posterCount / this.size;
 				const visibleRowStart = Math.floor(y / rowHeight);
 				const visibleItemStart = visibleRowStart * this.size;
 				const visibleItemEnd = visibleItemStart + this.size * (this.size + 2);
 				const elementsWithTop = new Set(getByClass(Class.hasCssTop, this.head));
 				const elementsVisible = new Set(getByClass(showClass, this.head));
+				const children = Array.from(this.head.children).filter(e => e instanceof HTMLDivElement);
 				
 				for (let i = visibleItemStart; i < visibleItemEnd; i++)
 				{
-					const children = this.head.children;
-					const e = children.item(i);
-					if (!(e instanceof HTMLElement))
+					const e = children[i];
+					if (!(e instanceof HTMLDivElement))
 					{
 						if (i >= children.length)
 							break;
@@ -309,8 +336,23 @@ namespace ScrollApp
 			
 			if (canContinue && isNearingBottom)
 				this.tryAppendPosters(1);
+			
+			if (CAPACITOR)
+			{
+				const query = this.head.getElementsByClassName(Class.hasCssTop);
+				if (query.length > 0)
+				{
+					const last = query.item(query.length - 1) as HTMLElement;
+					if (last && last !== this.lastVisiblePoster)
+					{
+						this.cornersElement!.style.height = (1 + last.offsetTop + last.offsetHeight / this.size) + "px";
+						this.lastVisiblePoster = last;
+					}
+				}
+			}
 		}
 		
+		private lastVisiblePoster: HTMLElement | null = null;
 		private lastY = -1;
 		
 		/** */

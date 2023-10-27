@@ -6,6 +6,47 @@ namespace ScrollApp
 	 */
 	export namespace UI
 	{
+		/**
+		 * Renders a single inverted rounded corner piece.
+		 */
+		export function corner(kind: "tl" | "tr" | "bl" | "br")
+		{
+			let top = 0;
+			let right = 0;
+			let bottom = 0;
+			let left = 0
+			
+			if (kind === "tl")
+				bottom = right = -100;
+			
+			else if (kind === "tr")
+				bottom = left = -100;
+			
+			else if (kind === "bl")
+				top = right = -100;
+			
+			else if (kind === "br")
+				top = left = -100;
+			
+			return hot.span(
+				{
+					overflow: "hidden",
+					width: "100px",
+					height: "100px",
+					clipPath: "inset(0 0)"
+				},
+				hot.span({
+					position: "absolute",
+					top: top + "%",
+					right: right + "%",
+					bottom: bottom + "%",
+					left: left + "%",
+					borderRadius: "100%",
+					boxShadow: "0 0 0 1000px black",
+				}),
+			);
+		}
+		
 		/** */
 		export function stretch(): Hot.Style[]
 		{

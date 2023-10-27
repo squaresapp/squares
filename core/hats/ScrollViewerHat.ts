@@ -20,18 +20,20 @@ namespace ScrollApp
 		readonly head;
 		private readonly gridContainer;
 		private readonly grid: GridHat;
+		private readonly pullToRefreshHat;
 		private selectedGridItem: HTMLElement | null = null;
 		
 		/** */
 		constructor()
 		{
+			this.grid = new GridHat();
+			
 			this.head = hot.div(
 				{
 					height: IOS || ANDROID ? "177.7777vw" : "100%",
 					alignSelf: "center",
 					borderRadius: isTouch ? "30px" : 0,
 					overflow: "hidden",
-					backgroundColor: "rgba(128, 128, 128, 0.25)",
 				},
 				this.gridContainer = hot.div(
 					"grid-container",
@@ -41,16 +43,31 @@ namespace ScrollApp
 						overflow: "hidden",
 						transitionDuration,
 						transitionProperty: "transform, opacity",
-					},
+					}
+				),
+				hot.get(this.pullToRefreshHat = new PullToRefreshHat(this.grid.head))(
+					{
+						position: "absolute",
+						bottom: "20px",
+						left: 0,
+						right: 0,
+						margin: "auto",
+					}
 				)
 			);
 			
 			Hat.wear(this);
-			
-			this.showGrid(true);
-			this.grid = new GridHat();
-			this.grid.head.style.borderRadius = "inherit";
 			this.constructGrid();
+			this.showGrid(true);
+			
+			this.pullToRefreshHat.onRefresh(() =>
+			{
+				setTimeout(() =>
+				{
+					this.pullToRefreshHat.setLoadingAnimation(false);
+				},
+				2000);
+			});
 			
 			(async () =>
 			{
@@ -94,6 +111,7 @@ namespace ScrollApp
 		/** */
 		private constructGrid()
 		{
+			this.grid.head.style.borderRadius = "inherit";
 			this.grid.handleRender(index => this.getPost(index));
 			
 			this.grid.handleSelect(async (e, index) =>
