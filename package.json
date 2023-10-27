@@ -17,7 +17,6 @@
 	"license": "MIT",
 	"dependencies": {
 		"@capacitor/android": "^5.4.2",
-		"@capacitor/background-runner": "^1.0.5",
 		"@capacitor/clipboard": "^5.0.6",
 		"@capacitor/core": "^5.4.2",
 		"@capacitor/device": "^5.0.6",
@@ -28,6 +27,7 @@
 		"@capacitor/status-bar": "^5.0.6",
 		"@capacitor/toast": "^5.0.6",
 		"@tauri-apps/api": "^1.4.0",
+		"@transistorsoft/capacitor-background-fetch": "^5.1.1",
 		"moduless": "^3.2.5"
 	},
 	"peerDependencies": {

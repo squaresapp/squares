@@ -96,6 +96,9 @@ const hot = new Hot();
 // Bindings for the Toast plugin
 declare const Toast: typeof import("@capacitor/toast").Toast;
 
+// Bindings for the Background Fetch plugin
+declare const BackgroundFetch: typeof import("@transistorsoft/capacitor-background-fetch").BackgroundFetch;
+
 namespace ScrollApp
 {
 	/**
@@ -107,7 +110,10 @@ namespace ScrollApp
 		const g = globalThis as any;
 		
 		if (CAPACITOR)
+		{
 			g.Toast = g.Capacitor?.Plugins?.Toast;
+			g.BackgroundFetch = g.Capacitor?.Plugins?.BackgroundFetch;
+		}
 		
 		if (DEBUG && CAPACITOR)
 		{
