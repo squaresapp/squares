@@ -96,6 +96,8 @@ namespace ScrollApp
 			}
 			else if (!enable && this.animation) (async () =>
 			{
+				const animation = this.animation!;
+				this.animation = null;
 				const s = this.head.style;
 				s.transitionDuration = "0.8s";
 				s.transitionProperty = "transform";
@@ -103,8 +105,9 @@ namespace ScrollApp
 				await UI.wait(1);
 				s.transform = "scale(0)";
 				await UI.waitTransitionEnd(this.head);
-				this.animation?.finish();
-				this.animation = null;
+				animation.finish();
+				s.opacity = "0";
+				s.transform = "scale(1)";
 			})();
 		}
 	}
