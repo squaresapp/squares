@@ -1,6 +1,5 @@
 import UIKit
 import Capacitor
-import CapacitorBackgroundRunner
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

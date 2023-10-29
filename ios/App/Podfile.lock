@@ -1,8 +1,6 @@
 PODS:
   - Capacitor (5.4.2):
     - CapacitorCordova
-  - CapacitorBackgroundRunner (1.0.5):
-    - Capacitor
   - CapacitorClipboard (5.0.6):
     - Capacitor
   - CapacitorCordova (5.4.2)
@@ -18,12 +16,9 @@ PODS:
     - Capacitor
   - CapacitorToast (5.0.6):
     - Capacitor
-  - TransistorsoftCapacitorBackgroundFetch (5.1.1):
-    - Capacitor
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
-  - "CapacitorBackgroundRunner (from `../../node_modules/@capacitor/background-runner`)"
   - "CapacitorClipboard (from `../../node_modules/@capacitor/clipboard`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorDevice (from `../../node_modules/@capacitor/device`)"
@@ -32,13 +27,10 @@ DEPENDENCIES:
   - "CapacitorShare (from `../../node_modules/@capacitor/share`)"
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
   - "CapacitorToast (from `../../node_modules/@capacitor/toast`)"
-  - "TransistorsoftCapacitorBackgroundFetch (from `../../node_modules/@transistorsoft/capacitor-background-fetch`)"
 
 EXTERNAL SOURCES:
   Capacitor:
     :path: "../../node_modules/@capacitor/ios"
-  CapacitorBackgroundRunner:
-    :path: "../../node_modules/@capacitor/background-runner"
   CapacitorClipboard:
     :path: "../../node_modules/@capacitor/clipboard"
   CapacitorCordova:
@@ -55,12 +47,9 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/status-bar"
   CapacitorToast:
     :path: "../../node_modules/@capacitor/toast"
-  TransistorsoftCapacitorBackgroundFetch:
-    :path: "../../node_modules/@transistorsoft/capacitor-background-fetch"
 
 SPEC CHECKSUMS:
   Capacitor: 8a9db42d105f55843cd8ed2a3cb54e2b78e7f102
-  CapacitorBackgroundRunner: f2415aebbcea4e744eb45f785a50f07ba72f1d0b
   CapacitorClipboard: 77edf49827ea21da2a9c05c690a4a6a4d07199c4
   CapacitorCordova: cfcc06b698481da655415985eeb2b8da363f8451
   CapacitorDevice: 2c968f98a1ec4d22357418c1521e7ddc46c675e6
@@ -69,8 +58,7 @@ SPEC CHECKSUMS:
   CapacitorShare: cd41743331cb71d217c029de54b681cbd91e0fcc
   CapacitorStatusBar: 565c0a1ebd79bb40d797606a8992b4a105885309
   CapacitorToast: bb0d79b78d9c27c0199b57f735dd50b8fc363489
-  TransistorsoftCapacitorBackgroundFetch: ce4b3e01b898cef516e68485d2160a078016ee97
 
-PODFILE CHECKSUM: db5ff607b7375656046905bcf94a34c697f996d8
+PODFILE CHECKSUM: 23af09db10b93ef68c7e9f05fff5cf6e8d31c299
 
 COCOAPODS: 1.11.3
