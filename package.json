@@ -9,7 +9,7 @@
 		"serve-feeds": "vite ./+feeds --host --cors --port 43332",
 		"ionic:serve": "vite ./+build --host --cors",
 		"ionic:build": "cd .",
-		"ios-dev": "cap run ios --external --livereload",
+		"ios-dev": "ionic cap run ios --external --livereload",
 		"android-dev": "ionic cap run android --external --livereload",
 		"icons": "npx @capacitor/assets generate --ios --android",
 		"bundle": "npm run icons && tsc -p tsconfig.release.json && terser ./+build/scroll.debug.js > ./+build/scroll.min.js"
