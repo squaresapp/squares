@@ -33,32 +33,31 @@ namespace ScrollApp
 		}
 		
 		/** */
-		private handleUnfollow(feedId: number)
+		private handleUnfollow(feedKey: number)
 		{
-			const cls = idPrefix + feedId;
+			const cls = keyPrefix + feedKey;
 			Array.from(this.head.children)
 				.filter(e => e instanceof HTMLElement && e.classList.contains(cls))
 				.map(e => e.remove());
 		}
 		
 		/** */
-		private handleFollow(feed: IFeedJson)
+		private handleFollow(feed: IFeed)
 		{
 			this.feedElements.prepend(this.renderIdentity(feed));
 		}
 		
 		/** */
-		private construct()
+		private async construct()
 		{
-			const feeds = Hat.over(this, RootHat).appData.feeds;
-			for (let i = feeds.length; i-- > 0;)
-				this.feedElements.append(this.renderIdentity(feeds[i]));
+			for await (const feed of Data.readFeeds())
+				this.feedElements.append(this.renderIdentity(feed));
 		}
 		
 		/** */
-		private renderIdentity(feed: IFeedJson)
+		private renderIdentity(feed: IFeed)
 		{
-			const iconUrl = IFeedJson.getIconUrl(feed);
+			const iconUrl = Util.getIconUrl(feed);
 			const author = feed.author || Strings.unknownAuthor;
 			
 			const e = hot.div(
@@ -72,7 +71,7 @@ namespace ScrollApp
 					backgroundColor: "rgba(128, 128, 128, 0.25)",
 					borderRadius: Style.borderRadiusSmall,
 				},
-				idPrefix + feed.id,
+				keyPrefix + feed.key,
 				hot.div(
 					{
 						width: "50px",
@@ -95,7 +94,7 @@ namespace ScrollApp
 					hot.text(Strings.unfollow),
 					hot.on("click", async () =>
 					{
-						Hat.signal(UnfollowSignal, feed.id);
+						Hat.signal(UnfollowSignal, feed.key);
 						await UI.collapse(e);
 						e.remove();
 					}),
@@ -106,5 +105,5 @@ namespace ScrollApp
 		}
 	}
 	
-	const idPrefix = "id:";
+	const keyPrefix = "id:";
 }

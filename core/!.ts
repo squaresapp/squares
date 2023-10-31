@@ -107,6 +107,15 @@ namespace ScrollApp
 	 */
 	export async function startup()
 	{
+		if (ELECTRON)
+			FilaNode.use();
+		
+		else if (TAURI)
+			FilaTauri.use();
+		
+		else if (CAPACITOR)
+			FilaCapacitor.use();
+		
 		const g = globalThis as any;
 		
 		if (CAPACITOR)
@@ -115,17 +124,120 @@ namespace ScrollApp
 			g.BackgroundFetch = g.Capacitor?.Plugins?.BackgroundFetch;
 		}
 		
-		if (DEBUG && CAPACITOR)
+		if (DEBUG)
 		{
-			const device = g.Capacitor?.Plugins?.Device;
-			const info = await device.getInfo();
-			Object.assign(globalThis, { SIMULATOR: info.isVirtual });
+			if (CAPACITOR)
+			{
+				const device = g.Capacitor?.Plugins?.Device;
+				const info = await device.getInfo();
+				Object.assign(globalThis, { SIMULATOR: info.isVirtual });
+			}
+			
+			await debugGenerateJsonFiles();
+			debugConnectRefreshTool();
 		}
 		
 		ScrollApp.appendCssReset();
+		await Data.initialize();
 		const rootHat = new RootHat();
 		await rootHat.construct();
 		document.body.append(rootHat.head);
+	}
+	
+	//@ts-ignore
+	if (!DEBUG) return;
+	
+	/** */
+	function debugConnectRefreshTool()
+	{
+		let pointerdown = false;
+		let timeoutId: any = 0;
+		
+		document.body.addEventListener("pointerdown", ev =>
+		{
+			pointerdown = true;
+			
+			timeoutId = setTimeout(() =>
+			{
+				if (pointerdown)
+					window.location.reload();
+			},
+			1000);
+		});
+		
+		const end = () =>
+		{
+			pointerdown = false;
+			clearTimeout(timeoutId);
+		};
+		
+		document.body.addEventListener("pointerup", end);
+		document.body.addEventListener("pointermove", end);
+	}
+	
+	/**
+	 * DEBUG-only function that generates app data files and
+	 * stores them in the local file system.
+	 */
+	async function debugGenerateJsonFiles()
+	{
+		const urlBase = "https://htmlfeeds.github.io/Examples/";
+		const appDataFila = await Util.getAppDataFila();
+		if (await appDataFila.exists())
+			await appDataFila.delete();
+		
+		await appDataFila.writeDirectory();
+		
+		const feedPaths = [
+			"trees/",
+			"raccoons/",
+		];
+		
+		const feeds: IFeed[] = [];
+		const urlLists: string[][] = [];
+		
+		for (const feedPath of feedPaths)
+		{
+			const url = urlBase + feedPath + "index.txt";
+			const contents = await HtmlFeed.getFeedContents(url);
+			if (!contents)
+				continue;
+			
+			urlLists.push(contents.urls);
+			
+			const feedMeta = await HtmlFeed.getFeedMetaData(url);
+			const feed = await Data.writeFeed(feedMeta || {}, { size: contents.bytesRead });
+			feeds.push(feed);
+		}
+		
+		const scroll = await Data.writeScroll({ feeds });
+		const maxLength = urlLists.reduce((a, b) => a > b.length ? a : b.length, 0);
+		let incrementingDate = Date.now() - 10 ** 7;
+		
+		for (let i = -1; ++i < maxLength * urlLists.length;)
+		{
+			const indexOfList = i % urlLists.length;
+			const urlList = urlLists[indexOfList];
+			const indexWithinList = Math.floor(i / urlLists.length);
+			
+			if (urlList.length <= indexWithinList)
+				continue;
+			
+			const feed = feeds[indexOfList];
+			const feedDirectory = HtmlFeed.Url.folderOf(feed.url);
+			const path = urlList[indexWithinList].slice(feedDirectory.length);
+			
+			const post = await Data.writePost({
+				key: incrementingDate++,
+				visited: false,
+				feed,
+				path,
+			});
+			
+			await Data.writeScrollPost(scroll.key, post);
+		}
+		
+		console.log("Debug data files recreated.");
 	}
 }
 

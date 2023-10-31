@@ -31,34 +31,18 @@ namespace ScrollApp
 			);
 			
 			Hat.wear(this)
-				.wear(UnfollowSignal, id => this.appData.unfollowFeed(id));
+				.wear(UnfollowSignal, key => Data.archiveFeed(key));
 		}
 		
 		/** */
 		async construct()
 		{
-			if (ELECTRON)
-				FilaNode.use();
-			
-			else if (TAURI)
-				FilaTauri.use();
-			
-			else if (CAPACITOR)
-				FilaCapacitor.use();
-			
-			if (DEBUG)
-			{
-				await debugGenerateJsonFiles();
-				debugConnectRefreshTool();
-			}
-			
-			this._appData = await AppData.read();
-			this._scrollDatas = await this._appData.readScrolls();
+			this._foregroundFetcher = new ForegroundFetcher();
 			const paneSwiper = new PaneSwiper();
 			
-			for (const scrollData of this.scrollDatas)
+			for await (const scroll of Data.readScrolls())
 			{
-				const viewer = new ScrollMuxViewerHat(scrollData);
+				const viewer = new ScrollMuxViewerHat(scroll);
 				paneSwiper.addPane(viewer.head);
 			}
 			
@@ -86,31 +70,18 @@ namespace ScrollApp
 		}
 		
 		/** */
-		get appData()
+		get foregroundFetcher()
 		{
-			if (!this._appData)
-				throw new Error();
-			
-			return this._appData;
+			return this._foregroundFetcher!;
 		}
-		private _appData: AppData | null = null;
-		
-		/** */
-		get scrollDatas()
-		{
-			if (!this._scrollDatas)
-				throw new Error();
-			
-			return this._scrollDatas;
-		}
-		private _scrollDatas: ScrollData[] = [];
+		private _foregroundFetcher: ForegroundFetcher | null = null;
 		
 		/**
 		 * 
 		 */
 		async followFeedFromUri(htmlUri: string)
 		{
-			const followUri = FollowUtil.parseFollowUri(htmlUri);
+			const followUri = Util.parseFollowUri(htmlUri);
 			if (!followUri)
 				return null;
 			
@@ -119,120 +90,21 @@ namespace ScrollApp
 				return null;
 			
 			const feedMeta = await HtmlFeed.getFeedMetaData(followUri);
-			const feedJson = IFeedJson.create(feedMeta || {}, { size: feedContents.bytesRead });
-			await this.appData.followFeed(feedJson, this.scrollDatas[0].identifier);
+			const feed = await Data.writeFeed(feedMeta || {}, { size: feedContents.bytesRead });
+			//await this.appData.followFeed(feed, this.scrollDatas[0].identifier);
 			
-			Hat.signal(FollowSignal, feedJson);
-			return feedJson;
+			Hat.signal(FollowSignal, feed);
+			return feed;
 		}
 		
 		/**
 		 * Gets the fully qualified URL where the post resides, which is calculated
 		 * by concatenating the post path with the containing feed URL.
 		 */
-		getPostUrl(post: IPostJson)
+		getPostUrl(post: IPost)
 		{
-			const feed = this.appData.getFeed(post.feedId);
-			if (!feed)
-				return null;
-			
-			const feedFolder = HtmlFeed.Url.folderOf(feed.url);
+			const feedFolder = HtmlFeed.Url.folderOf(post.feed.url);
 			return feedFolder + post.path;
-		}
-	}
-	
-	//@ts-ignore
-	if (!DEBUG) return;
-	
-	/** */
-	function debugConnectRefreshTool()
-	{
-		let pointerdown = false;
-		let timeoutId: any = 0;
-		
-		document.body.addEventListener("pointerdown", ev =>
-		{
-			pointerdown = true;
-			
-			timeoutId = setTimeout(() =>
-			{
-				if (pointerdown)
-					window.location.reload();
-			},
-			1000);
-		});
-		
-		const end = () =>
-		{
-			pointerdown = false;
-			clearTimeout(timeoutId);
-		};
-		
-		document.body.addEventListener("pointerup", end);
-		document.body.addEventListener("pointermove", end);
-	}
-	
-	/**
-	 * DEBUG-only function that generates app data files and
-	 * stores them in the local file system.
-	 */
-	export async function debugGenerateJsonFiles()
-	{
-		const identifier = "scroll-id";
-		const urlBase = "https://htmlfeeds.github.io/Examples/";
-		const appDataFila = await ScrollApp.getAppDataFila();
-		const scrollFila = appDataFila.down(identifier);
-		if (await scrollFila.exists())
-			await scrollFila.delete();
-		
-		const scrollData = new ScrollData(identifier);
-		const appData = new AppData();
-		appData.addScroll(scrollData.identifier);
-		
-		const feedPaths = [
-			"trees/",
-		];
-		
-		const feedsArray: IFeedJson[] = [];
-		const urlLists: string[][] = [];
-		
-		for (const feedPath of feedPaths)
-		{
-			const url = urlBase + feedPath + "index.txt";
-			const contents = await HtmlFeed.getFeedContents(url);
-			if (!contents)
-				continue;
-			
-			urlLists.push(contents.urls);
-			
-			const feedMeta = await HtmlFeed.getFeedMetaData(url);
-			const feedJson = IFeedJson.create(feedMeta || {}, { size: contents.bytesRead });
-			feedsArray.push(feedJson);
-			appData.followFeed(feedJson, scrollData.identifier);
-		}
-		
-		const maxLength = urlLists.reduce((a, b) => a > b.length ? a : b.length, 0);
-		let incrementingDate = Date.now() - 10 ** 7;
-		
-		for (let i = -1; ++i < maxLength * urlLists.length;)
-		{
-			const indexOfList = i % urlLists.length;
-			const urlList = urlLists[indexOfList];
-			const indexWithinList = Math.floor(i / urlLists.length);
-			
-			if (urlList.length <= indexWithinList)
-				continue;
-			
-			const feedJson = feedsArray[indexOfList];
-			const feedDirectory = HtmlFeed.Url.folderOf(feedJson.url);
-			const path = urlList[indexWithinList].slice(feedDirectory.length);
-			
-			await scrollData.writePost({
-				visited: false,
-				dateFound: incrementingDate++,
-				feedId: feedJson.id,
-				path,
-			});
 		}
 	}
 }

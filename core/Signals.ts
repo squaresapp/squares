@@ -2,8 +2,8 @@
 namespace ScrollApp
 {
 	/** */
-	export function UnfollowSignal(feedId: number) {}
+	export function UnfollowSignal(feedKey: number) {}
 	
 	/** */
-	export function FollowSignal(feed: IFeedJson) {}
+	export function FollowSignal(feed: IFeed) {}
 }

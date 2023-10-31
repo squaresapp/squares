@@ -30,13 +30,13 @@ namespace ScrollApp.Cover
 			)
 		];
 		
-		const feedJson: IFeedJson = {
+		const feedJson: IFeed = {
 			author: "Paul Gordon",
 			url: "http://localhost:43332/raccoons/index.txt",
 			description: "A description of the feed",
 			dateFollowed: Date.now(),
 			icon: "http://localhost:43332/raccoons/icon.jpg",
-			id: 0,
+			key: 0,
 			size: 0,
 		};
 		

@@ -6,17 +6,6 @@ namespace ScrollApp
 	/** */
 	export abstract class ScrollViewerHat
 	{
-		/** */
-		private static async maybeSetupPinger()
-		{
-			if (this.pinger)
-				return;
-			
-			const pingerFila = await ScrollApp.getPingerFila();
-			this.pinger = new Pinger.Service(pingerFila.path);
-		}
-		private static pinger: Pinger.Service;
-		
 		readonly head;
 		private readonly gridContainer;
 		private readonly grid: GridHat;
@@ -62,51 +51,26 @@ namespace ScrollApp
 			
 			this.pullToRefreshHat.onRefresh(() =>
 			{
-				setTimeout(() =>
-				{
-					this.pullToRefreshHat.setLoadingAnimation(false);
-				},
-				2000);
+				this.handleRefresh();
 			});
 			
-			(async () =>
-			{
-				/*
-				//! This code is trying to setup pinging in the wrong place
-				await ScrollViewerHat.maybeSetupPinger();
-				const muxDirectory = await ScrollApp.getAppDataFila();
-				await this.scrollProvider.load(muxDirectory);
-				
-				for (const post of scrollData.getPosts())
-				{
-					const feed = this.scrollProvider.getFeed(post.feedId);
-					if (!feed)
-					{
-						console.error("Feed not found for post: " + post.path);
-						continue;
-					}
-					
-					ScrollViewerHat.pinger.set(feed.feedUrl);
-				}
-				*/
-				
-			})().then(() =>
-			{
-				this.gridContainer.append(this.grid.head);
-			});
+			this.gridContainer.append(this.grid.head);
 		}
 		
 		/** */
 		protected abstract getPost(index: number): ReturnType<RenderFn>;
 		
 		/** */
+		protected abstract handleRefresh(): void;
+		
+		/** */
 		protected abstract getStory(index: number): Promise<{
 			readonly sections: HTMLElement[];
-			readonly feed: IFeedJson;
+			readonly feed: IFeed;
 		}>;
 		
 		/** */
-		protected abstract handlePostVisited(index: number): void;
+		protected abstract handlePostVisited(index: number): void | Promise<void>;
 		
 		/** */
 		private constructGrid()
@@ -124,22 +88,6 @@ namespace ScrollApp
 		/** */
 		private async showStory(index: number)
 		{
-			/*
-			const post = this.scrollData.getPost(index);
-			if (!post)
-				throw new Error();
-			
-			const postUrl = this.scrollData.getPostUrl(post) || "";
-			const reel = await HtmlFeed.getReelFromUrl(postUrl);
-			const sections: HTMLElement[] = reel ?
-				reel.sections.slice() :
-				[HtmlFeed.getErrorPoster()];
-			
-			const feed = this.scrollData.getFeed(post.feedId);
-			if (!feed)
-				throw new Error();
-			*/
-			
 			const story = await this.getStory(index);
 			const storyHat = new StoryHat(story.sections, story.feed);
 			
@@ -271,36 +219,55 @@ namespace ScrollApp
 	export class ScrollMuxViewerHat extends ScrollViewerHat
 	{
 		/** */
-		constructor(private readonly scrollData: ScrollData)
+		constructor(private readonly scroll: IScroll)
 		{
 			super();
 		}
 		
 		/** */
+		protected handleRefresh()
+		{
+			Hat.over(this, RootHat).foregroundFetcher.startFetch(feed =>
+			{
+				console.log("Not implemented");
+			});
+		}
+		
+		/** */
 		protected getPost(index: number)
 		{
-			const post = this.scrollData.getPost(index);
-			if (post === null)
-				return null;
-			
-			const url = Hat.over(this, RootHat).getPostUrl(post);
-			if (!url)
+			if (index >= Data.readScrollPostCount(this.scroll.key))
 				return null;
 			
 			return (async () =>
 			{
-				const maybePoster = await HtmlFeed.getPosterFromUrl(url);
-				const poster = maybePoster || HtmlFeed.getErrorPoster();
-				return post.visited ? 
-					applyVisitedStyle(poster) :
-					poster;
+				block:
+				{
+					const post = await Data.readScrollPost(this.scroll.key, index);
+					if (post === null)
+						break block;
+					
+					const url = Hat.over(this, RootHat).getPostUrl(post);
+					if (!url)
+						break block;
+					
+					const poster = await HtmlFeed.getPosterFromUrl(url);
+					if (!poster)
+						break block;
+					
+					return post.visited ? 
+						applyVisitedStyle(poster) :
+						poster;
+				}
+				
+				return HtmlFeed.getErrorPoster();
 			})();
 		}
 		
 		/** */
 		protected async getStory(index: number)
 		{
-			const post = this.scrollData.getPost(index);
+			const post = await Data.readScrollPost(this.scroll.key, index);
 			if (!post)
 				throw new Error();
 			
@@ -311,7 +278,7 @@ namespace ScrollApp
 				reel.sections.slice() :
 				[HtmlFeed.getErrorPoster()];
 			
-			const feed = root.appData.getFeed(post.feedId);
+			const feed = await Data.readFeed(post.key);
 			if (!feed)
 				throw new Error();
 			
@@ -319,13 +286,13 @@ namespace ScrollApp
 		}
 		
 		/** */
-		protected handlePostVisited(index: number): void
+		protected async handlePostVisited(index: number)
 		{
-			const post = this.scrollData.getPost(index);
+			const post = await Data.readScrollPost(this.scroll.key, index);
 			if (post)
 			{
 				post.visited = true;
-				this.scrollData.writePost(post);
+				Data.writePost(post);
 			}
 		}
 	}
@@ -338,10 +305,16 @@ namespace ScrollApp
 	{
 		/** */
 		constructor(
-			private readonly feed: IFeedJson,
+			private readonly feed: IFeed,
 			private readonly urls: string[])
 		{
 			super();
+		}
+		
+		/** */
+		protected handleRefresh()
+		{
+			
 		}
 		
 		/** */

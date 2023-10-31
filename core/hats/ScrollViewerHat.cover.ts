@@ -4,8 +4,8 @@ namespace ScrollApp.Cover
 	/** */
 	export async function coverScrollFeedViewerHat()
 	{
-		const feedJson: IFeedJson = {
-			id: 1696947977011,
+		const feed: IFeed = {
+			key: 1696947977011,
 			url: "http://localhost:43332/raccoons/index.txt",
 			icon: "icon.jpg",
 			author: "Mr Raccoons",
@@ -15,11 +15,11 @@ namespace ScrollApp.Cover
 		};
 		
 		const feedUrl = "http://localhost:43332/raccoons/index.txt";
-		const feed = await HtmlFeed.getFeedContents(feedUrl, 0);
-		if (!feed)
+		const feedContents = await HtmlFeed.getFeedContents(feedUrl, 0);
+		if (!feedContents)
 			throw "No feed loaded";
 		
-		const hat = new ScrollFeedViewerHat(feedJson, feed.urls);
+		const hat = new ScrollFeedViewerHat(feed, feedContents.urls);
 		document.body.append(hat.head);
 	}
 }

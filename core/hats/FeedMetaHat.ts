@@ -7,9 +7,9 @@ namespace ScrollApp
 		readonly head;
 		
 		/** */
-		constructor(data: IFeedJson)
+		constructor(data: IFeed)
 		{
-			const iconUrl = IFeedJson.getIconUrl(data);
+			const iconUrl = Util.getIconUrl(data);
 			const author = data.author || Strings.unknownAuthor;
 			const isFollowing = data.dateFollowed > 0;
 			
@@ -73,7 +73,7 @@ namespace ScrollApp
 					isFollowing && (e => this.renderButton(Strings.unfollow, () =>
 					{
 						Hat.over(this, StoryHat).head.scrollBy({ top: -1 });
-						Hat.signal(UnfollowSignal, data.id);
+						Hat.signal(UnfollowSignal, data.key);
 						UI.fade(e);
 					})),
 				),

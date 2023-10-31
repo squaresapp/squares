@@ -9,7 +9,7 @@
 		"serve-feeds": "vite ./+feeds --host --cors --port 43332",
 		"ionic:serve": "vite ./+build --host --cors",
 		"ionic:build": "cd .",
-		"ios-dev": "ionic cap run ios --external --livereload",
+		"ios-dev": "cap run ios --external --livereload",
 		"android-dev": "ionic cap run android --external --livereload",
 		"icons": "npx @capacitor/assets generate --ios --android",
 		"bundle": "npm run icons && tsc -p tsconfig.release.json && terser ./+build/scroll.debug.js > ./+build/scroll.min.js"
@@ -27,12 +27,12 @@
 		"@capacitor/status-bar": "^5.0.6",
 		"@capacitor/toast": "^5.0.6",
 		"@tauri-apps/api": "^1.4.0",
-		"@transistorsoft/capacitor-background-fetch": "^5.1.1",
-		"moduless": "^3.2.5"
+		"@transistorsoft/capacitor-background-fetch": "^5.1.1"
 	},
 	"peerDependencies": {
 		"@capacitor/cli": "^5.1.0",
-		"vite": "^2.9.13"
+		"vite": "^2.9.13",
+		"moduless": "^3.2.5"
 	},
 	"devDependencies": {
 		"@capacitor/assets": "^2.0.4"

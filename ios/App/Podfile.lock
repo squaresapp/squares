@@ -16,6 +16,8 @@ PODS:
     - Capacitor
   - CapacitorToast (5.0.6):
     - Capacitor
+  - TransistorsoftCapacitorBackgroundFetch (5.1.1):
+    - Capacitor
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
@@ -27,6 +29,7 @@ DEPENDENCIES:
   - "CapacitorShare (from `../../node_modules/@capacitor/share`)"
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
   - "CapacitorToast (from `../../node_modules/@capacitor/toast`)"
+  - "TransistorsoftCapacitorBackgroundFetch (from `../../node_modules/@transistorsoft/capacitor-background-fetch`)"
 
 EXTERNAL SOURCES:
   Capacitor:
@@ -47,6 +50,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/status-bar"
   CapacitorToast:
     :path: "../../node_modules/@capacitor/toast"
+  TransistorsoftCapacitorBackgroundFetch:
+    :path: "../../node_modules/@transistorsoft/capacitor-background-fetch"
 
 SPEC CHECKSUMS:
   Capacitor: 8a9db42d105f55843cd8ed2a3cb54e2b78e7f102
@@ -58,7 +63,8 @@ SPEC CHECKSUMS:
   CapacitorShare: cd41743331cb71d217c029de54b681cbd91e0fcc
   CapacitorStatusBar: 565c0a1ebd79bb40d797606a8992b4a105885309
   CapacitorToast: bb0d79b78d9c27c0199b57f735dd50b8fc363489
+  TransistorsoftCapacitorBackgroundFetch: ce4b3e01b898cef516e68485d2160a078016ee97
 
-PODFILE CHECKSUM: 23af09db10b93ef68c7e9f05fff5cf6e8d31c299
+PODFILE CHECKSUM: 37bdcfb2d6b3551d6ad9be8e995fb7b36219b43b
 
 COCOAPODS: 1.11.3

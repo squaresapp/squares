@@ -1,9 +1,18 @@
 
 namespace ScrollApp
 {
-	/** */
-	export namespace FollowUtil
+	export namespace Util
 	{
+		/**
+		 * Returns the fully-qualified URL to the icon image
+		 * specified in the specified feed.
+		 */
+		export function getIconUrl(feed: IFeed)
+		{
+			const folder = HtmlFeed.Url.folderOf(feed.url);
+			return HtmlFeed.Url.resolve(feed.icon, folder);
+		}
+		
 		/**
 		 * Parses URIs as specified in the HTML feeds specification found at:
 		 * https://www.scrollapp.org/specs/htmlfeeds/
@@ -28,6 +37,45 @@ namespace ScrollApp
 			catch (e) { }
 			
 			return "";
+		}
+		
+		/**
+		 * Safely parses a string JSON into an object.
+		 */
+		export function tryParseJson<T extends object = object>(jsonText: string): T | null
+		{
+			try
+			{
+				return JSON.parse(jsonText);
+			}
+			catch (e) { }
+			
+			return null;
+		}
+		
+		/**
+		 * Returns the environment-specific path to the application data folder.
+		 */
+		export async function getAppDataFila()
+		{
+			if (TAURI)
+			{
+				const dir = await Tauri.path.appDataDir();
+				return Fila.new(dir);
+			}
+			else if (ELECTRON)
+			{
+				const fila = Fila.new(__dirname).down("data");
+				await fila.writeDirectory();
+				return fila;
+			}
+			else if (CAPACITOR)
+			{
+				const path = FilaCapacitor.directory.documents;
+				return Fila.new(path);
+			}
+			
+			throw new Error("Not implemented");
 		}
 		
 		/**
