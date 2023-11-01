@@ -139,7 +139,7 @@ namespace ScrollApp.Data
 	/** */
 	async function getScrollFolder()
 	{
-		const fila = await Util.getAppDataFila();
+		const fila = await Util.getDataFolder();
 		return fila.down("scrolls");
 	}
 	
@@ -276,23 +276,29 @@ namespace ScrollApp.Data
 	}
 	
 	/** */
+	async function getFeedsFolder()
+	{
+		const fila = await Util.getDataFolder();
+		return fila.down("feeds");
+	}
+	
+	/** */
 	async function getFeedFile(key: number)
 	{
-		const fila = await Util.getAppDataFila();
-		return fila.down("feeds").down(key + ".json");
+		return (await getFeedsFolder()).down(key + ".json");
 	}
 	
 	/** */
 	async function getFeedPostsFile(key: number)
 	{
-		const fila = await Util.getAppDataFila();
+		const fila = await Util.getDataFolder();
 		return fila.down("feeds").down(key + ".txt");
 	}
 	
 	/** */
 	async function getFeedFileArchived(key: number)
 	{
-		const fila = await Util.getAppDataFila();
+		const fila = await Util.getDataFolder();
 		return fila.down("feeds-archived").down(key + ".json");
 	}
 	
@@ -361,6 +367,13 @@ namespace ScrollApp.Data
 	}
 	
 	/** */
+	async function getPostsFolder()
+	{
+		const fila = await Util.getDataFolder();
+		return fila.down("posts");
+	}
+	
+	/** */
 	async function getPostsFile(key: number)
 	{
 		const date = new Date(key);
@@ -368,9 +381,7 @@ namespace ScrollApp.Data
 		const m = ("0" + (date.getMonth() + 1)).slice(-2);
 		const d = ("0" + date.getDate()).slice(-2);
 		const postsFileName = [y, m, d].join("-") + ".json";
-		const fila = await Util.getAppDataFila();
-		const postsFile = fila.down("posts").down(postsFileName);
-		return postsFile;
+		return (await getPostsFolder()).down(postsFileName);
 	}
 	
 	/** */
@@ -408,5 +419,31 @@ namespace ScrollApp.Data
 	{
 		const text = keys.map(k => k + "\n").join("");
 		await fila.writeText(text, { append: true });
+	}
+	
+	//@ts-ignore
+	if (!DEBUG) return;
+	
+	/**
+	 * Deletes all data in the data folder.
+	 * Intended only for debugging purposes.
+	 */
+	export async function clear()
+	{
+		const scrollFolder = await getScrollFolder();
+		const feedFolder = await getFeedsFolder();
+		const postsFolder = await getPostsFolder();
+		const all: Fila[] = [];
+		
+		if (await scrollFolder.exists())
+			all.push(...await scrollFolder.readDirectory());
+		
+		if (await feedFolder.exists())
+			all.push(...await feedFolder.readDirectory());
+		
+		if (await postsFolder.exists())
+			all.push(...await postsFolder.readDirectory());
+		
+		await Promise.all(all.map(fila => fila.delete()));
 	}
 }

@@ -182,11 +182,11 @@ namespace ScrollApp
 	async function debugGenerateJsonFiles()
 	{
 		const urlBase = "https://htmlfeeds.github.io/Examples/";
-		const appDataFila = await Util.getAppDataFila();
-		if (await appDataFila.exists())
-			await appDataFila.delete();
+		const dataFolder = await Util.getDataFolder();
+		if (!await dataFolder.exists())
+			await dataFolder.writeDirectory();
 		
-		await appDataFila.writeDirectory();
+		await Data.clear();
 		
 		const feedPaths = [
 			"trees/",

@@ -56,7 +56,7 @@ namespace ScrollApp
 		/**
 		 * Returns the environment-specific path to the application data folder.
 		 */
-		export async function getAppDataFila()
+		export async function getDataFolder()
 		{
 			if (TAURI)
 			{
@@ -71,7 +71,10 @@ namespace ScrollApp
 			}
 			else if (CAPACITOR)
 			{
-				const path = FilaCapacitor.directory.documents;
+				const path = DEBUG ?
+					FilaCapacitor.directory.documents :
+					FilaCapacitor.directory.data;
+				
 				return Fila.new(path);
 			}
 			
