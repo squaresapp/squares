@@ -184,24 +184,21 @@ namespace ScrollApp
 	 */
 	async function debugGenerateJsonFiles()
 	{
-		const urlBase = "https://htmlfeeds.github.io/Examples/";
 		const dataFolder = await Util.getDataFolder();
 		if (!await dataFolder.exists())
 			await dataFolder.writeDirectory();
 		
 		await Data.clear();
-		
-		const feedPaths = [
-			"trees/",
-			"raccoons/",
-		];
-		
 		const feeds: IFeed[] = [];
 		const urlLists: string[][] = [];
 		
-		for (const feedPath of feedPaths)
+		const feedUrls = [
+			"https://htmlfeeds.github.io/Examples/trees/index.txt",
+			"https://htmlfeeds.github.io/Examples/raccoons/index.txt",
+		];
+		
+		for (const url of feedUrls)
 		{
-			const url = urlBase + feedPath + "index.txt";
 			const urls = await HtmlFeed.getFeedUrls(url);
 			if (!urls)
 				continue;
