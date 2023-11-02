@@ -299,7 +299,7 @@ namespace ScrollApp
 				reel.sections.slice() :
 				[HtmlFeed.getErrorPoster()];
 			
-			const feed = await Data.readFeed(post.key);
+			const feed = await Data.readFeed(post.feed.key);
 			if (!feed)
 				throw new Error();
 			
