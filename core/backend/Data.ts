@@ -32,7 +32,7 @@ namespace ScrollApp.Data
 	{
 		const scroll: IScroll = Object.assign(
 			{
-				key: Date.now(),
+				key: Util.getSafeTicks(),
 				anchorIndex: 0,
 				feeds: []
 			},
@@ -60,9 +60,19 @@ namespace ScrollApp.Data
 		scrollPostCounts.set(scrollKey, (scrollPostCounts.get(scrollKey) || 0) + 1);
 	}
 	
-	/** */
-	export async function readScroll(key: number)
+	/**
+	 * Read the scroll object from the file system with the specified key.
+	 * If the argument is omitted, the first discovered scroll is returned.
+	 */
+	export async function readScroll(key?: number)
 	{
+		if (!key)
+			for (const fila of await readScrollFilas("json"))
+				key = keyOf(fila);
+		
+		if (!key)
+			return null;
+		
 		const fila = await getScrollFile(key);
 		if (!await fila.exists())
 			return null;
@@ -161,7 +171,7 @@ namespace ScrollApp.Data
 	 */
 	export async function writeFeed(...defaults: Partial<IFeed>[])
 	{
-		const key =  Date.now();
+		const key =  Util.getSafeTicks();
 		const feed: IFeed = Object.assign(
 			{
 				key,
@@ -203,6 +213,7 @@ namespace ScrollApp.Data
 		
 		const jsonText = await fila.readText();
 		const feed: IFeed = JSON.parse(jsonText);
+		feed.key = key;
 		return feed;
 	}
 	
@@ -213,7 +224,6 @@ namespace ScrollApp.Data
 	{
 		const folder = (await getFeedFile(0)).up();
 		const files = await folder.readDirectory();
-		
 		
 		for (const file of files)
 		{
@@ -302,6 +312,55 @@ namespace ScrollApp.Data
 		return fila.down("feeds-archived").down(key + ".json");
 	}
 	
+	/**
+	 * Writes the URLs contained in the specified to the file system, in their full-qualified
+	 * form, and returns an object that indicates what URLs where added and which ones
+	 * were removed from the previous time that this function was called.
+	 * 
+	 * Worth noting that the URLs are expected to be in their fully-qualified form,
+	 * which is different from how the URLs are typically written in the feed text file.
+	 */
+	export async function captureRawFeed(feed: IFeed, urls: string[])
+	{
+		if (!feed.key)
+			throw new Error("Cannot capture this feed because it has no key.");
+		
+		const added: string[] = [];
+		const removed: string[] = [];
+		const filaRaw = (await getFeedsRawFolder()).down(feed.key + ".txt");
+		
+		if (await filaRaw.exists())
+		{
+			const rawText = await filaRaw.readText();
+			const rawLines = rawText.split("\n");
+			const rawLinesSet = new Set(rawLines);
+			const urlsSet = new Set(urls);
+			
+			for (const url of rawLines)
+				if (!urlsSet.has(url))
+					removed.push(url);
+			
+			for (const url of urls)
+				if (!rawLinesSet.has(url))
+					added.push(url);
+		}
+		else
+		{
+			const text = urls.join("\n");
+			await filaRaw.writeText(text);
+			added.push(...urls);
+		}
+		
+		return { added, removed };
+	}
+	
+	/** */
+	async function getFeedsRawFolder()
+	{
+		const fila = await Util.getDataFolder();
+		return fila.down("feeds-raw");
+	}
+	
 	/** */
 	export async function readPost(key: number)
 	{
@@ -327,7 +386,7 @@ namespace ScrollApp.Data
 	export async function writePost(post: Partial<IPost>)
 	{
 		if (!post.key)
-			post.key = Date.now();
+			post.key = Util.getSafeTicks();
 		
 		const fullPost = post as IPost;
 		
@@ -432,6 +491,7 @@ namespace ScrollApp.Data
 	{
 		const scrollFolder = await getScrollFolder();
 		const feedFolder = await getFeedsFolder();
+		const feedRawFolder = await getFeedsRawFolder();
 		const postsFolder = await getPostsFolder();
 		const all: Fila[] = [];
 		
@@ -440,6 +500,9 @@ namespace ScrollApp.Data
 		
 		if (await feedFolder.exists())
 			all.push(...await feedFolder.readDirectory());
+		
+		if (await feedRawFolder.exists())
+			all.push(...await feedRawFolder.readDirectory());
 		
 		if (await postsFolder.exists())
 			all.push(...await postsFolder.readDirectory());

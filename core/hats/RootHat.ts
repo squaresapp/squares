@@ -14,19 +14,17 @@ namespace ScrollApp
 				{
 					height: "inherit",
 					top: "env(safe-area-inset-top)",
+					tabIndex: 0,
 				},
-				hot.on(window, "follow" as any, async ev =>
+				hot.on(window, "paste", async ev =>
 				{
-					const htmlUri: string = (ev as any).data;
-					const feedJson = await this.followFeedFromUri(htmlUri);
-					if (!feedJson)
-						return;
-					
-					await Toast.show({
-						position: "center",
-						duration: "long",
-						text: Strings.nowFollowing + " " + feedJson.author
-					});
+					const uri = await Util.readClipboardHtmlUri();
+					if (uri)
+						this.followFeedFromUri(uri);
+				}),
+				hot.on(window, "follow" as any, ev =>
+				{
+					this.followFeedFromUri((ev as any).data);
 				})
 			);
 			
@@ -37,7 +35,6 @@ namespace ScrollApp
 		/** */
 		async construct()
 		{
-			this._foregroundFetcher = new ForegroundFetcher();
 			const paneSwiper = new PaneSwiper();
 			
 			for await (const scroll of Data.readScrolls())
@@ -69,32 +66,37 @@ namespace ScrollApp
 			});
 		}
 		
-		/** */
-		get foregroundFetcher()
-		{
-			return this._foregroundFetcher!;
-		}
-		private _foregroundFetcher: ForegroundFetcher | null = null;
-		
 		/**
 		 * 
 		 */
 		async followFeedFromUri(htmlUri: string)
 		{
-			const followUri = Util.parseFollowUri(htmlUri);
+			const followUri = Util.parseHtmlUri(htmlUri);
 			if (!followUri)
-				return null;
+				return;
 			
-			const feedContents = await HtmlFeed.getFeedContents(followUri);
-			if (!feedContents)
-				return null;
+			const urls = await HtmlFeed.getFeedUrls(followUri);
+			if (!urls)
+				return;
+			
+			const checksum = await Util.getFeedChecksum(followUri);
+			if (!checksum)
+				return;
 			
 			const feedMeta = await HtmlFeed.getFeedMetaData(followUri);
-			const feed = await Data.writeFeed(feedMeta || {}, { size: feedContents.bytesRead });
-			//await this.appData.followFeed(feed, this.scrollDatas[0].identifier);
+			const feed = await Data.writeFeed(feedMeta || {}, { checksum });
+			await Data.captureRawFeed(feed, urls);
 			
 			Hat.signal(FollowSignal, feed);
-			return feed;
+			
+			if (CAPACITOR)
+			{
+				await Toast.show({
+					position: "center",
+					duration: "long",
+					text: Strings.nowFollowing + " " + feed.author,
+				});
+			}
 		}
 		
 		/**

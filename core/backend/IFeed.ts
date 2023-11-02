@@ -30,9 +30,10 @@ namespace ScrollApp
 		description: string;
 		
 		/**
-		 * Stores the number of bytes of the feed file.
+		 * Stores a value which can be used for comparison purposes to see if a
+		 * feed has been updated.
 		 */
-		size: number;
+		checksum: string;
 	}
 	
 	/** */
@@ -40,11 +41,6 @@ namespace ScrollApp
 	{
 		/** */
 		key: number;
-		
-		/**
-		 * Stores the date (in ticks) when the user began following the feed.
-		 */
-		dateFollowed: number;
 	}
 }
 

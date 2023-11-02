@@ -3,6 +3,57 @@ namespace ScrollApp
 {
 	export namespace Util
 	{
+		/** */
+		export async function getFeedChecksum(feedUrl: string)
+		{
+			try
+			{
+				const ac = new AbortController();
+				const id = setTimeout(() => ac.abort(), timeout);
+				
+				const fetchResult = await fetch(feedUrl, {
+					method: "HEAD",
+					mode: "no-cors",
+					signal: ac.signal,
+				});
+				
+				clearTimeout(id);
+				
+				if (!fetchResult.ok)
+					return null;
+				
+				const len = fetchResult.headers.get("Content-Length") || "";
+				const mod = fetchResult.headers.get("Last-Modified") || "";
+				
+				if (!len && !mod)
+					return null;
+					
+				const checksum = (mod + ";" + len).replace(/[,:\s]/g, "");
+				return checksum;
+			}
+			catch (e) { }
+			
+			return null;
+		}
+		
+		const timeout = 500;
+		
+		/**
+		 * Returns the current date in ticks form, but with any incrementation
+		 * necessary to avoid returning the same ticks value twice.
+		 */
+		export function getSafeTicks()
+		{
+			let now = Date.now();
+			
+			if (now <= lastTicks)
+				now = ++lastTicks;
+			
+			lastTicks = now;
+			return now;
+		}
+		let lastTicks = 0;
+		
 		/**
 		 * Returns the fully-qualified URL to the icon image
 		 * specified in the specified feed.
@@ -17,10 +68,11 @@ namespace ScrollApp
 		 * Parses URIs as specified in the HTML feeds specification found at:
 		 * https://www.scrollapp.org/specs/htmlfeeds/
 		 */
-		export function parseFollowUri(uri: string)
+		export function parseHtmlUri(uri: string)
 		{
 			uri = uri.trim();
-			const prefix = "html://follow?"
+			const prefix = "html://follow?";
+			
 			if (!uri.startsWith(prefix))
 				return "";
 			
@@ -81,64 +133,33 @@ namespace ScrollApp
 			throw new Error("Not implemented");
 		}
 		
-		/**
-		 * Scans the clipboard for content in the form of a text/uri-list that starts with the
-		 * html://subscribe/ URI prefix, and returns a list of the URLs that are stored within
-		 * the URI after the prefix.
-		 */
-		export async function getUrlList()
+		/** */
+		export async function readClipboardHtmlUri()
 		{
-			if (TAURI)
-			{
-				const text = (await Tauri.clipboard.readText()) || "";
-				const lines = text.split("\n").map(s => s.trim());
-				
-				if (lines.every(line => line.slice(0, knownPrefix.length) === knownPrefix))
-				{
-					const urls = lines.map(line =>
-					{
-						try { return new URL(line.slice(0, knownPrefix.length)); }
-						catch (e) { return []; }
-					});
-					
-					if (urls.every(url => !!url))
-						return urls as URL[];
-				}
-				
-				return [];
-			}
-			else throw new Error("Not implemented");
+			const text = await readClipboard();
+			const uri = parseHtmlUri(text);
+			return uri ? text : "";
 		}
 		
 		/** */
-		export function handleUriListChanged(callback: (urls: URL[]) => void)
+		export async function readClipboard()
 		{
-			MACOS && (async () =>
+			if (ELECTRON)
 			{
-				currentClipboardText = await Tauri.clipboard.readText() || "";
-				currentClipboardCount = await Tauri.invoke("clipboard_change_count");
-				
-				const poll = async () =>
-				{
-					const newCount = Number(await Tauri.invoke("clipboard_change_count"));
-					if (newCount !== currentClipboardCount)
-					{
-						const urls = await getUrlList();
-						if (urls.length > 0)
-							callback(urls);
-					}
-					
-					setTimeout(poll, delay);
-				};
-				
-				setTimeout(poll, delay);
-			})();
+				const electron = require("electron");
+				return electron.clipboard.readText() || "";
+			}
+			else if (TAURI)
+			{
+				const text = await Tauri.clipboard.readText();
+				return text || "";
+			}
+			else if (CAPACITOR)
+			{
+				const text = await CapClipboard.read();
+				return text.value;
+			}
+			return "";
 		}
-		
-		let currentClipboardText = "";
-		let currentClipboardCount = -1;
-		
-		const delay = 250;
-		const knownPrefix = "html://subscribe/";
 	}
 }

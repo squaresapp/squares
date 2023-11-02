@@ -8,6 +8,17 @@ namespace ScrollApp
 	export namespace Style
 	{
 		/** */
+		export function backgroundOverlay(): Hot.Param
+		{
+			return [
+				{
+					backgroundColor: "rgba(0, 0, 0, 0.75)",
+				},
+				Style.backdropBlur(5),
+			]
+		}
+		
+		/** */
 		export function backdropBlur(pixels = 5): Hot.Style
 		{
 			const value = pixels > 0 ? `blur(${pixels}px)` : "none";

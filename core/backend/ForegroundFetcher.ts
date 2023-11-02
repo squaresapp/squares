@@ -17,70 +17,48 @@ namespace ScrollApp
 		private feedIterator: AsyncGenerator<IFeed, void, unknown> | null = null;
 		
 		/** */
-		async startFetch(updateFn: (feed: IFeed) => void)
+		async fetch()
 		{
 			this.stopFetch();
 			this.feedIterator = Data.readFeeds();
-			const promises: Promise<void>[] = [];
+			const threads: Promise<void>[] = [];
+			const modifiedFeeds: IFeed[] = [];
 			
-			for (let i = -1; ++i < numFetchThreads;)
+			for (let i = -1; ++i < maxFetchThreads;)
 			{
-				promises.push(this.startFetchThread(async feed =>
+				// Creates a "thread" that attempts to ping
+				// the URL of the next feed in the line.
+				threads.push(new Promise<void>(async r =>
 				{
-					await Data.writeFeed(feed);
+					for (;;)
+					{
+						const feedIteration = await this.feedIterator?.next();
+						if (!feedIteration || feedIteration.done)
+						{
+							// If i is less than the number of "threads" running,
+							// and the iterator has run out, that means there's
+							// fewer feeds than there are threads (so avoid
+							// termination in this case).
+							if (i >= maxFetchThreads)
+							{
+								this.feedIterator = null;
+								this.abortControllers.clear();
+							}
+							
+							return r();
+						}
+						
+						const feed = feedIteration.value;
+						
+						const checksum = await Util.getFeedChecksum(feed.url);
+						if (checksum !== feed.checksum)
+							modifiedFeeds.push(feed);
+					}
 				}));
 			}
 			
-			await Promise.all(promises);
-		}
-		
-		/**
-		 * Launches a "thread" that attempts to ping
-		 * the URL of the next feed in the line.
-		 */
-		private async startFetchThread(updateFn: (feed: IFeed) => void)
-		{
-			for (;;)
-			{
-				const feedIteration = await this.feedIterator?.next();
-				if (!feedIteration || feedIteration.done)
-				{
-					this.feedIterator = null;
-					this.abortControllers.clear();
-					return;
-				}
-				
-				const feed = feedIteration.value;
-				
-				try
-				{
-					const ac = new AbortController();
-					this.abortControllers.add(ac);
-					
-					const id = setTimeout(() => ac.abort(), pingResponseTimeout);
-					const fetchResult = await fetch(feed.url, {
-						method: "HEAD",
-						mode: "no-cors",
-						signal: ac.signal,
-					});
-					
-					this.abortControllers.delete(ac);
-					clearTimeout(id);
-					
-					if (fetchResult.ok)
-					{
-						const sizeStr = fetchResult.headers.get("Content-Length") || "-1";
-						const size = parseInt(sizeStr, 10);
-						if (size >= 0)
-						{
-							feed.size = size;
-							updateFn(feed);
-							continue;
-						}
-					}
-				}
-				catch (e) { }
-			}
+			await Promise.all(threads);
+			await Fetcher.updateModifiedFeeds(modifiedFeeds);
 		}
 		
 		/** */
@@ -96,41 +74,5 @@ namespace ScrollApp
 		private readonly abortControllers = new Set<AbortController>();
 	}
 	
-	const numFetchThreads = 10;
-	const pingResponseTimeout = 500;
-	
-	/**
-	 * 
-	 */
-	export class BackgroundFetcher
-	{ 
-		/** */
-		constructor()
-		{
-			//! Not implemented
-		}
-	}
-	
-	/** */
-	async function updateFeedJson(feedJson: IFeed)
-	{
-		
-	}
-	
-	/**
-	 * 
-	 */
-	async function handlePostFetch(modifiedFeeds: IFeed[])
-	{
-		for (const modifiedFeed of modifiedFeeds)
-		{
-			HtmlFeed.getFeedContents(modifiedFeed.url).then(contents =>
-			{
-				if (!contents)
-					return;
-				
-				
-			});
-		}
-	}
+	const maxFetchThreads = 10;
 }

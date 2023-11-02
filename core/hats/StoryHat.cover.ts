@@ -30,17 +30,16 @@ namespace ScrollApp.Cover
 			)
 		];
 		
-		const feedJson: IFeed = {
+		const feed: IFeed = {
+			key: Util.getSafeTicks(),
 			author: "Paul Gordon",
 			url: "http://localhost:43332/raccoons/index.txt",
 			description: "A description of the feed",
-			dateFollowed: Date.now(),
 			icon: "http://localhost:43332/raccoons/icon.jpg",
-			key: 0,
-			size: 0,
+			checksum: "?",
 		};
 		
-		const hat = new StoryHat(sections, feedJson);
+		const hat = new StoryHat(sections, feed);
 		document.body.append(hat.head);
 	}
 }

@@ -11,7 +11,7 @@ namespace ScrollApp
 		{
 			const iconUrl = Util.getIconUrl(data);
 			const author = data.author || Strings.unknownAuthor;
-			const isFollowing = data.dateFollowed > 0;
+			const isFollowing = data.key > 0;
 			
 			this.head = hot.div(
 				{

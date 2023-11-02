@@ -99,6 +99,8 @@ declare const Toast: typeof import("@capacitor/toast").Toast;
 // Bindings for the Background Fetch plugin
 declare const BackgroundFetch: typeof import("@transistorsoft/capacitor-background-fetch").BackgroundFetch;
 
+declare const CapClipboard: typeof import("@capacitor/clipboard").Clipboard;
+
 namespace ScrollApp
 {
 	/**
@@ -122,6 +124,7 @@ namespace ScrollApp
 		{
 			g.Toast = g.Capacitor?.Plugins?.Toast;
 			g.BackgroundFetch = g.Capacitor?.Plugins?.BackgroundFetch;
+			g.Capactor?.Clipboard;
 		}
 		
 		if (DEBUG)
@@ -199,20 +202,24 @@ namespace ScrollApp
 		for (const feedPath of feedPaths)
 		{
 			const url = urlBase + feedPath + "index.txt";
-			const contents = await HtmlFeed.getFeedContents(url);
-			if (!contents)
+			const urls = await HtmlFeed.getFeedUrls(url);
+			if (!urls)
 				continue;
 			
-			urlLists.push(contents.urls);
+			const checksum = await Util.getFeedChecksum(url);
+			if (!checksum)
+				continue;
+			
+			urlLists.push(urls);
 			
 			const feedMeta = await HtmlFeed.getFeedMetaData(url);
-			const feed = await Data.writeFeed(feedMeta || {}, { size: contents.bytesRead });
+			const feed = await Data.writeFeed(feedMeta || {}, { checksum });
+			await Data.captureRawFeed(feed, urls);
 			feeds.push(feed);
 		}
 		
 		const scroll = await Data.writeScroll({ feeds });
 		const maxLength = urlLists.reduce((a, b) => a > b.length ? a : b.length, 0);
-		let incrementingDate = Date.now() - 10 ** 7;
 		
 		for (let i = -1; ++i < maxLength * urlLists.length;)
 		{
@@ -226,14 +233,7 @@ namespace ScrollApp
 			const feed = feeds[indexOfList];
 			const feedDirectory = HtmlFeed.Url.folderOf(feed.url);
 			const path = urlList[indexWithinList].slice(feedDirectory.length);
-			
-			const post = await Data.writePost({
-				key: incrementingDate++,
-				visited: false,
-				feed,
-				path,
-			});
-			
+			const post = await Data.writePost({ feed, path });
 			await Data.writeScrollPost(scroll.key, post);
 		}
 		

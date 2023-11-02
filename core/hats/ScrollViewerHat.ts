@@ -34,6 +34,25 @@ namespace ScrollApp
 						transitionProperty: "transform, opacity",
 					}
 				),
+				!CAPACITOR && hot.div(
+					Dock.bottomRight(10),
+					{
+						zIndex: 1,
+						color: "white",
+						borderRadius: "100%",
+						padding: "10px",
+						width: "50px",
+						height: "50px",
+						lineHeight: "33px",
+						textAlign: "center",
+						fontSize: "25px",
+						fontWeight: 700,
+					},
+					Style.backgroundOverlay(),
+					Style.clickable,
+					hot.text("↻"),
+					hot.on("click", () => this.handleRefresh()),
+				),
 				hot.get(this.pullToRefreshHat = new PullToRefreshHat(this.grid.head))(
 					{
 						position: "absolute",
@@ -222,15 +241,19 @@ namespace ScrollApp
 		constructor(private readonly scroll: IScroll)
 		{
 			super();
+			this.fetcher = new ForegroundFetcher();
 		}
+		
+		private readonly fetcher;
 		
 		/** */
 		protected handleRefresh()
 		{
-			Hat.over(this, RootHat).foregroundFetcher.startFetch(feed =>
+			(async () =>
 			{
-				console.log("Not implemented");
-			});
+				await this.fetcher.fetch();
+				//! Signal to the GridHat that it needs to run a tryGetPosters()
+			})();
 		}
 		
 		/** */

@@ -10,16 +10,15 @@ namespace ScrollApp.Cover
 			icon: "icon.jpg",
 			author: "Mr Raccoons",
 			description: "Sample feed of raccoons",
-			size: 721,
-			dateFollowed: 1696947977011
+			checksum: "?"
 		};
 		
 		const feedUrl = "http://localhost:43332/raccoons/index.txt";
-		const feedContents = await HtmlFeed.getFeedContents(feedUrl, 0);
-		if (!feedContents)
+		const urls = await HtmlFeed.getFeedUrls(feedUrl);
+		if (!urls)
 			throw "No feed loaded";
 		
-		const hat = new ScrollFeedViewerHat(feed, feedContents.urls);
+		const hat = new ScrollFeedViewerHat(feed, urls);
 		document.body.append(hat.head);
 	}
 }
