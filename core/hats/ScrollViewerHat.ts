@@ -67,12 +67,7 @@ namespace ScrollApp
 			Hat.wear(this);
 			this.constructGrid();
 			this.showGrid(true);
-			
-			this.pullToRefreshHat.onRefresh(() =>
-			{
-				this.handleRefresh();
-			});
-			
+			this.pullToRefreshHat.onRefresh(() => this.handleRefresh());
 			this.gridContainer.append(this.grid.head);
 		}
 		
