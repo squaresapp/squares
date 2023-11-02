@@ -51,7 +51,7 @@ namespace ScrollApp
 					Style.backgroundOverlay(),
 					Style.clickable,
 					hot.text("↻"),
-					hot.on("click", () => this.handleRefresh()),
+					hot.on("click", () => this.handleRefreshInner()),
 				),
 				hot.get(this.pullToRefreshHat = new PullToRefreshHat(this.grid.head))(
 					{
@@ -67,7 +67,7 @@ namespace ScrollApp
 			Hat.wear(this);
 			this.constructGrid();
 			this.showGrid(true);
-			this.pullToRefreshHat.onRefresh(() => this.handleRefresh());
+			this.pullToRefreshHat.onRefresh(() => this.handleRefreshInner());
 			this.gridContainer.append(this.grid.head);
 		}
 		
@@ -75,7 +75,14 @@ namespace ScrollApp
 		protected abstract getPost(index: number): ReturnType<RenderFn>;
 		
 		/** */
-		protected abstract handleRefresh(): void;
+		protected abstract handleRefresh(): Promise<void>;
+		
+		/** */
+		private async handleRefreshInner()
+		{
+			await this.handleRefresh();
+			this.grid.tryAppendPosters(1);
+		}
 		
 		/** */
 		protected abstract getStory(index: number): Promise<{
@@ -236,19 +243,15 @@ namespace ScrollApp
 		constructor(private readonly scroll: IScroll)
 		{
 			super();
-			this.fetcher = new ForegroundFetcher();
+			this.foregroundFetcher = new ForegroundFetcher();
 		}
 		
-		private readonly fetcher;
+		private readonly foregroundFetcher;
 		
 		/** */
-		protected handleRefresh()
+		protected async handleRefresh()
 		{
-			(async () =>
-			{
-				await this.fetcher.fetch();
-				//! Signal to the GridHat that it needs to run a tryGetPosters()
-			})();
+			await this.foregroundFetcher.fetch();
 		}
 		
 		/** */
@@ -330,7 +333,7 @@ namespace ScrollApp
 		}
 		
 		/** */
-		protected handleRefresh()
+		protected async handleRefresh()
 		{
 			
 		}

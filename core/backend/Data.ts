@@ -346,10 +346,11 @@ namespace ScrollApp.Data
 		}
 		else
 		{
-			const text = urls.join("\n");
-			await filaRaw.writeText(text);
 			added.push(...urls);
 		}
+		
+		const text = urls.join("\n");
+		await filaRaw.writeText(text);
 		
 		return { added, removed };
 	}
@@ -395,6 +396,9 @@ namespace ScrollApp.Data
 			feed: fullPost.feed?.key || 0,
 			path: fullPost.path || ""
 		};
+		
+		if (!diskPost.path)
+			throw new Error("Post has no .path property.");
 		
 		const postsFile = await getPostsFile(post.key);
 		const postsObject = await readPostsFile(postsFile);

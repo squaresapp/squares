@@ -21,12 +21,14 @@ namespace ScrollApp
 					if (!urls)
 						return;
 					
+					const feedUrlFolder = HtmlFeed.Url.folderOf(feed.url);
 					const { added, removed } = await Data.captureRawFeed(feed, urls);
 					
 					for (const url of added)
 					{
-						const path = url.slice(feed.url.length);
+						const path = url.slice(feedUrlFolder.length);
 						const post = await Data.writePost({ feed, path });
+						
 						if (scroll)
 							Data.writeScrollPost(scroll.key, post);
 					}

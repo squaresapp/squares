@@ -176,12 +176,11 @@ namespace ScrollApp
 		/** */
 		get posterCount()
 		{
-			const e = this.head.lastElementChild;
-			return e ? getIndex(e) : 0;
+			return this.head.getElementsByClassName(Class.poster).length;
 		}
 		
 		/** */
-		private async tryAppendPosters(screenCount: number)
+		async tryAppendPosters(screenCount: number)
 		{
 			const pullCount = this.size * this.size * screenCount;
 			const rangeStart = this.posterCount;
@@ -203,11 +202,11 @@ namespace ScrollApp
 				maybePromises.push(result);
 			}
 			
-			const posterCount = maybePromises.length;
-			if (posterCount === 0)
+			const newPosterCount = maybePromises.length;
+			if (newPosterCount === 0)
 				return;
 			
-			if (rangeStart === 0 && posterCount < this.size)
+			if (rangeStart === 0 && newPosterCount < this.size)
 			{
 				// The constrained size cannot go below 2. This means that if there
 				// is only 1 preview returned, the Omniview is going to look a bit
@@ -215,7 +214,7 @@ namespace ScrollApp
 				// empty space on the right. If this is undesirable, the component
 				// that owns the Omniview is responsible for avoiding this situation
 				// by it's own means.
-				this.sizeLimit = Math.max(2, posterCount);
+				this.sizeLimit = Math.max(2, newPosterCount);
 				this.setSizeInner(this.sizeLimit);
 			}
 			
@@ -517,6 +516,9 @@ namespace ScrollApp
 	/** */
 	function setIndex(e: Element, index: number)
 	{
+		if (document.getElementsByClassName(indexPrefix + index).length > 0)
+			debugger;
+		
 		e.classList.add(indexPrefix + index);
 	}
 	
