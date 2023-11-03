@@ -2,7 +2,7 @@
 namespace ScrollApp
 {
 	/** */
-	export class PostHat
+	export class PageHat
 	{
 		readonly head;
 		

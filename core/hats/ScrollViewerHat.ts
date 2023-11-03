@@ -294,9 +294,9 @@ namespace ScrollApp
 			
 			const root = Hat.over(this, RootHat);
 			const postUrl = root.getPostUrl(post) || "";
-			const reel = await HtmlFeed.getReelFromUrl(postUrl);
-			const sections: HTMLElement[] = reel ?
-				reel.sections.slice() :
+			const page = await HtmlFeed.getPageFromUrl(postUrl);
+			const sections: HTMLElement[] = page ?
+				page.sections.slice() :
 				[HtmlFeed.getErrorPoster()];
 			
 			const feed = await Data.readFeed(post.feed.key);
