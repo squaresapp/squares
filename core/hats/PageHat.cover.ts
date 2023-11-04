@@ -39,7 +39,7 @@ namespace ScrollApp.Cover
 			checksum: "?",
 		};
 		
-		const hat = new StoryHat(sections, feed);
+		const hat = new PageHat([], sections, feed);
 		document.body.append(hat.head);
 	}
 }

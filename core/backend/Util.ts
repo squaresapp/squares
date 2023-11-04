@@ -161,5 +161,27 @@ namespace ScrollApp
 			}
 			return "";
 		}
+		
+		/**
+		 * Removes problematic CSS attributes from the specified section tag,
+		 * and ensures that no external CSS is modifying its display propert
+		 */
+		export function getSectionSanitizationCss(): Hot.Style
+		{
+			return {
+				position: "relative !",
+				zIndex: 0,
+				width: "auto !",
+				height: "100% !",
+				margin: "0 !",
+				boxSizing: "border-box !",
+				display: "block !",
+				float: "none !",
+				clipPath: "inset(0 0) !",
+				mask: "none !",
+				opacity: "1 !",
+				transform: "none !",
+			};
+		}
 	}
 }

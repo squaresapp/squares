@@ -72,7 +72,7 @@ namespace ScrollApp
 					this.renderButton(Strings.share, () => {}),
 					isFollowing && (e => this.renderButton(Strings.unfollow, () =>
 					{
-						Hat.over(this, StoryHat).head.scrollBy({ top: -1 });
+						Hat.over(this, PageHat).head.scrollBy({ top: -1 });
 						Hat.signal(UnfollowSignal, data.key);
 						UI.fade(e);
 					})),

@@ -68,6 +68,13 @@ namespace ScrollApp
 		}
 		
 		/** */
+		setVisiblePane(index: number)
+		{
+			const w = this.head.offsetWidth;
+			this.head.scrollBy(w * index, 0);
+		}
+		
+		/** */
 		private updateVisiblePane()
 		{
 			const w = this.head.offsetWidth;

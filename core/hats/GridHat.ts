@@ -16,14 +16,6 @@ namespace ScrollApp
 		constructor()
 		{
 			maybeAppendDefaultCss();
-			const size = parseInt(Style.borderRadiusLarge);
-			const cornerStyles: Hot.Style = {
-				position: "absolute",
-				zIndex: 1,
-				width: size + "px",
-				height: size + "px",
-				pointerEvents: "none",
-			};
 			
 			this.head = hot.div(
 				Style.unselectable,
@@ -52,8 +44,8 @@ namespace ScrollApp
 				}),
 				
 				CAPACITOR && [
-					hot.get(UI.corner("tl"))(cornerStyles, { top: 0, left: 0 }),
-					hot.get(UI.corner("tr"))(cornerStyles, { top: 0, right: 0 }),
+					UI.cornerAbsolute("tl"),
+					UI.cornerAbsolute("tr"),
 					
 					this.cornersElement = hot.span(
 						{
@@ -65,8 +57,8 @@ namespace ScrollApp
 							right: 0,
 							zIndex: 2,
 						},
-						hot.get(UI.corner("bl"))(cornerStyles, { bottom: 0, left: 0 }),
-						hot.get(UI.corner("br"))(cornerStyles, { bottom: 0, right: 0 }),
+						UI.cornerAbsolute("bl"),
+						UI.cornerAbsolute("br"),
 					)
 				]
 			);

@@ -85,7 +85,8 @@ namespace ScrollApp
 		}
 		
 		/** */
-		protected abstract getStory(index: number): Promise<{
+		protected abstract getPageInfo(index: number): Promise<{
+			readonly head: HTMLElement[];
 			readonly sections: HTMLElement[];
 			readonly feed: IFeed;
 		}>;
@@ -98,21 +99,20 @@ namespace ScrollApp
 		{
 			this.grid.head.style.borderRadius = "inherit";
 			this.grid.handleRender(index => this.getPost(index));
-			
 			this.grid.handleSelect(async (e, index) =>
 			{
 				this.selectedGridItem = e;
-				this.showStory(index);
+				this.showPage(index);
 			});
 		}
 		
 		/** */
-		private async showStory(index: number)
+		private async showPage(index: number)
 		{
-			const story = await this.getStory(index);
-			const storyHat = new StoryHat(story.sections, story.feed);
+			const pageInfo = await this.getPageInfo(index);
+			const pageHat = new PageHat(pageInfo.head, pageInfo.sections, pageInfo.feed);
 			
-			hot.get(storyHat)(
+			hot.get(pageHat)(
 				Dock.cover(),
 				{
 					transitionDuration,
@@ -125,82 +125,33 @@ namespace ScrollApp
 						if (e instanceof HTMLElement)
 							e.classList.add(noOverflowClass);
 					
-					storyHat.head.style.transform = "translateY(0)";
-					await UI.waitTransitionEnd(storyHat.head);
+					pageHat.head.style.transform = "translateY(0)";
+					await UI.waitTransitionEnd(pageHat.head);
 					this.gridContainer.style.transitionDuration = "0s";
 				})),
-				hot.on("scroll", () => window.requestAnimationFrame(() =>
+				hot.on(this.grid.head, "scroll", async () =>
 				{
-					const h = storyHat.head;
-					const scrollTop = Math.ceil(h.scrollTop);
-					const scrollLeft = Math.ceil(h.scrollLeft);
-					const scrollHeight = Math.ceil(h.scrollHeight);
-					const offsetHeight = Math.ceil(h.offsetHeight);
-					const offsetWidth = Math.ceil(h.offsetWidth);
-					let pct = -1;
-					
-					if (canExitLeft && scrollLeft < offsetWidth)
-						pct = scrollLeft / offsetWidth;
-					
-					else if (scrollTop < offsetHeight)
-						pct = scrollTop / offsetHeight;
-					
-					else if (scrollTop >= scrollHeight - offsetHeight * 2)
-						pct = (scrollHeight - offsetHeight - scrollTop) / offsetHeight;
-					
-					if (pct >= 0)
+					if (pageHat.head.isConnected)
 					{
-						const s = this.gridContainer.style;
-						s.transform = translateZ(pct * translateZMax + "px");
-						s.opacity = (1 - pct).toString();
-						
-						if (scrollTop === 0 || scrollTop >= scrollHeight - offsetHeight)
-							s.pointerEvents = "all";
+						await pageHat.forceRetract();
+						this.showGrid(true);
 					}
-				})),
-				hot.on(this.grid.head, "scroll", () =>
-				{
-					const e = storyHat.head;
-					
-					if (!e.isConnected)
-						return;
-					
-					// This check will indicate whether the storyHat has rightward
-					// scrolling inertia. If it does, it's scrolling will halt and it will be
-					// necessary to animate the story hat away manually.
-					if (e.scrollLeft > 0 && e.scrollLeft < e.offsetWidth)
-						slideAway("x", e.scrollLeft);
-					
-					else if (e.scrollTop > 0 && e.scrollTop < e.offsetHeight)
-						slideAway("y", e.scrollTop);
 				})
 			);
 			
-			const slideAway = (axis: "x" | "y", amount: number) =>
+			pageHat.onRetract(pct => window.requestAnimationFrame(() =>
 			{
-				const ms = 250;
-				const e = storyHat.head;
-				e.style.transitionDuration = ms + "ms";
-				e.style.transitionProperty = "transform";
-				e.style.transform = `translate${axis.toLocaleUpperCase()}(${amount}px)`;
-				e.style.pointerEvents = "none";
-				
-				setTimeout(() =>
-				{
-					storyHat.head.remove();
-					disconnected();
-				},
-				ms);
-				
-				this.showGrid(true);
-			}
+				const s = this.gridContainer.style;
+				s.transform = translateZ(pct * translateZMax + "px");
+				s.opacity = (1 - pct).toString();
+			}));
 			
 			const disconnected = async () =>
 			{
 				if (this.selectedGridItem)
 				{
 					const s = this.selectedGridItem.style;
-					s.transitionDuration = "0.5s";
+					s.transitionDuration = "0.75s";
 					s.transitionProperty = "opacity, filter";
 					await UI.wait(1);
 					applyVisitedStyle(this.selectedGridItem);
@@ -218,8 +169,8 @@ namespace ScrollApp
 					this.handlePostVisited(index);
 			}
 			
-			storyHat.disconnected(disconnected);
-			this.gridContainer.after(storyHat.head);
+			pageHat.onDisconnect(disconnected);
+			this.gridContainer.after(pageHat.head);
 			this.showGrid(false);
 		}
 		
@@ -286,7 +237,7 @@ namespace ScrollApp
 		}
 		
 		/** */
-		protected async getStory(index: number)
+		protected async getPageInfo(index: number)
 		{
 			const post = await Data.readScrollPost(this.scroll.key, index);
 			if (!post)
@@ -295,6 +246,7 @@ namespace ScrollApp
 			const root = Hat.over(this, RootHat);
 			const postUrl = root.getPostUrl(post) || "";
 			const page = await HtmlFeed.getPageFromUrl(postUrl);
+			const head = page?.head || [];
 			const sections: HTMLElement[] = page ?
 				page.sections.slice() :
 				[HtmlFeed.getErrorPoster()];
@@ -303,7 +255,7 @@ namespace ScrollApp
 			if (!feed)
 				throw new Error();
 			
-			return { sections, feed };
+			return { head, sections, feed };
 		}
 		
 		/** */
@@ -354,9 +306,10 @@ namespace ScrollApp
 		}
 		
 		/** */
-		protected async getStory(index: number)
+		protected async getPageInfo(index: number)
 		{
 			return {
+				head: [],
 				sections: [],
 				feed: this.feed,
 			};
@@ -370,8 +323,7 @@ namespace ScrollApp
 	function applyVisitedStyle(e: HTMLElement)
 	{
 		const s = e.style;
-		s.opacity = "0.5";
-		s.filter = "saturate(0)";
+		s.filter = "saturate(0) brightness(0.4)";
 		return e;
 	}
 	

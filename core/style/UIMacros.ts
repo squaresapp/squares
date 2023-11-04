@@ -6,6 +6,31 @@ namespace ScrollApp
 	 */
 	export namespace UI
 	{
+		/** */
+		export function cornerAbsolute(kind: "tl" | "tr" | "bl" | "br")
+		{
+			if (kind === "tl")
+				return hot.get(UI.corner("tl"))(cornerStyles, { top: 0, left: 0 });
+			
+			if (kind === "tr")
+				return hot.get(UI.corner("tr"))(cornerStyles, { top: 0, right: 0 });
+			
+			else if (kind === "bl")
+				return hot.get(UI.corner("bl"))(cornerStyles, { bottom: 0, left: 0 });
+			
+			else if (kind === "br")
+				return hot.get(UI.corner("br"))(cornerStyles, { bottom: 0, right: 0 });
+		}
+		
+		const size = parseInt(Style.borderRadiusLarge);
+		const cornerStyles: Hot.Style = {
+			position: "absolute",
+			zIndex: 1,
+			width: size + "px",
+			height: size + "px",
+			pointerEvents: "none",
+		};
+		
 		/**
 		 * Renders a single inverted rounded corner piece.
 		 */
@@ -29,6 +54,7 @@ namespace ScrollApp
 				top = left = -100;
 			
 			return hot.span(
+				"corner",
 				{
 					overflow: "hidden",
 					width: "100px",
@@ -224,57 +250,6 @@ namespace ScrollApp
 			e.style.opacity = "0";
 			await UI.waitTransitionEnd(e);
 			e.style.visibility = "hidden";
-		}
-		
-		/** */
-		export namespace screenTransition
-		{
-			/** */
-			export function execute(
-				activeElement: HTMLElement,
-				overlayElement: HTMLElement)
-			{
-				hot.get(activeElement)(
-					
-				);
-				
-				hot.get(overlayElement)(
-					Dock.cover(), // Necessary?
-					{
-						transitionDuration: duration,
-						transitionProperty: "transform",
-						transform: "translateY(110%)",
-					},
-				);
-				
-				
-			}
-			
-			/** */
-			function slideAway(axis: "x" | "y", amount: number)
-			{
-				/*
-				const ms = 250;
-				const e = storyHat.head;
-				e.style.transitionDuration = ms + "ms";
-				e.style.transitionProperty = "transform";
-				e.style.transform = `translate${axis.toLocaleUpperCase()}(${amount}px)`;
-				e.style.pointerEvents = "none";
-				
-				setTimeout(() =>
-				{
-					storyHat.head.remove();
-					disconnected();
-				},
-				ms);
-				
-				this.showGrid(true);
-				*/
-			}
-			
-			const translateZ = (amount: string) => `perspective(10px) translateZ(${amount})`;
-			const translateZMax = -3;
-			export const duration = "0.5s";
 		}
 	}
 }
