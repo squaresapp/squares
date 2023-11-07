@@ -93,6 +93,8 @@ const isPwa =
 const isTouch =  matchMedia("(pointer:coarse)").matches;
 const hot = new Hot();
 
+declare const Device: typeof import("@capacitor/device").Device;
+
 // Bindings for the Toast plugin
 declare const Toast: typeof import("@capacitor/toast").Toast;
 
@@ -125,6 +127,7 @@ namespace ScrollApp
 			g.Toast = g.Capacitor?.Plugins?.Toast;
 			g.BackgroundFetch = g.Capacitor?.Plugins?.BackgroundFetch;
 			g.Capactor?.Clipboard;
+			g.Device = g.Capacitor?.Plugins?.Device;
 		}
 		
 		if (DEBUG)
