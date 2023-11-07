@@ -2,9 +2,9 @@
 declare const DEBUG: boolean;
 declare const ELECTRON: boolean;
 declare const TAURI: boolean;
-declare const MACOS: boolean;
 declare const IOS: boolean;
 declare const ANDROID: boolean;
+declare const WEB: boolean;
 declare const CAPACITOR: boolean;
 declare const SIMULATOR: boolean;
 declare const Moduless: { getRunningFunctionName(): string; }
@@ -57,9 +57,6 @@ if (typeof ELECTRON === "undefined")
 if (typeof TAURI === "undefined")
 	Object.assign(globalThis, { TAURI: typeof window !== "undefined" && typeof (window as any).__TAURI__ !== "undefined" });
 
-if (typeof MACOS === "undefined")
-	Object.assign(globalThis, { MACOS: (navigator.platform || "").indexOf("Mac") === 0 });
-
 if (typeof IOS === "undefined")
 	Object.assign(globalThis, { IOS: navigator.platform.startsWith("iP") });
 
@@ -67,7 +64,10 @@ if (typeof ANDROID === "undefined")
 	Object.assign(globalThis, { ANDROID: navigator.userAgent.includes("Android") });
 
 if (typeof CAPACITOR === "undefined")
-	Object.assign(globalThis, { CAPACITOR: IOS || ANDROID });
+	Object.assign(globalThis, { CAPACITOR: typeof Capacitor === "object" });
+
+if (typeof WEB === "undefined")
+	Object.assign(globalThis, { WEB: !ELECTRON && !TAURI && !CAPACITOR });
 
 if (typeof SIMULATOR === "undefined")
 	Object.assign(globalThis, { SIMULATOR: false });
@@ -120,6 +120,9 @@ namespace ScrollApp
 		else if (CAPACITOR)
 			FilaCapacitor.use();
 		
+		else if (WEB)
+			FilaKeyva.use();
+		
 		const g = globalThis as any;
 		
 		if (CAPACITOR)
@@ -140,7 +143,6 @@ namespace ScrollApp
 			}
 			
 			await debugGenerateJsonFiles();
-			debugConnectRefreshTool();
 		}
 		
 		ScrollApp.appendCssReset();
@@ -152,34 +154,6 @@ namespace ScrollApp
 	
 	//@ts-ignore
 	if (!DEBUG) return;
-	
-	/** */
-	function debugConnectRefreshTool()
-	{
-		let pointerdown = false;
-		let timeoutId: any = 0;
-		
-		document.body.addEventListener("pointerdown", ev =>
-		{
-			pointerdown = true;
-			
-			timeoutId = setTimeout(() =>
-			{
-				if (pointerdown)
-					window.location.reload();
-			},
-			1000);
-		});
-		
-		const end = () =>
-		{
-			pointerdown = false;
-			clearTimeout(timeoutId);
-		};
-		
-		document.body.addEventListener("pointerup", end);
-		document.body.addEventListener("pointermove", end);
-	}
 	
 	/**
 	 * DEBUG-only function that generates app data files and

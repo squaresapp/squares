@@ -508,9 +508,6 @@ namespace ScrollApp
 	/** */
 	function setIndex(e: Element, index: number)
 	{
-		if (document.getElementsByClassName(indexPrefix + index).length > 0)
-			debugger;
-		
 		e.classList.add(indexPrefix + index);
 	}
 	

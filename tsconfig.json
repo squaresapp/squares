@@ -38,8 +38,8 @@
 		{ "path": "../FilaCapacitor" },
 		{ "path": "../FilaTauri" },
 		{ "path": "../FilaNode" },
+		{ "path": "../FilaKeyva" },
 		{ "path": "../Keyva" },
-		{ "path": "../Pinger" },
 		{ "path": "../HtmlFeedJS" },
 		{ "path": "../Dock" }
 	]

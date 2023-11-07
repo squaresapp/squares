@@ -12,11 +12,14 @@
 		{ "path": "../Hat" },
 		{ "path": "../Query" },
 		{ "path": "../Not" },
+		{ "path": "../Force" },
 		{ "path": "../Fila" },
-		{ "path": "../FilaNode" },
+		{ "path": "../FilaCapacitor" },
 		{ "path": "../FilaTauri" },
-		{ "path": "../Pinger" },
+		{ "path": "../FilaNode" },
+		{ "path": "../FilaKeyva" },
+		{ "path": "../Keyva" },
 		{ "path": "../HtmlFeedJS" },
-		{ "path": "../Dock" },
+		{ "path": "../Dock" }
 	]
 }

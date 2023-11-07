@@ -13,7 +13,7 @@ namespace ScrollApp
 				
 				const fetchResult = await fetch(feedUrl, {
 					method: "HEAD",
-					mode: "no-cors",
+					mode: "cors",
 					signal: ac.signal,
 				});
 				
@@ -128,6 +128,10 @@ namespace ScrollApp
 					FilaCapacitor.directory.data;
 				
 				return Fila.new(path);
+			}
+			else if (WEB)
+			{
+				return Fila.new();
 			}
 			
 			throw new Error("Not implemented");
