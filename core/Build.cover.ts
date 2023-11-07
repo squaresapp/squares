@@ -25,6 +25,7 @@ namespace ScrollApp.Build
 			`<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">`,
 			`<meta name="apple-mobile-web-app-title" content="Scroll">`,
 			`<meta name="viewport" content="initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover, width=device-width">`,
+			`<link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=" rel="icon" type="image/x-icon">`,
 		];
 		
 		const buildFolder = Fila.new(__dirname);
