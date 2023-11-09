@@ -15,5 +15,3 @@ namespace ScrollApp
 		"https://htmlfeeds.github.io/Examples/trees/index.txt",
 	];
 }
-
-
