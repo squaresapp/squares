@@ -2,11 +2,14 @@
 declare const DEBUG: boolean;
 declare const ELECTRON: boolean;
 declare const TAURI: boolean;
+declare const MAC: boolean;
+declare const WINDOWS: boolean;
+declare const LINUX: boolean;
+declare const SIMULATOR: boolean;
+declare const CAPACITOR: boolean;
 declare const IOS: boolean;
 declare const ANDROID: boolean;
 declare const WEB: boolean;
-declare const CAPACITOR: boolean;
-declare const SIMULATOR: boolean;
 declare const Moduless: { getRunningFunctionName(): string; }
 
 declare namespace Electron
@@ -133,16 +136,26 @@ namespace ScrollApp
 			g.Device = g.Capacitor?.Plugins?.Device;
 		}
 		
+		if (DEBUG && CAPACITOR)
+		{
+			const device = g.Capacitor?.Plugins?.Device;
+			const info = await device.getInfo();
+			Object.assign(globalThis, { SIMULATOR: info.isVirtual });
+		}
+		
 		if (DEBUG)
 		{
-			if (CAPACITOR)
-			{
-				const device = g.Capacitor?.Plugins?.Device;
-				const info = await device.getInfo();
-				Object.assign(globalThis, { SIMULATOR: info.isVirtual });
-			}
+			const dataFolder = await Util.getDataFolder();
+			if (!await dataFolder.exists())
+				await dataFolder.writeDirectory();
 			
-			await debugGenerateJsonFiles();
+			await Data.clear();
+			await ScrollApp.runDataInitializer(ScrollApp.feedsForDebug);
+		}
+		
+		if (!DEBUG && WEB)
+		{
+			await ScrollApp.runDataInitializer(feedsForWeb);
 		}
 		
 		ScrollApp.appendCssReset();
@@ -150,68 +163,6 @@ namespace ScrollApp
 		const rootHat = new RootHat();
 		await rootHat.construct();
 		document.body.append(rootHat.head);
-	}
-	
-	//@ts-ignore
-	if (!DEBUG) return;
-	
-	/**
-	 * DEBUG-only function that generates app data files and
-	 * stores them in the local file system.
-	 */
-	async function debugGenerateJsonFiles()
-	{
-		const dataFolder = await Util.getDataFolder();
-		if (!await dataFolder.exists())
-			await dataFolder.writeDirectory();
-		
-		await Data.clear();
-		const feeds: IFeed[] = [];
-		const urlLists: string[][] = [];
-		
-		const feedUrls = [
-			"https://htmlfeeds.github.io/Examples/trees/index.txt",
-			"https://htmlfeeds.github.io/Examples/raccoons/index.txt",
-		];
-		
-		for (const url of feedUrls)
-		{
-			const urls = await HtmlFeed.getFeedUrls(url);
-			if (!urls)
-				continue;
-			
-			const checksum = await Util.getFeedChecksum(url);
-			if (!checksum)
-				continue;
-			
-			urlLists.push(urls);
-			
-			const feedMeta = await HtmlFeed.getFeedMetaData(url);
-			const feed = await Data.writeFeed(feedMeta || {}, { checksum });
-			await Data.captureRawFeed(feed, urls);
-			feeds.push(feed);
-		}
-		
-		const scroll = await Data.writeScroll({ feeds });
-		const maxLength = urlLists.reduce((a, b) => a > b.length ? a : b.length, 0);
-		
-		for (let i = -1; ++i < maxLength * urlLists.length;)
-		{
-			const indexOfList = i % urlLists.length;
-			const urlList = urlLists[indexOfList];
-			const indexWithinList = Math.floor(i / urlLists.length);
-			
-			if (urlList.length <= indexWithinList)
-				continue;
-			
-			const feed = feeds[indexOfList];
-			const feedDirectory = HtmlFeed.Url.folderOf(feed.url);
-			const path = urlList[indexWithinList].slice(feedDirectory.length);
-			const post = await Data.writePost({ feed, path });
-			await Data.writeScrollPost(scroll.key, post);
-		}
-		
-		console.log("Debug data files recreated.");
 	}
 }
 
