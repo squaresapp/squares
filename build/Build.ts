@@ -114,7 +114,14 @@ namespace ScrollApp.Build
 		
 		const tsconfig = await TsConfig.read(tsconfigFila);
 		tsconfig.exclude.push("build/**/*.ts", "**/*.cover.ts");
-		tsconfig.outFile = buildFolder.name + "/scroll.js";
+		tsconfig.compilerOptions.outFile = buildFolder.name + "/scroll.js";
+		tsconfig.compilerOptions.composite = false;
+		tsconfig.compilerOptions.incremental = false;
+		tsconfig.compilerOptions.declaration = false;
+		tsconfig.compilerOptions.declarationMap = false;
+		tsconfig.compilerOptions.sourceMap = false;
+		tsconfig.compilerOptions.inlineSources = false;
+		tsconfig.compilerOptions.inlineSourceMap = false;
 		await tsconfig.compile();
 		
 		const indexHtml = new IndexHtml();
@@ -136,12 +143,12 @@ namespace ScrollApp.Build
 			
 			const refTsConfig = await TsConfig.read(referenceConfigFile);
 			await refTsConfig.compile();
-			const referenceOutFile = referenceFolder.down(refTsConfig.outFile);
+			const referenceOutFile = referenceFolder.down(refTsConfig.compilerOptions.outFile);
 			await referenceOutFile.copy(buildFolder.down(referenceOutFile.name));
 			indexHtml.addScript(referenceOutFile.name);
 		}
 		
-		indexHtml.addScript(buildFolder.down(tsconfig.outFile).name);
+		indexHtml.addScript(buildFolder.down(tsconfig.compilerOptions.outFile).name);
 		indexHtml.addScript(() => ScrollApp.startup());
 		indexHtml.preventFavicon();
 		await buildFolder.down("index.html").writeText(indexHtml.toString());
@@ -156,13 +163,12 @@ namespace ScrollApp.Build
 		
 		await buildFolder.down(".gitignore").writeText(gitIgnore);
 		
-		await Build.minify(root.down(tsconfig.outFile), constants);
+		//await Build.minify(root.down(tsconfig.outFile), constants);
 		
 		const cwd = buildFolder.path;
 		await Build.executeInTerminal("git", ["add", "."], cwd);
 		
-		const d = new Date();
-		const message = d.toDateString() + " " + d.toTimeString();
+		const message = new Date().toLocaleString();
 		await Build.executeInTerminal("git", ["commit", "-m", `${message}`], cwd);
 		await Build.executeInTerminal("git", ["push", "-u", "origin", "master"], cwd);
 	}

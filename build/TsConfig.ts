@@ -21,30 +21,17 @@ namespace ScrollApp.Build
 			private readonly tsconfigJson: any)
 		{
 			this.exclude = tsconfigJson.exclude || [];
-			
-			if (tsconfigJson.compilerOptions)
-			{
-				tsconfigJson.compilerOptions.inlineSourceMap = false;
-				tsconfigJson.compilerOptions.inlineSources = false;
-			}
+			tsconfigJson.compilerOptions ||= {};
+		}
+		
+		/** */
+		get compilerOptions(): ICompilerOptions
+		{
+			this.isModified = true;
+			return this.tsconfigJson.compilerOptions;
 		}
 		
 		private isModified = false;
-		
-		/** */
-		get outFile()
-		{
-			return this.tsconfigJson.compilerOptions?.outFile || "";
-		}
-		set outFile(path: string)
-		{
-			if (!this.tsconfigJson.compilerOptions)
-				this.tsconfigJson.compilerOptions = {};
-			
-			this.tsconfigJson.compilerOptions.outFile = path;
-			this.isModified = true;
-		}
-		
 		readonly exclude: string[];
 		
 		/** */
@@ -81,5 +68,18 @@ namespace ScrollApp.Build
 	{
 		path: string;
 		if?: string;
+	}
+	
+	/** */
+	interface ICompilerOptions
+	{
+		outFile: string;
+		composite: boolean;
+		sourceMap: boolean;
+		inlineSourceMap: boolean;
+		inlineSources: boolean;
+		declaration: boolean;
+		declarationMap: boolean;
+		incremental: boolean;
 	}
 }
