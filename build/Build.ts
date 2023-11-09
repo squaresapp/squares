@@ -107,6 +107,7 @@ namespace ScrollApp.Build
 		FilaNode.use();
 		
 		const constants: TConstants = Object.assign(getConstants(), constantsOverrides);
+		const constantsKeys = Object.entries(constants).filter(([k, v]) => v).map(([k]) => k);
 		const root = Fila.new(__dirname).up();
 		const buildFolder = root.down("+build-" + target.toLowerCase());
 		const tsconfigFila = root.down("tsconfig.json");
@@ -116,15 +117,14 @@ namespace ScrollApp.Build
 		tsconfig.outFile = buildFolder.name + "/scroll.js";
 		await tsconfig.compile();
 		
-		await Build.minify(root.down(tsconfig.outFile), constants);
 		const indexHtml = new IndexHtml();
 		
 		for (const reference of tsconfig.references)
 		{
 			if (reference.if)
 			{
-				const ifArray = reference.if?.split(",").map(s => s.trim()) || [];
-				if (ifArray.length > 0 && !ifArray.some(f => ifArray.includes(target)))
+				const refConst = reference.if?.split(",").map(s => s.trim()) || [];
+				if (refConst.length > 0 && !constantsKeys.some(rc => refConst.includes(rc)))
 					continue;
 			}
 			
@@ -156,10 +156,15 @@ namespace ScrollApp.Build
 		
 		await buildFolder.down(".gitignore").writeText(gitIgnore);
 		
+		await Build.minify(root.down(tsconfig.outFile), constants);
+		
 		const cwd = buildFolder.path;
 		await Build.executeInTerminal("git", ["add", "."], cwd);
-		await Build.executeInTerminal("git", ["commit", "-m", `"${new Date().toString()}"`], cwd);
-		//await Build.executeInTerminal("git", ["push", "-u", "origin", "master"], cwd);
+		
+		const d = new Date();
+		const message = d.toDateString() + " " + d.toTimeString();
+		await Build.executeInTerminal("git", ["commit", "-m", `${message}`], cwd);
+		await Build.executeInTerminal("git", ["push", "-u", "origin", "master"], cwd);
 	}
 	
 	/**
