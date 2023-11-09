@@ -52,7 +52,7 @@ if (typeof globalThis === "undefined")
 // cover function, or in one of the hosts in debug mode. In this case,
 // we set the compilation constants explicitly at runtime.
 if (typeof DEBUG === "undefined")
-	Object.assign(globalThis, { DEBUG: true });
+	Object.assign(globalThis, { DEBUG: false });
 
 if (typeof ELECTRON === "undefined")
 	Object.assign(globalThis, { ELECTRON: typeof screen + typeof require === "objectfunction" });
