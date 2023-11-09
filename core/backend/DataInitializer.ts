@@ -23,7 +23,7 @@ namespace ScrollApp
 			urlLists.push(urls);
 			
 			const feedMeta = await HtmlFeed.getFeedMetaData(url);
-			const feed = await Data.writeFeed(feedMeta || {}, { checksum });
+			const feed = await Data.writeFeed(feedMeta, { checksum });
 			await Data.captureRawFeed(feed, urls);
 			feeds.push(feed);
 		}

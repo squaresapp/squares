@@ -84,7 +84,7 @@ namespace ScrollApp
 				return;
 			
 			const feedMeta = await HtmlFeed.getFeedMetaData(followUri);
-			const feed = await Data.writeFeed(feedMeta || {}, { checksum });
+			const feed = await Data.writeFeed(feedMeta, { checksum });
 			await Data.captureRawFeed(feed, urls);
 			
 			Hat.signal(FollowSignal, feed);

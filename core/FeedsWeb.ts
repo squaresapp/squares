@@ -9,5 +9,3 @@ namespace ScrollApp
 		"https://raw.githubusercontent.com/HTMLFeeds/Examples/main/trees/index.txt",
 	];
 }
-
-

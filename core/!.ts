@@ -138,8 +138,7 @@ namespace ScrollApp
 		
 		if (DEBUG && CAPACITOR)
 		{
-			const device = g.Capacitor?.Plugins?.Device;
-			const info = await device.getInfo();
+			const info = await Device.getInfo();
 			Object.assign(globalThis, { SIMULATOR: info.isVirtual });
 		}
 		
