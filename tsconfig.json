@@ -35,11 +35,11 @@
 		{ "path": "../Not" },
 		{ "path": "../Force" },
 		{ "path": "../Fila" },
-		{ "path": "../FilaCapacitor" },
-		{ "path": "../FilaTauri" },
-		{ "path": "../FilaNode" },
-		{ "path": "../FilaKeyva" },
-		{ "path": "../Keyva" },
+		{ "path": "../FilaCapacitor", "if": "CAPACITOR" },
+		{ "path": "../FilaTauri", "if": "TAURI" },
+		{ "path": "../FilaNode", "if": "ELECTRON" },
+		{ "path": "../FilaKeyva", "if": "WEB" },
+		{ "path": "../Keyva", "if": "WEB" },
 		{ "path": "../HtmlFeedJS" },
 		{ "path": "../Dock" }
 	]
