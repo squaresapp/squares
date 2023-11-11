@@ -24,8 +24,8 @@
 	},
 	"exclude": [
 		"**/+*/**/*.ts",
-		"ios/**",
-		"android/**",
+		"ios/**/*.ts",
+		"android*/**/*.ts",
 		"vite.config.ts"
 	],
 	"references": [
@@ -38,8 +38,8 @@
 		{ "path": "../FilaCapacitor", "if": "CAPACITOR" },
 		{ "path": "../FilaTauri", "if": "TAURI" },
 		{ "path": "../FilaNode", "if": "ELECTRON" },
-		{ "path": "../FilaKeyva", "if": "WEB" },
-		{ "path": "../Keyva", "if": "WEB" },
+		{ "path": "../FilaKeyva", "if": "DEMO" },
+		{ "path": "../Keyva", "if": "DEMO" },
 		{ "path": "../HtmlFeedJS" },
 		{ "path": "../Dock" }
 	]

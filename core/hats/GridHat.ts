@@ -43,11 +43,12 @@ namespace ScrollApp
 					this.tryAppendPosters(3);
 				}),
 				
-				CAPACITOR && [
+				(CAPACITOR || DEMO) && [
 					UI.cornerAbsolute("tl"),
 					UI.cornerAbsolute("tr"),
 					
 					this.cornersElement = hot.span(
+						"corners-element",
 						{
 							display: "block",
 							position: "absolute",
@@ -328,7 +329,7 @@ namespace ScrollApp
 			if (canContinue && isNearingBottom)
 				this.tryAppendPosters(1);
 			
-			if (CAPACITOR)
+			if (CAPACITOR || DEMO)
 			{
 				const query = this.head.getElementsByClassName(Class.hasCssTop);
 				if (query.length > 0)

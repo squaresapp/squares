@@ -16,25 +16,26 @@ namespace ScrollApp
 		constructor()
 		{
 			this.grid = new GridHat();
+			const borderRadius = (CAPACITOR || DEMO) ? "30px" : 0;
 			
 			this.head = hot.div(
 				{
-					height: IOS || ANDROID ? "177.7777vw" : "100%",
+					height: (CAPACITOR || DEMO) ? "177.7777vw" : "100%",
 					alignSelf: "center",
-					borderRadius: isTouch ? "30px" : 0,
+					borderRadius,
 					overflow: "hidden",
 				},
 				this.gridContainer = hot.div(
 					"grid-container",
 					{
 						height: "100%",
-						borderRadius: isTouch ? "30px" : 0,
+						borderRadius,
 						overflow: "hidden",
 						transitionDuration,
 						transitionProperty: "transform, opacity",
 					}
 				),
-				!CAPACITOR && hot.div(
+				!(CAPACITOR || DEMO) && hot.div(
 					Dock.bottomRight(10),
 					{
 						zIndex: 1,

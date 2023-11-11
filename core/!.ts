@@ -9,7 +9,7 @@ declare const SIMULATOR: boolean;
 declare const CAPACITOR: boolean;
 declare const IOS: boolean;
 declare const ANDROID: boolean;
-declare const WEB: boolean;
+declare const DEMO: boolean;
 declare const Moduless: { getRunningFunctionName(): string; }
 
 declare namespace Electron
@@ -69,8 +69,8 @@ if (typeof ANDROID === "undefined")
 if (typeof CAPACITOR === "undefined")
 	Object.assign(globalThis, { CAPACITOR: typeof Capacitor === "object" });
 
-if (typeof WEB === "undefined")
-	Object.assign(globalThis, { WEB: !ELECTRON && !TAURI && !CAPACITOR });
+if (typeof DEMO === "undefined")
+	Object.assign(globalThis, { DEMO: !ELECTRON && !TAURI && !CAPACITOR && window.location.pathname.indexOf("demo") > -1 });
 
 if (typeof SIMULATOR === "undefined")
 	Object.assign(globalThis, { SIMULATOR: false });
@@ -123,7 +123,7 @@ namespace ScrollApp
 		else if (CAPACITOR)
 			FilaCapacitor.use();
 		
-		else if (WEB)
+		else if (DEMO)
 			FilaKeyva.use();
 		
 		const g = globalThis as any;
@@ -148,12 +148,11 @@ namespace ScrollApp
 			if (!await dataFolder.exists())
 				await dataFolder.writeDirectory();
 			
-			await Data.clear();
 			await ScrollApp.runDataInitializer(ScrollApp.feedsForDebug);
 		}
-		
-		if (!DEBUG && WEB)
+		else if (DEMO)
 		{
+			await Data.clear();
 			await ScrollApp.runDataInitializer(feedsForWeb);
 		}
 		

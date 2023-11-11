@@ -54,7 +54,10 @@ namespace ScrollApp
 				position: "absolute",
 				left: 0,
 				right: 0,
-				bottom: CAPACITOR ? "105px" : "15px",
+				bottom:
+					CAPACITOR ? "105px" :
+					DEMO ? 0 :
+					"15px",
 				margin: "auto",
 			});
 			

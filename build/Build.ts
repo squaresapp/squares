@@ -66,9 +66,9 @@ namespace ScrollApp.Build
 	}
 	
 	/** */
-	export async function buildWebDemo()
+	export async function buildDemo()
 	{
-		await buildTarget("web", { WEB: true });
+		await buildTarget("demo", { DEMO: true });
 	}
 	
 	/** */
@@ -106,8 +106,6 @@ namespace ScrollApp.Build
 	{
 		FilaNode.use();
 		
-		const constants: TConstants = Object.assign(getConstants(), constantsOverrides);
-		const constantsKeys = Object.entries(constants).filter(([k, v]) => v).map(([k]) => k);
 		const root = Fila.new(__dirname).up();
 		const buildFolder = root.down("+build-" + target.toLowerCase());
 		const tsconfigFila = root.down("tsconfig.json");
@@ -126,6 +124,8 @@ namespace ScrollApp.Build
 		
 		const indexHtml = new IndexHtml();
 		
+		const constants: TConstants = Object.assign(getConstants(), constantsOverrides);
+		const constantsKeys = Object.entries(constants).filter(([k, v]) => v).map(([k]) => k);
 		for (const reference of tsconfig.references)
 		{
 			if (reference.if)
@@ -149,7 +149,7 @@ namespace ScrollApp.Build
 		}
 		
 		indexHtml.addScript(buildFolder.down(tsconfig.compilerOptions.outFile).name);
-		indexHtml.addScript(() => ScrollApp.startup());
+		indexHtml.addScript(() => window.addEventListener("DOMContentLoaded", ScrollApp.startup));
 		indexHtml.preventFavicon();
 		await buildFolder.down("index.html").writeText(indexHtml.toString());
 		
@@ -170,7 +170,7 @@ namespace ScrollApp.Build
 		
 		const message = new Date().toLocaleString();
 		await Build.executeInTerminal("git", ["commit", "-m", `${message}`], cwd);
-		await Build.executeInTerminal("git", ["push", "-u", "origin", "master"], cwd);
+		await Build.executeInTerminal("git", ["push"], cwd);
 	}
 	
 	/**
@@ -184,7 +184,7 @@ namespace ScrollApp.Build
 			TAURI: false,
 			IOS: false,
 			ANDROID: false,
-			WEB: false,
+			DEMO: false,
 			CAPACITOR: false,
 			SIMULATOR: false,
 		};

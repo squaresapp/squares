@@ -23,7 +23,7 @@ namespace ScrollApp
 			if (sections.length < 1)
 				throw new Error("Must have at least one section.");
 			
-			if (CAPACITOR)
+			if (CAPACITOR || DEMO)
 			{
 				hot.get(sections[0])({
 					borderTopLeftRadius: Style.borderRadiusLarge + " !",
@@ -88,7 +88,7 @@ namespace ScrollApp
 					Style.backdropBlur(8),
 					snap,
 				),
-				CAPACITOR && hot.div(
+				(CAPACITOR || DEMO) && hot.div(
 					"corners-container",
 					{
 						position: "absolute",

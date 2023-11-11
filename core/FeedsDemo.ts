@@ -2,7 +2,7 @@
 namespace ScrollApp
 {
 	//@ts-ignore
-	if (!WEB) return;
+	if (!DEMO) return;
 	
 	export const feedsForWeb = [
 		"https://raw.githubusercontent.com/HTMLFeeds/Examples/main/raccoons/index.txt",

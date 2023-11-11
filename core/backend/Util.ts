@@ -129,7 +129,7 @@ namespace ScrollApp
 				
 				return Fila.new(path);
 			}
-			else if (WEB)
+			else if (DEMO)
 			{
 				return Fila.new();
 			}

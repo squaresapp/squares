@@ -484,9 +484,6 @@ namespace ScrollApp.Data
 		await fila.writeText(text, { append: true });
 	}
 	
-	//@ts-ignore
-	if (!DEBUG) return;
-	
 	/**
 	 * Deletes all data in the data folder.
 	 * Intended only for debugging purposes.
