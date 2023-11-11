@@ -1,4 +1,4 @@
-package org.rail.app;
+package org.scrollapp;
 
 import com.getcapacitor.BridgeActivity;
 
