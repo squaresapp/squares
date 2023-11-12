@@ -11,7 +11,7 @@ namespace ScrollApp
 		/** */
 		constructor()
 		{
-			this.head = hot.div(
+			this.head = raw.div(
 				Dock.cover(),
 				{
 					whiteSpace: "nowrap",
@@ -19,7 +19,7 @@ namespace ScrollApp
 					overflowY: "hidden",
 					scrollSnapType: "x mandatory",
 				},
-				hot.css(" > DIV", {
+				raw.css(" > DIV", {
 					display: "inline-block",
 					width: "100%",
 					height: "100%",
@@ -29,7 +29,7 @@ namespace ScrollApp
 					overflowX: "hidden",
 					overflowY: "auto",
 				}),
-				hot.on("scroll", () => this.updateVisiblePane()),
+				raw.on("scroll", () => this.updateVisiblePane()),
 			);
 			
 			Hat.wear(this);
@@ -44,7 +44,7 @@ namespace ScrollApp
 		/** */
 		addPane(element: HTMLElement, at: number = -0)
 		{
-			const pane = hot.div(
+			const pane = raw.div(
 				"swiper-pane",
 				{
 					height: "100%",

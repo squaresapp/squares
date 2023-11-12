@@ -25,7 +25,7 @@ namespace ScrollApp
 			
 			if (CAPACITOR || DEMO)
 			{
-				hot.get(sections[0])({
+				raw.get(sections[0])({
 					borderTopLeftRadius: Style.borderRadiusLarge + " !",
 					borderTopRightRadius: Style.borderRadiusLarge + " !",
 				});
@@ -33,7 +33,7 @@ namespace ScrollApp
 			
 			for (const section of sections)
 			{
-				hot.get(section)(
+				raw.get(section)(
 					Util.getSectionSanitizationCss(),
 					{
 						scrollSnapStop: "always !",
@@ -46,13 +46,13 @@ namespace ScrollApp
 			const metaHat = new FeedMetaHat(this.feed);
 			const metaHatHeight = 200;
 			
-			this.head = hot.div(
+			this.head = raw.div(
 				"head",
 				{
 					width: "100%",
 					height: "100%",
 				},
-				hot.on("connected", () =>
+				raw.on("connected", () =>
 				{
 					this.swiper.setVisiblePane(1);
 					this.setupRetractionTracker();
@@ -66,19 +66,19 @@ namespace ScrollApp
 				this.swiper
 			);
 			
-			this.scrollable = hot.div(
+			this.scrollable = raw.div(
 				"scrollable-element",
 				{
 					scrollSnapType: "y mandatory",
 					overflowY: "auto",
 					height: "100%",
 				},
-				hot.div(
+				raw.div(
 					"snap-top",
 					snap,
 					{ height: "100%" },
 				),
-				hot.get(metaHat)(
+				raw.get(metaHat)(
 					{
 						height: (metaHatHeight - 10) + "px",
 						marginBottom: "10px",
@@ -88,7 +88,7 @@ namespace ScrollApp
 					Style.backdropBlur(8),
 					snap,
 				),
-				(CAPACITOR || DEMO) && hot.div(
+				(CAPACITOR || DEMO) && raw.div(
 					"corners-container",
 					{
 						position: "absolute",
@@ -102,25 +102,25 @@ namespace ScrollApp
 						UI.cornerAbsolute("tr"),
 					],
 				),
-				hot.div(
+				raw.div(
 					"shadow-container",
 					{ display: "contents" },
-					hot.shadow(
+					raw.shadow(
 						...head,
-						hot.body(
+						raw.body(
 							{ display: "contents !" },
 							...sections
 						)
 					),
 				),
-				hot.div(
+				raw.div(
 					"snap-bottom",
 					snap,
 					{ height: "100%" }
 				)
 			);
 			
-			this.swiper.addPane(hot.div("exit-left-element"));
+			this.swiper.addPane(raw.div("exit-left-element"));
 			this.swiper.addPane(this.scrollable);
 			
 			[this.onRetract, this._onRetract] = Force.create<(percent: number) => void>();
@@ -249,7 +249,7 @@ namespace ScrollApp
 		}
 	}
 	
-	const snap: Hot.Style = {
+	const snap: Raw.Style = {
 		scrollSnapStop: "always",
 		scrollSnapAlign: "start",
 	};

@@ -94,7 +94,7 @@ const isPwa =
 	window.matchMedia("(display-mode: standalone)").matches;
 
 const isTouch =  matchMedia("(pointer:coarse)").matches;
-const hot = new Hot();
+const raw = new Raw();
 
 declare const Device: typeof import("@capacitor/device").Device;
 

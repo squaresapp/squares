@@ -17,7 +17,7 @@ namespace ScrollApp.Cover
 			console;
 		});
 		
-		const container = hot.div(
+		const container = raw.div(
 			{
 				position: "absolute",
 				top: 0,
@@ -38,12 +38,12 @@ namespace ScrollApp.Cover
 	/** */
 	function generateFakeScene(text: string)
 	{
-		return hot.div(
+		return raw.div(
 			{
 				backgroundImage: "linear-gradient(45deg, orange, crimson)",
 				minHeight: "100vh",
 			},
-			hot.div(
+			raw.div(
 				{
 					position: "absolute",
 					top: 0,
@@ -58,7 +58,7 @@ namespace ScrollApp.Cover
 					fontWeight: 900,
 					textAlign: "center",
 				},
-				hot.text(text)
+				raw.text(text)
 			)
 		);
 	}

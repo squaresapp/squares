@@ -10,20 +10,20 @@ namespace ScrollApp
 		export function cornerAbsolute(kind: "tl" | "tr" | "bl" | "br")
 		{
 			if (kind === "tl")
-				return hot.get(UI.corner("tl"))(cornerStyles, { top: 0, left: 0 });
+				return raw.get(UI.corner("tl"))(cornerStyles, { top: 0, left: 0 });
 			
 			if (kind === "tr")
-				return hot.get(UI.corner("tr"))(cornerStyles, { top: 0, right: 0 });
+				return raw.get(UI.corner("tr"))(cornerStyles, { top: 0, right: 0 });
 			
 			else if (kind === "bl")
-				return hot.get(UI.corner("bl"))(cornerStyles, { bottom: 0, left: 0 });
+				return raw.get(UI.corner("bl"))(cornerStyles, { bottom: 0, left: 0 });
 			
 			else if (kind === "br")
-				return hot.get(UI.corner("br"))(cornerStyles, { bottom: 0, right: 0 });
+				return raw.get(UI.corner("br"))(cornerStyles, { bottom: 0, right: 0 });
 		}
 		
 		const size = parseInt(Style.borderRadiusLarge);
-		const cornerStyles: Hot.Style = {
+		const cornerStyles: Raw.Style = {
 			position: "absolute",
 			zIndex: 1,
 			width: size + "px",
@@ -53,7 +53,7 @@ namespace ScrollApp
 			else if (kind === "br")
 				top = left = -100;
 			
-			return hot.span(
+			return raw.span(
 				"corner",
 				{
 					overflow: "hidden",
@@ -61,7 +61,7 @@ namespace ScrollApp
 					height: "100px",
 					clipPath: "inset(0 0)"
 				},
-				hot.span({
+				raw.span({
 					position: "absolute",
 					top: top + "%",
 					right: right + "%",
@@ -74,7 +74,7 @@ namespace ScrollApp
 		}
 		
 		/** */
-		export function stretch(): Hot.Style[]
+		export function stretch(): Raw.Style[]
 		{
 			return [
 				{ width: "-moz-available" },
@@ -85,11 +85,11 @@ namespace ScrollApp
 		}
 		
 		/** */
-		export function escape(fn: () => void): Hot.Param[]
+		export function escape(fn: () => void): Raw.Param[]
 		{
 			return [
 				{ tabIndex: 0 },
-				hot.on("keydown", ev =>
+				raw.on("keydown", ev =>
 				{
 					if (ev.key === "Escape")
 						fn();
@@ -98,12 +98,12 @@ namespace ScrollApp
 		}
 		
 		/** */
-		export function click(handlerFn: (ev: Event) => void): Hot.Param
+		export function click(handlerFn: (ev: Event) => void): Raw.Param
 		{
 			return [
 				e => ((e as any).role = "button"),
 				Style.clickable,
-				hot.on("click", handlerFn)
+				raw.on("click", handlerFn)
 			];
 		}
 		
@@ -117,7 +117,7 @@ namespace ScrollApp
 		export async function waitConnected(e: HTMLElement)
 		{
 			if (!e.isConnected)
-				await new Promise(r => hot.get(e)(hot.on("connected", r)));
+				await new Promise(r => raw.get(e)(raw.on("connected", r)));
 			
 			// Wait an additional 1ms so that the element becomes transition-ready
 			await new Promise(r => setTimeout(r, 1));
@@ -136,7 +136,7 @@ namespace ScrollApp
 		/** */
 		export function noScrollBars()
 		{
-			return hot.style(
+			return raw.style(
 				"*::-webkit-scrollbar", {
 					display: "none"
 				}
@@ -150,7 +150,7 @@ namespace ScrollApp
 			
 			if (!hideHasRun)
 			{
-				hot.style("." + cls, { display: "none !" }).attach();
+				raw.style("." + cls, { display: "none !" }).attach();
 				hideHasRun = true;
 			}
 			
@@ -161,30 +161,30 @@ namespace ScrollApp
 		/** */
 		export function visibleWhenAlone()
 		{
-			return hot.css(":not(:only-child) !", { display: "none" });
+			return raw.css(":not(:only-child) !", { display: "none" });
 		}
 		
 		/** */
 		export function visibleWhenNotAlone()
 		{
-			return hot.css(":only-child !", { display: "none" });
+			return raw.css(":only-child !", { display: "none" });
 		}
 		
 		/** */
-		export function visibleWhenEmpty(watchTarget: HTMLElement): Hot.Param
+		export function visibleWhenEmpty(watchTarget: HTMLElement): Raw.Param
 		{
 			return [
 				watchTarget.children.length === 0 ? "" : UI.hide(),
-				hot.on("connected", ev => addVisibilityObserver(ev.target, watchTarget, true)),
+				raw.on("connected", ev => addVisibilityObserver(ev.target, watchTarget, true)),
 			];
 		}
 		
 		/** */
-		export function visibleWhenNotEmpty(watchTarget: HTMLElement): Hot.Param
+		export function visibleWhenNotEmpty(watchTarget: HTMLElement): Raw.Param
 		{
 			return [
 				watchTarget.children.length === 0 ? UI.hide() : "",
-				hot.on("connected", ev => addVisibilityObserver(ev.target, watchTarget, false)),
+				raw.on("connected", ev => addVisibilityObserver(ev.target, watchTarget, false)),
 			];
 		}
 		

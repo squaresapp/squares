@@ -35,14 +35,14 @@ namespace ScrollApp
 			property: string,
 			axis: "w" | "h",
 			amount: number,
-			cls: string): Hot.Param
+			cls: string): Raw.Param
 		{
 			if (supportsContainerUnits === null)
-				supportsContainerUnits = hot.div({ width: "1cqw" }).style.width !== "";
+				supportsContainerUnits = raw.div({ width: "1cqw" }).style.width !== "";
 			
 			let container: HTMLElement | null = null;
 			
-			return e => hot.on("connected", () =>
+			return e => raw.on("connected", () =>
 			{
 				container ||= Query.ancestors(e).find((c): c is HTMLElement => 
 					c instanceof HTMLElement &&

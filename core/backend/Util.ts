@@ -170,7 +170,7 @@ namespace ScrollApp
 		 * Removes problematic CSS attributes from the specified section tag,
 		 * and ensures that no external CSS is modifying its display propert
 		 */
-		export function getSectionSanitizationCss(): Hot.Style
+		export function getSectionSanitizationCss(): Raw.Style
 		{
 			return {
 				position: "relative !",

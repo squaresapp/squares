@@ -33,7 +33,7 @@ namespace ScrollApp
 					}
 				}).observe(e, { box: "border-box" });
 			}
-			else hot.get(e)(hot.on(window, "resize", () =>
+			else raw.get(e)(raw.on(window, "resize", () =>
 			{
 				window.requestAnimationFrame(() =>
 				{
@@ -50,7 +50,7 @@ namespace ScrollApp
 				if (e.isConnected)
 					exec();
 				else
-					hot.get(e)(hot.on("connected", exec));
+					raw.get(e)(raw.on("connected", exec));
 			}
 		}
 	}

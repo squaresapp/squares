@@ -10,20 +10,20 @@ namespace ScrollApp
 		/** */
 		constructor()
 		{
-			this.head = hot.div(
+			this.head = raw.div(
 				{
 					padding: "20px",
 				},
-				hot.on("connected", () => this.construct()),
-				hot.div(
+				raw.on("connected", () => this.construct()),
+				raw.div(
 					{
 						fontSize: "22px",
 						fontWeight: 600,
 						marginBottom: "20px",
 					},
-					hot.text(Strings.following)
+					raw.text(Strings.following)
 				),
-				this.feedElements = hot.div()
+				this.feedElements = raw.div()
 			);
 			
 			Hat
@@ -60,7 +60,7 @@ namespace ScrollApp
 			const iconUrl = Util.getIconUrl(feed);
 			const author = feed.author || Strings.unknownAuthor;
 			
-			const e = hot.div(
+			const e = raw.div(
 				{
 					display: "flex",
 					alignContent: "center",
@@ -72,7 +72,7 @@ namespace ScrollApp
 					borderRadius: Style.borderRadiusSmall,
 				},
 				keyPrefix + feed.key,
-				hot.div(
+				raw.div(
 					{
 						width: "50px",
 						padding: "10px",
@@ -83,16 +83,16 @@ namespace ScrollApp
 						backgroundSize: "cover",
 					},
 				),
-				hot.div(
+				raw.div(
 					{
 						fontWeight: 500,
 						flex: "1 0",
 					},
-					hot.text(author)
+					raw.text(author)
 				),
 				Widget.fillButton(
-					hot.text(Strings.unfollow),
-					hot.on("click", async () =>
+					raw.text(Strings.unfollow),
+					raw.on("click", async () =>
 					{
 						Hat.signal(UnfollowSignal, feed.key);
 						await UI.collapse(e);

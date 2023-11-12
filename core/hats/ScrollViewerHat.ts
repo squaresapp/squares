@@ -18,14 +18,14 @@ namespace ScrollApp
 			this.grid = new GridHat();
 			const borderRadius = (CAPACITOR || DEMO) ? "30px" : 0;
 			
-			this.head = hot.div(
+			this.head = raw.div(
 				{
 					height: (CAPACITOR || DEMO) ? "177.7777vw" : "100%",
 					alignSelf: "center",
 					borderRadius,
 					overflow: "hidden",
 				},
-				this.gridContainer = hot.div(
+				this.gridContainer = raw.div(
 					"grid-container",
 					{
 						height: "100%",
@@ -35,7 +35,7 @@ namespace ScrollApp
 						transitionProperty: "transform, opacity",
 					}
 				),
-				!(CAPACITOR || DEMO) && hot.div(
+				!(CAPACITOR || DEMO) && raw.div(
 					Dock.bottomRight(10),
 					{
 						zIndex: 1,
@@ -51,10 +51,10 @@ namespace ScrollApp
 					},
 					Style.backgroundOverlay(),
 					Style.clickable,
-					hot.text("↻"),
-					hot.on("click", () => this.handleRefreshInner()),
+					raw.text("↻"),
+					raw.on("click", () => this.handleRefreshInner()),
 				),
-				hot.get(this.pullToRefreshHat = new PullToRefreshHat(this.grid.head))(
+				raw.get(this.pullToRefreshHat = new PullToRefreshHat(this.grid.head))(
 					{
 						position: "absolute",
 						bottom: "20px",
@@ -113,14 +113,14 @@ namespace ScrollApp
 			const pageInfo = await this.getPageInfo(index);
 			const pageHat = new PageHat(pageInfo.head, pageInfo.sections, pageInfo.feed);
 			
-			hot.get(pageHat)(
+			raw.get(pageHat)(
 				Dock.cover(),
 				{
 					transitionDuration,
 					transitionProperty: "transform",
 					transform: "translateY(110%)",
 				},
-				hot.on("connected", () => setTimeout(async () =>
+				raw.on("connected", () => setTimeout(async () =>
 				{
 					for (const e of Query.ancestors(this.head))
 						if (e instanceof HTMLElement)
@@ -130,7 +130,7 @@ namespace ScrollApp
 					await UI.waitTransitionEnd(pageHat.head);
 					this.gridContainer.style.transitionDuration = "0s";
 				})),
-				hot.on(this.grid.head, "scroll", async () =>
+				raw.on(this.grid.head, "scroll", async () =>
 				{
 					if (pageHat.head.isConnected)
 					{
@@ -331,7 +331,7 @@ namespace ScrollApp
 	const translateZ = (amount: string) => `perspective(10px) translateZ(${amount})`;
 	const translateZMax = -3;
 	
-	const noOverflowClass = hot.css({
+	const noOverflowClass = raw.css({
 		overflow: "hidden !"
 	});
 }

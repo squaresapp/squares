@@ -7,21 +7,21 @@ namespace ScrollApp.Cover
 		ScrollApp.appendCssReset();
 		
 		const sections = [
-			hot.div(
+			raw.div(
 				{
 					scrollSnapStop: "always",
 					scrollSnapAlign: "start",
 					backgroundColor: "red",
 				}
 			),
-			hot.div(
+			raw.div(
 				{
 					scrollSnapStop: "always",
 					scrollSnapAlign: "start",
 					backgroundColor: "green",
 				}
 			),
-			hot.div(
+			raw.div(
 				{
 					scrollSnapStop: "always",
 					scrollSnapAlign: "start",

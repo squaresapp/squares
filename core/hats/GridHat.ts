@@ -17,14 +17,14 @@ namespace ScrollApp
 		{
 			maybeAppendDefaultCss();
 			
-			this.head = hot.div(
+			this.head = raw.div(
 				Style.unselectable,
 				{
 					minHeight: "100%",
 					overflowY: "auto",
 				},
 				UI.stretch(),
-				hot.css("> ." + Class.poster, {
+				raw.css("> ." + Class.poster, {
 					display: "none",
 					position: "absolute",
 					width: "100%",
@@ -33,8 +33,8 @@ namespace ScrollApp
 					outline: "2px solid black",
 					...Style.clickable,
 				}),
-				hot.on("scroll", () => this.updatePosterVisibility(true)),
-				hot.on("connected", () =>
+				raw.on("scroll", () => this.updatePosterVisibility(true)),
+				raw.on("connected", () =>
 				{
 					this.setSizeInner(calculateNaturalSize());
 					this._width = this.head.offsetWidth;
@@ -47,7 +47,7 @@ namespace ScrollApp
 					UI.cornerAbsolute("tl"),
 					UI.cornerAbsolute("tr"),
 					
-					this.cornersElement = hot.span(
+					this.cornersElement = raw.span(
 						"corners-element",
 						{
 							display: "block",
@@ -220,7 +220,7 @@ namespace ScrollApp
 				
 				if (maybePromise instanceof Promise)
 				{
-					const shim = hot.div(
+					const shim = raw.div(
 						"element-placeholder",
 						getDefaultBackground());
 					
@@ -242,11 +242,11 @@ namespace ScrollApp
 								shim.style.getPropertyValue(definedProperty));
 						}
 						
-						hot.get(element)(
+						raw.get(element)(
 							// Classes that have been set on the shim since it was inserted
 							// must be copied over to the element.
 							Array.from(shim.classList), 
-							hot.on("click", () => this.selectFn(element, getIndex(element)))
+							raw.on("click", () => this.selectFn(element, getIndex(element)))
 						);
 						
 						shim.replaceWith(element);
@@ -254,8 +254,8 @@ namespace ScrollApp
 				}
 				else
 				{
-					elements.push(hot.get(maybePromise)(
-						hot.on("click", () => this.selectFn(maybePromise, getIndex(maybePromise)))
+					elements.push(raw.get(maybePromise)(
+						raw.on("click", () => this.selectFn(maybePromise, getIndex(maybePromise)))
 					));
 				}
 			}
@@ -368,7 +368,7 @@ namespace ScrollApp
 	/** */
 	let getDefaultBackground = () =>
 	{
-		const canvas = hot.canvas({ width: 32, height: 32 });
+		const canvas = raw.canvas({ width: 32, height: 32 });
 		const ctx = canvas.getContext("2d")!;
 		const grad = ctx.createLinearGradient(0, 0, 32, 32);
 		grad.addColorStop(0, "rgb(50, 50, 50)");
@@ -376,7 +376,7 @@ namespace ScrollApp
 		ctx.fillStyle = grad;
 		ctx.fillRect(0, 0, 32, 32);
 		
-		const cls = hot.css({
+		const cls = raw.css({
 			backgroundImage: `url(${canvas.toDataURL()})`,
 			backgroundSize: "100% 100%",
 		});
@@ -389,7 +389,7 @@ namespace ScrollApp
 	{
 		maybeAppendDefaultCss = () => {};
 		
-		hot.style(
+		raw.style(
 			"." + Class.body, {
 				position: "fixed",
 				top: 0,
@@ -439,7 +439,7 @@ namespace ScrollApp
 		const classes = new Map<number, string>();
 		for (let size = minSize; size <= maxSize; size++)
 		{
-			const params: (string | Hot.Style)[] = [];
+			const params: (string | Raw.Style)[] = [];
 			const scale = 1 / size;
 			const sizeClass = "size-" + size;
 			classes.set(size, sizeClass);
@@ -461,7 +461,7 @@ namespace ScrollApp
 				);
 			}
 			
-			hot.style(...params).attach();
+			raw.style(...params).attach();
 		}
 		
 		sizeClasses = classes;
@@ -527,7 +527,7 @@ namespace ScrollApp
 	//# Utilities
 	
 	/** */
-	const showClass = hot.css({
+	const showClass = raw.css({
 		display: "block !",
 	});
 	

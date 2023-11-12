@@ -29,7 +29,7 @@
 		"vite.config.ts"
 	],
 	"references": [
-		{ "path": "../Hot" },
+		{ "path": "../Raw" },
 		{ "path": "../Hat" },
 		{ "path": "../Query" },
 		{ "path": "../Not" },

@@ -8,7 +8,7 @@ namespace ScrollApp
 	export namespace Style
 	{
 		/** */
-		export function backgroundOverlay(): Hot.Param
+		export function backgroundOverlay(): Raw.Param
 		{
 			return [
 				{
@@ -19,7 +19,7 @@ namespace ScrollApp
 		}
 		
 		/** */
-		export function backdropBlur(pixels = 5): Hot.Style
+		export function backdropBlur(pixels = 5): Raw.Style
 		{
 			const value = pixels > 0 ? `blur(${pixels}px)` : "none";
 			return {
@@ -29,26 +29,26 @@ namespace ScrollApp
 		}
 		
 		/** */
-		export const unselectable: Hot.Style = {
+		export const unselectable: Raw.Style = {
 			userSelect: "none",
 			webkitUserSelect: "none",
 		};
 		
 		/** */
-		export const presentational: Hot.Style = {
+		export const presentational: Raw.Style = {
 			...unselectable,
 			pointerEvents: "none",
 			cursor: "default",
 		};
 		
 		/** */
-		export const keyable: Hot.Param = {
+		export const keyable: Raw.Param = {
 			tabIndex: 0,
 			outline: 0,
 		};
 		
 		/** */
-		export const clickable: Hot.Style = {
+		export const clickable: Raw.Style = {
 			...unselectable,
 			cursor: "pointer"
 		} as const;
@@ -57,7 +57,7 @@ namespace ScrollApp
 		 * Returns styles that produce a font weight whose value
 		 * may or may not be perfectly divisible by 100.
 		 */
-		export function weight(weight: number): Hot.Style
+		export function weight(weight: number): Raw.Style
 		{
 			return {
 				fontWeight: weight.toString(),
@@ -69,7 +69,7 @@ namespace ScrollApp
 		 * Displays text at a given font size and weightthat
 		 * defaults to being unselectable.
 		 */
-		export function text(label: string = "", size: number | string = 20, weight?: number): Hot.Param[]
+		export function text(label: string = "", size: number | string = 20, weight?: number): Raw.Param[]
 		{
 			return [
 				Style.unselectable,

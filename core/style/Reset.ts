@@ -5,7 +5,7 @@ namespace ScrollApp
 	export function appendCssReset()
 	{
 		document.head.append(
-			hot.style(
+			raw.style(
 				"*", {
 					position: "relative",
 					padding: 0,

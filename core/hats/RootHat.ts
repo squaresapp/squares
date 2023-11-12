@@ -9,20 +9,20 @@ namespace ScrollApp
 		/** */
 		constructor()
 		{
-			this.head = hot.div(
+			this.head = raw.div(
 				UI.noScrollBars,
 				{
 					height: "inherit",
 					top: "env(safe-area-inset-top)",
 					tabIndex: 0,
 				},
-				hot.on(window, "paste", async ev =>
+				raw.on(window, "paste", async ev =>
 				{
 					const uri = await Util.readClipboardHtmlUri();
 					if (uri)
 						this.followFeedFromUri(uri);
 				}),
-				hot.on(window, "follow" as any, ev =>
+				raw.on(window, "follow" as any, ev =>
 				{
 					this.followFeedFromUri((ev as any).data);
 				})
@@ -50,7 +50,7 @@ namespace ScrollApp
 			dotsHat.insert(2);
 			dotsHat.highlight(0);
 			
-			hot.get(dotsHat.head)({
+			raw.get(dotsHat.head)({
 				position: "absolute",
 				left: 0,
 				right: 0,

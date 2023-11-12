@@ -13,7 +13,7 @@ namespace ScrollApp
 			const author = data.author || Strings.unknownAuthor;
 			const isFollowing = data.key > 0;
 			
-			this.head = hot.div(
+			this.head = raw.div(
 				{
 					display: "flex",
 					height: "100%",
@@ -21,7 +21,7 @@ namespace ScrollApp
 					alignContent: "center",
 					alignItems: "center",
 				},
-				hot.div(
+				raw.div(
 					{
 						display: "flex",
 						width: "140px",
@@ -30,7 +30,7 @@ namespace ScrollApp
 						alignContent: "center",
 						alignItems: "center",
 					},
-					hot.div(
+					raw.div(
 						{
 							width: "100%",
 							aspectRatio: "1/1",
@@ -40,15 +40,15 @@ namespace ScrollApp
 						}
 					),
 				),
-				hot.div(
+				raw.div(
 					{
 						flex: "1 0",
 						fontSize: "18px",
 					},
-					hot.css(" > :not(:first-child)", {
+					raw.css(" > :not(:first-child)", {
 						marginTop: "10px"
 					}),
-					hot.div(
+					raw.div(
 						{
 							fontWeight: 700,
 							display: "-webkit-box",
@@ -56,9 +56,9 @@ namespace ScrollApp
 							webkitLineClamp: "1",
 							overflow: "hidden",
 						},
-						hot.text(author),
+						raw.text(author),
 					),
-					!!data.description && hot.div(
+					!!data.description && raw.div(
 						{
 							fontWeight: 500,
 							display: "-webkit-box",
@@ -66,7 +66,7 @@ namespace ScrollApp
 							webkitLineClamp: "2",
 							overflow: "hidden",
 						},
-						hot.text(data.description)
+						raw.text(data.description)
 					),
 					
 					this.renderButton(Strings.share, () => {}),
@@ -89,8 +89,8 @@ namespace ScrollApp
 				{
 					marginRight: "15px",
 				},
-				hot.text(label),
-				hot.on("click", () => clickFn())
+				raw.text(label),
+				raw.on("click", () => clickFn())
 			);
 		}
 	}

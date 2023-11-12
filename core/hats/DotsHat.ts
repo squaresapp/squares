@@ -9,7 +9,7 @@ namespace ScrollApp
 		/** */
 		constructor()
 		{
-			this.head = hot.div(
+			this.head = raw.div(
 				Style.backgroundOverlay(),
 				{
 					width: "fit-content",
@@ -17,7 +17,7 @@ namespace ScrollApp
 					borderRadius: "1000px",
 					textAlign: "center",
 				},
-				hot.css(" > SPAN", {
+				raw.css(" > SPAN", {
 					display: "inline-block",
 					width: "10px",
 					height: "10px",
@@ -25,7 +25,7 @@ namespace ScrollApp
 					borderRadius: "100%",
 					backgroundColor: "rgba(128, 128, 128)",
 				}),
-				hot.css(" > SPAN." + highlightClass, {
+				raw.css(" > SPAN." + highlightClass, {
 					backgroundColor: "hsl(205, 100%, 50%)",
 				})
 			);
@@ -39,7 +39,7 @@ namespace ScrollApp
 			const spans: HTMLSpanElement[] = [];
 			
 			for (let i = -1; ++i < count;)
-				spans.push(hot.span());
+				spans.push(raw.span());
 			
 			at = Math.max(0, at);
 			at = Math.min(this.head.childElementCount, at);

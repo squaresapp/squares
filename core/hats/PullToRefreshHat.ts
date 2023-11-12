@@ -14,7 +14,7 @@ namespace ScrollApp
 		{
 			const size = (parseInt(Style.borderRadiusLarge) * 2) + "px";
 			
-			this.head = hot.div(
+			this.head = raw.div(
 				{
 					width: size,
 					height: size,
@@ -25,8 +25,8 @@ namespace ScrollApp
 					pointerEvents: "none",
 				},
 				Style.backdropBlur(),
-				hot.on(target, "scroll", () => this.handleTargetScroll()),
-				this.symbol = hot.div(
+				raw.on(target, "scroll", () => this.handleTargetScroll()),
+				this.symbol = raw.div(
 					Dock.center(),
 					{
 						width: factor * 9 + "px",

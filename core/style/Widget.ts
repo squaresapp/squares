@@ -8,10 +8,10 @@ namespace ScrollApp
 		export function hollowButton(options: {
 			text: string,
 			click?: (ev: Event) => void,
-			params?: Hot.Param
+			params?: Raw.Param
 		})
 		{
-			return hot.div(
+			return raw.div(
 				{
 					padding: "15px",
 					border: "2px solid " + Pal.gray1,
@@ -21,15 +21,15 @@ namespace ScrollApp
 					cursor: "pointer",
 					whiteSpace: "nowrap",
 				},
-				options.click && hot.on("click", options.click),
+				options.click && raw.on("click", options.click),
 				Style.text(options.text, 23, 500),
 			);
 		}
 		
 		/** */
-		export function fillButton(...params: Hot.Param[])
+		export function fillButton(...params: Raw.Param[])
 		{
-			return hot.div(
+			return raw.div(
 				{
 					display: "inline-block",
 					padding: "10px",
@@ -44,9 +44,9 @@ namespace ScrollApp
 		}
 		
 		/** */
-		export function underlineTextbox(...params: Hot.Param[])
+		export function underlineTextbox(...params: Raw.Param[])
 		{
-			return hot.input(
+			return raw.input(
 				{
 					outline: 0,
 					border: 0,
