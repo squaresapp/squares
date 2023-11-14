@@ -14,7 +14,7 @@ namespace ScrollApp.Cover
 		};
 		
 		const feedUrl = "http://localhost:43332/raccoons/index.txt";
-		const urls = await HtmlFeed.getFeedUrls(feedUrl);
+		const urls = await Libfeed.getFeedUrls(feedUrl);
 		if (!urls)
 			throw "No feed loaded";
 		

@@ -16,12 +16,12 @@ namespace ScrollApp
 			
 			for (const feed of modifiedFeeds)
 			{
-				HtmlFeed.getFeedUrls(feed.url).then(async urls =>
+				Libfeed.getFeedUrls(feed.url).then(async urls =>
 				{
 					if (!urls)
 						return;
 					
-					const feedUrlFolder = HtmlFeed.Url.folderOf(feed.url);
+					const feedUrlFolder = Libfeed.Url.folderOf(feed.url);
 					const { added, removed } = await Data.captureRawFeed(feed, urls);
 					
 					for (const url of added)

@@ -12,7 +12,7 @@ namespace ScrollApp
 		
 		for (const url of defaultFeedUrls)
 		{
-			const urls = await HtmlFeed.getFeedUrls(url);
+			const urls = await Libfeed.getFeedUrls(url);
 			if (!urls)
 				continue;
 			
@@ -22,7 +22,7 @@ namespace ScrollApp
 			
 			urlLists.push(urls);
 			
-			const feedMeta = await HtmlFeed.getFeedMetaData(url);
+			const feedMeta = await Libfeed.getFeedMetaData(url);
 			const feed = await Data.writeFeed(feedMeta, { checksum });
 			await Data.captureRawFeed(feed, urls);
 			feeds.push(feed);
@@ -41,7 +41,7 @@ namespace ScrollApp
 				continue;
 			
 			const feed = feeds[indexOfList];
-			const feedDirectory = HtmlFeed.Url.folderOf(feed.url);
+			const feedDirectory = Libfeed.Url.folderOf(feed.url);
 			const path = urlList[indexWithinList].slice(feedDirectory.length);
 			const post = await Data.writePost({ feed, path });
 			await Data.writeScrollPost(scroll.key, post);
