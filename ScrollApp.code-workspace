@@ -32,6 +32,13 @@
 	"launch": {
 		"configurations": [
 			{
+				"name": "Attach To Android Webview",
+				"type": "android-webview",
+				"request": "attach",
+				"webRoot": "${workspaceFolder}/app",
+				"sourceMaps": true,
+			},
+			{
 				"name": "Debug Active Cover Function (Electron)",
 				"type": "chrome",
 				"request": "launch",
