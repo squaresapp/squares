@@ -124,8 +124,8 @@ namespace ScrollApp
 			else if (CAPACITOR)
 			{
 				const path = DEBUG ?
-					FilaCapacitor.directory.documents :
-					FilaCapacitor.directory.data;
+					FilaCapacitor.Directory.documents :
+					FilaCapacitor.Directory.data;
 				
 				return Fila.new(path);
 			}
