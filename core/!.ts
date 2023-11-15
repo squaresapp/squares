@@ -43,6 +43,11 @@ declare const Capacitor: typeof import("@capacitor/core").Capacitor &
 	platform: string;
 }
 
+declare const Device: typeof import("@capacitor/device").Device;
+declare const Toast: typeof import("@capacitor/toast").Toast;
+declare const BackgroundFetch: typeof import("@transistorsoft/capacitor-background-fetch").BackgroundFetch;
+declare const CapClipboard: typeof import("@capacitor/clipboard").Clipboard;
+
 // The globalThis value isn't available in Safari, so a polyfill is necessary:
 if (typeof globalThis === "undefined")
 	(window as any).globalThis = window;
@@ -66,45 +71,17 @@ if (typeof IOS === "undefined")
 if (typeof ANDROID === "undefined")
 	Object.assign(globalThis, { ANDROID: navigator.userAgent.includes("Android") });
 
-if (typeof CAPACITOR === "undefined")
-	Object.assign(globalThis, { CAPACITOR: typeof Capacitor === "object" });
-
-if (typeof DEMO === "undefined")
-	Object.assign(globalThis, { DEMO: !ELECTRON && !TAURI && !CAPACITOR && window.location.pathname.indexOf("demo") > -1 });
-
 if (typeof SIMULATOR === "undefined")
 	Object.assign(globalThis, { SIMULATOR: false });
 
-if (ELECTRON)
-{
-	const g = globalThis as any;
-	g.Electron = Object.freeze({
-		fs: require("fs"),
-		path: require("path")
-	});
-}
-else if (TAURI)
-{
-	const g = globalThis as any;
-	g.Tauri = g.__TAURI__;
-}
+if (typeof DEMO === "undefined")
+	Object.assign(globalThis, { DEMO: /^[\d\.]+$/.test(window.location.hostname) });
 
 const isPwa = 
 	"standalone" in navigator ||
 	window.matchMedia("(display-mode: standalone)").matches;
 
-const isTouch =  matchMedia("(pointer:coarse)").matches;
 const raw = new Raw();
-
-declare const Device: typeof import("@capacitor/device").Device;
-
-// Bindings for the Toast plugin
-declare const Toast: typeof import("@capacitor/toast").Toast;
-
-// Bindings for the Background Fetch plugin
-declare const BackgroundFetch: typeof import("@transistorsoft/capacitor-background-fetch").BackgroundFetch;
-
-declare const CapClipboard: typeof import("@capacitor/clipboard").Clipboard;
 
 namespace ScrollApp
 {
@@ -114,19 +91,27 @@ namespace ScrollApp
 	 */
 	export async function startup()
 	{
-		if (ELECTRON)
-			FilaNode.use();
-		
-		else if (TAURI)
-			FilaTauri.use();
-		
-		else if (CAPACITOR)
-			FilaCapacitor.use();
-		
-		else if (DEMO)
-			FilaKeyva.use();
+		// The CAPACITOR constant needs to be defined after the document has loaded,
+		// otherwise, window.Capacitor will be undefined (on Android, it doesn't appear
+		// to be injected right away.
+		if (typeof CAPACITOR === "undefined")
+			Object.assign(globalThis, { CAPACITOR: typeof Capacitor === "object" });
 		
 		const g = globalThis as any;
+		
+		if (ELECTRON)
+		{
+			const g = globalThis as any;
+			g.Electron = Object.freeze({
+				fs: require("fs"),
+				path: require("path")
+			});
+		}
+		else if (TAURI)
+		{
+			const g = globalThis as any;
+			g.Tauri = g.__TAURI__;
+		}
 		
 		if (CAPACITOR)
 		{
@@ -141,6 +126,18 @@ namespace ScrollApp
 			const info = await Device.getInfo();
 			Object.assign(globalThis, { SIMULATOR: info.isVirtual });
 		}
+		
+		if (ELECTRON)
+			FilaNode.use();
+		
+		else if (TAURI)
+			FilaTauri.use();
+		
+		else if (CAPACITOR)
+			FilaCapacitor.use();
+		
+		else if (DEMO)
+			FilaKeyva.use();
 		
 		if (DEBUG)
 		{
@@ -163,7 +160,9 @@ namespace ScrollApp
 		document.body.append(rootHat.head);
 	}
 	
-	window.addEventListener("DOMContentLoaded", startup);
+	document.addEventListener(
+		"readystatechange",
+		() => document.readyState === "complete" && startup());
 }
 
 //@ts-ignore
