@@ -4,8 +4,8 @@ namespace ScrollApp
 	//@ts-ignore
 	if (!DEMO) return;
 	
-	export const feedsForWeb = [
-		"https://raw.githubusercontent.com/HTMLFeeds/Examples/main/raccoons/index.txt",
-		"https://raw.githubusercontent.com/HTMLFeeds/Examples/main/trees/index.txt",
+	export const feedsForDemo = [
+		"https://raw.githubusercontent.com/scrollapp/html-feed-examples/main/raccoons/index.txt",
+		"https://raw.githubusercontent.com/scrollapp/html-feed-examples/main/trees/index.txt",
 	];
 }

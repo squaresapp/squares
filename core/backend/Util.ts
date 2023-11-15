@@ -117,7 +117,7 @@ namespace ScrollApp
 			}
 			else if (ELECTRON)
 			{
-				const fila = Fila.new(__dirname).down("data");
+				const fila = Fila.new(__dirname).down(DEBUG ? "+data" : "data");
 				await fila.writeDirectory();
 				return fila;
 			}
