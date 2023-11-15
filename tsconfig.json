@@ -40,7 +40,7 @@
 		{ "path": "../FilaNode", "if": "ELECTRON" },
 		{ "path": "../FilaKeyva", "if": "DEMO" },
 		{ "path": "../Keyva", "if": "DEMO" },
-		{ "path": "../HtmlFeedJS" },
+		{ "path": "../Libfeed" },
 		{ "path": "../Dock" }
 	]
 }
