@@ -5,7 +5,7 @@
 		"withGlobalTauri": true,
 		"beforeBuildCommand": "",
 		"beforeDevCommand": "",
-		"devPath": "../+build",
+		"devPath": "../app",
 		"distDir": "../+bundle"
 	},
 	"package":

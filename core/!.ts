@@ -162,6 +162,8 @@ namespace ScrollApp
 		await rootHat.construct();
 		document.body.append(rootHat.head);
 	}
+	
+	window.addEventListener("DOMContentLoaded", startup);
 }
 
 //@ts-ignore

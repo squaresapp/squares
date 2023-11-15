@@ -289,7 +289,7 @@ namespace ScrollApp.Data
 	async function getFeedsFolder()
 	{
 		const fila = await Util.getDataFolder();
-		return fila.down("feeds");
+		return fila.down(DEBUG ? "+feeds" : "feeds");
 	}
 	
 	/** */
@@ -301,8 +301,7 @@ namespace ScrollApp.Data
 	/** */
 	async function getFeedPostsFile(key: number)
 	{
-		const fila = await Util.getDataFolder();
-		return fila.down("feeds").down(key + ".txt");
+		return (await getFeedsFolder()).down(key + ".txt");
 	}
 	
 	/** */

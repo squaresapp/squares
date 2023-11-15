@@ -2,6 +2,8 @@
 +*
 node_modules
 package-lock.json
+app/scroll.*
+app-*
 src-tauri/target
 src-tauri/icons
 src-tauri/gen

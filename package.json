@@ -7,12 +7,12 @@
 	"main": "scroll.js",
 	"scripts": {
 		"serve-feeds": "vite ./+feeds --host --cors --port 43332",
-		"ionic:serve": "vite ./+build --host --cors",
+		"ionic:serve": "vite ./app --host --cors",
 		"ionic:build": "cd .",
 		"ios-dev": "ionic cap run ios --external --livereload",
 		"android-dev": "ionic cap run android --external --livereload",
 		"icons": "npx @capacitor/assets generate --ios --android",
-		"bundle": "npm run icons && tsc -p tsconfig.release.json && terser ./+build/scroll.debug.js > ./+build/scroll.min.js"
+		"bundle": "npm run icons && tsc -p tsconfig.release.json && terser ./app/scroll.js > ./app/scroll.min.js"
 	},
 	"license": "MIT",
 	"dependencies": {

@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"outFile": "+build/scroll.debug.js",
+		"outFile": "app/scroll.js",
 		"composite": true,
 		"module": "system",
 		"moduleResolution": "node",
@@ -24,6 +24,7 @@
 	},
 	"exclude": [
 		"**/+*/**/*.ts",
+		"app*/**/*.ts",
 		"ios/**/*.ts",
 		"android*/**/*.ts",
 		"vite.config.ts"
@@ -35,11 +36,11 @@
 		{ "path": "../Not" },
 		{ "path": "../Force" },
 		{ "path": "../Fila" },
-		{ "path": "../FilaCapacitor", "if": "CAPACITOR" },
-		{ "path": "../FilaTauri", "if": "TAURI" },
-		{ "path": "../FilaNode", "if": "ELECTRON" },
-		{ "path": "../FilaKeyva", "if": "DEMO" },
-		{ "path": "../Keyva", "if": "DEMO" },
+		{ "path": "../FilaCapacitor" },
+		{ "path": "../FilaTauri" },
+		{ "path": "../FilaNode" },
+		{ "path": "../FilaKeyva" },
+		{ "path": "../Keyva" },
 		{ "path": "../Libfeed" },
 		{ "path": "../Dock" }
 	]

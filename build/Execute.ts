@@ -13,7 +13,7 @@ namespace ScrollApp.Build
 			const options = cwd ? { cwd } : {};
 			const proc = spawn(command, args, options);
 			
-			proc.stdout.on("data", data =>
+			const print = (data: string | Buffer) =>
 			{
 				command;
 				
@@ -22,12 +22,10 @@ namespace ScrollApp.Build
 				
 				else if (typeof data === "string")
 					console.log(data);
-			});
+			}
 			
-			proc.stderr.on("data", data =>
-			{
-				console.error(data);
-			});
+			proc.stdout.on("data", print);
+			proc.stderr.on("data", print);
 			
 			proc.on("close", () =>
 			{
