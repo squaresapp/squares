@@ -57,7 +57,7 @@ if (typeof globalThis === "undefined")
 // cover function, or in one of the hosts in debug mode. In this case,
 // we set the compilation constants explicitly at runtime.
 if (typeof DEBUG === "undefined")
-	Object.assign(globalThis, { DEBUG: false });
+	Object.assign(globalThis, { DEBUG: true });
 
 if (typeof ELECTRON === "undefined")
 	Object.assign(globalThis, { ELECTRON: typeof screen + typeof require === "objectfunction" });
@@ -75,7 +75,7 @@ if (typeof SIMULATOR === "undefined")
 	Object.assign(globalThis, { SIMULATOR: false });
 
 if (typeof DEMO === "undefined")
-	Object.assign(globalThis, { DEMO: /^[\d\.]+$/.test(window.location.hostname) });
+	Object.assign(globalThis, { DEMO: !(Number(window.location.hostname.split(".").join("")) > 0) });
 
 const isPwa = 
 	"standalone" in navigator ||
@@ -139,6 +139,9 @@ namespace ScrollApp
 		else if (DEMO)
 			FilaKeyva.use();
 		
+		if (DEBUG || DEMO)
+			await Data.clear();
+		
 		if (DEBUG)
 		{
 			const dataFolder = await Util.getDataFolder();
@@ -149,8 +152,7 @@ namespace ScrollApp
 		}
 		else if (DEMO)
 		{
-			await Data.clear();
-			await ScrollApp.runDataInitializer(feedsForWeb);
+			await ScrollApp.runDataInitializer(ScrollApp.feedsForDemo);
 		}
 		
 		ScrollApp.appendCssReset();
