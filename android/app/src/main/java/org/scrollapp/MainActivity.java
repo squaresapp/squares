@@ -1,4 +1,4 @@
-package org.scrollapp;
+package app.scroll;
 
 import com.getcapacitor.BridgeActivity;
 

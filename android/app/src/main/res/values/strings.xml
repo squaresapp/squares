@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">Scroll</string>
     <string name="title_activity_main">Scroll</string>
-    <string name="package_name">org.scrollapp</string>
-    <string name="custom_url_scheme">org.scrollapp</string>
+    <string name="package_name">app.scroll</string>
+    <string name="custom_url_scheme">app.scroll</string>
 </resources>
