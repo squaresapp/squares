@@ -51,7 +51,7 @@ namespace ScrollApp
 					},
 					Style.backgroundOverlay(),
 					Style.clickable,
-					raw.text("↻"),
+					t`↻`,
 					raw.on("click", () => this.handleRefreshInner()),
 				),
 				raw.get(this.pullToRefreshHat = new PullToRefreshHat(this.grid.head))(
@@ -224,7 +224,7 @@ namespace ScrollApp
 					if (!url)
 						break block;
 					
-					const poster = await Libfeed.getPosterFromUrl(url);
+					const poster = await Webfeed.getPosterFromUrl(url);
 					if (!poster)
 						break block;
 					
@@ -233,7 +233,7 @@ namespace ScrollApp
 						poster;
 				}
 				
-				return Libfeed.getErrorPoster();
+				return Webfeed.getErrorPoster();
 			})();
 		}
 		
@@ -246,11 +246,11 @@ namespace ScrollApp
 			
 			const root = Hat.over(this, RootHat);
 			const postUrl = root.getPostUrl(post) || "";
-			const page = await Libfeed.getPageFromUrl(postUrl);
+			const page = await Webfeed.getPageFromUrl(postUrl);
 			const head = page?.head || [];
 			const sections: HTMLElement[] = page ?
 				page.sections.slice() :
-				[Libfeed.getErrorPoster()];
+				[Webfeed.getErrorPoster()];
 			
 			const feed = await Data.readFeed(post.feed.key);
 			if (!feed)
@@ -301,8 +301,8 @@ namespace ScrollApp
 			
 			return (async () =>
 			{
-				const maybePoster = await Libfeed.getPosterFromUrl(url);
-				return maybePoster || Libfeed.getErrorPoster();
+				const maybePoster = await Webfeed.getPosterFromUrl(url);
+				return maybePoster || Webfeed.getErrorPoster();
 			})();
 		}
 		

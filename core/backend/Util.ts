@@ -60,8 +60,8 @@ namespace ScrollApp
 		 */
 		export function getIconUrl(feed: IFeed)
 		{
-			const folder = Libfeed.Url.folderOf(feed.url);
-			return Libfeed.Url.resolve(feed.icon, folder);
+			const folder = Webfeed.Url.folderOf(feed.url);
+			return Webfeed.Url.resolve(feed.icon, folder);
 		}
 		
 		/**

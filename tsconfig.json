@@ -41,7 +41,7 @@
 		{ "path": "../FilaNode" },
 		{ "path": "../FilaKeyva" },
 		{ "path": "../Keyva" },
-		{ "path": "../Libfeed" },
+		{ "path": "../Webfeed" },
 		{ "path": "../Dock" }
 	]
 }

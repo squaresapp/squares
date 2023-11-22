@@ -78,7 +78,7 @@ namespace ScrollApp
 			if (!followUri)
 				return;
 			
-			const urls = await Libfeed.getFeedUrls(followUri);
+			const urls = await Webfeed.getFeedUrls(followUri);
 			if (!urls)
 				return;
 			
@@ -86,7 +86,7 @@ namespace ScrollApp
 			if (!checksum)
 				return;
 			
-			const feedMeta = await Libfeed.getFeedMetaData(followUri);
+			const feedMeta = await Webfeed.getFeedMetaData(followUri);
 			const feed = await Data.writeFeed(feedMeta, { checksum });
 			await Data.captureRawFeed(feed, urls);
 			
@@ -108,7 +108,7 @@ namespace ScrollApp
 		 */
 		getPostUrl(post: IPost)
 		{
-			const feedFolder = Libfeed.Url.folderOf(post.feed.url);
+			const feedFolder = Webfeed.Url.folderOf(post.feed.url);
 			return feedFolder + post.path;
 		}
 	}
