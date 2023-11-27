@@ -17,7 +17,7 @@ namespace ScrollApp
 					fontSize: "inherit",
 				},
 				":root", {
-					height: isPwa ? "100vh" : "100dvh",
+					height: "100vh",
 					fontSize: "20px",
 					fontFamily: "Inter, -apple-system, BlinkMacSystemFont, avenir next, avenir, segoe ui, helvetica neue, helvetica, Ubuntu, roboto, noto, arial, sans-serif",
 					color: "white",
