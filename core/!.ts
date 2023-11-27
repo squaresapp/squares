@@ -72,10 +72,6 @@ if (typeof ANDROID === "undefined")
 if (typeof DEMO === "undefined")
 	Object.assign(globalThis, { DEMO: !(Number(window.location.hostname.split(".").join("")) > 0) });
 
-const isPwa = 
-	"standalone" in navigator ||
-	window.matchMedia("(display-mode: standalone)").matches;
-
 const t = raw.text;
 
 namespace ScrollApp
