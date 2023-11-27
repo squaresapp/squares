@@ -100,7 +100,6 @@ namespace ScrollApp.Build
 			LINUX: false,
 			DEMO: false,
 			CAPACITOR: false,
-			SIMULATOR: false,
 		};
 	}
 	

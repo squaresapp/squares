@@ -5,7 +5,6 @@ declare const TAURI: boolean;
 declare const MAC: boolean;
 declare const WINDOWS: boolean;
 declare const LINUX: boolean;
-declare const SIMULATOR: boolean;
 declare const CAPACITOR: boolean;
 declare const IOS: boolean;
 declare const ANDROID: boolean;
@@ -43,10 +42,9 @@ declare const Capacitor: typeof import("@capacitor/core").Capacitor &
 	platform: string;
 }
 
-declare const Device: typeof import("@capacitor/device").Device;
 declare const Toast: typeof import("@capacitor/toast").Toast;
-declare const BackgroundFetch: typeof import("@transistorsoft/capacitor-background-fetch").BackgroundFetch;
 declare const CapClipboard: typeof import("@capacitor/clipboard").Clipboard;
+declare const BackgroundFetch: typeof import("@transistorsoft/capacitor-background-fetch").BackgroundFetch;
 
 // The globalThis value isn't available in Safari, so a polyfill is necessary:
 if (typeof globalThis === "undefined")
@@ -71,9 +69,6 @@ if (typeof IOS === "undefined")
 if (typeof ANDROID === "undefined")
 	Object.assign(globalThis, { ANDROID: navigator.userAgent.includes("Android") });
 
-if (typeof SIMULATOR === "undefined")
-	Object.assign(globalThis, { SIMULATOR: false });
-
 if (typeof DEMO === "undefined")
 	Object.assign(globalThis, { DEMO: !(Number(window.location.hostname.split(".").join("")) > 0) });
 
@@ -81,7 +76,7 @@ const isPwa =
 	"standalone" in navigator ||
 	window.matchMedia("(display-mode: standalone)").matches;
 
-const raw = new Raw();
+const t = raw.text;
 
 namespace ScrollApp
 {
@@ -118,13 +113,6 @@ namespace ScrollApp
 			g.Toast = g.Capacitor?.Plugins?.Toast;
 			g.BackgroundFetch = g.Capacitor?.Plugins?.BackgroundFetch;
 			g.Capactor?.Clipboard;
-			g.Device = g.Capacitor?.Plugins?.Device;
-		}
-		
-		if (DEBUG && CAPACITOR)
-		{
-			const info = await Device.getInfo();
-			Object.assign(globalThis, { SIMULATOR: info.isVirtual });
 		}
 		
 		if (ELECTRON)
