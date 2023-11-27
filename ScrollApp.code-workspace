@@ -35,8 +35,11 @@
 				"name": "Attach To Android Webview",
 				"type": "android-webview",
 				"request": "attach",
-				"webRoot": "${workspaceFolder}/app",
 				"sourceMaps": true,
+				"webRoot": "${workspaceFolder}/app",
+				"sourceMapPathOverrides": {
+		                "webpack:/*": "${workspaceFolder}/*"
+		            }
 			},
 			{
 				"name": "Debug Active Cover Function (Electron)",
