@@ -1,11 +1,9 @@
 PODS:
-  - Capacitor (5.4.2):
+  - Capacitor (5.5.1):
     - CapacitorCordova
   - CapacitorClipboard (5.0.6):
     - Capacitor
-  - CapacitorCordova (5.4.2)
-  - CapacitorDevice (5.0.6):
-    - Capacitor
+  - CapacitorCordova (5.5.1)
   - CapacitorDialog (5.0.6):
     - Capacitor
   - CapacitorFilesystem (5.1.4):
@@ -23,7 +21,6 @@ DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorClipboard (from `../../node_modules/@capacitor/clipboard`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
-  - "CapacitorDevice (from `../../node_modules/@capacitor/device`)"
   - "CapacitorDialog (from `../../node_modules/@capacitor/dialog`)"
   - "CapacitorFilesystem (from `../../node_modules/@capacitor/filesystem`)"
   - "CapacitorShare (from `../../node_modules/@capacitor/share`)"
@@ -38,8 +35,6 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/clipboard"
   CapacitorCordova:
     :path: "../../node_modules/@capacitor/ios"
-  CapacitorDevice:
-    :path: "../../node_modules/@capacitor/device"
   CapacitorDialog:
     :path: "../../node_modules/@capacitor/dialog"
   CapacitorFilesystem:
@@ -54,10 +49,9 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@transistorsoft/capacitor-background-fetch"
 
 SPEC CHECKSUMS:
-  Capacitor: 8a9db42d105f55843cd8ed2a3cb54e2b78e7f102
+  Capacitor: 9da0a2415e3b6098511f8b5ffdb578d91ee79f8f
   CapacitorClipboard: 77edf49827ea21da2a9c05c690a4a6a4d07199c4
-  CapacitorCordova: cfcc06b698481da655415985eeb2b8da363f8451
-  CapacitorDevice: 2c968f98a1ec4d22357418c1521e7ddc46c675e6
+  CapacitorCordova: e128cc7688c070ca0bfa439898a5f609da8dbcfe
   CapacitorDialog: 0f3c15dfe9414b83bc64aef4078f1b92bcfead26
   CapacitorFilesystem: af704badfbc69f6f8623d9ed313e5490e3723dcb
   CapacitorShare: cd41743331cb71d217c029de54b681cbd91e0fcc
@@ -65,6 +59,6 @@ SPEC CHECKSUMS:
   CapacitorToast: bb0d79b78d9c27c0199b57f735dd50b8fc363489
   TransistorsoftCapacitorBackgroundFetch: ce4b3e01b898cef516e68485d2160a078016ee97
 
-PODFILE CHECKSUM: 37bdcfb2d6b3551d6ad9be8e995fb7b36219b43b
+PODFILE CHECKSUM: 2758d761caa6fef5cf19354396cca6de8d0ee762
 
 COCOAPODS: 1.11.3
