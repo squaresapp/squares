@@ -66,7 +66,7 @@ namespace ScrollApp
 		}
 		
 		/**
-		 * Displays text at a given font size and weightthat
+		 * Displays text at a given font size and weight that
 		 * defaults to being unselectable.
 		 */
 		export function text(label: string = "", size: number | string = 20, weight?: number): Raw.Param[]

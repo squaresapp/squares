@@ -102,6 +102,9 @@ namespace ScrollApp
 			this.grid.handleRender(index => this.getPost(index));
 			this.grid.handleSelect(async (e, index) =>
 			{
+				if (this.selectedGridItem)
+					return;
+				
 				this.selectedGridItem = e;
 				this.showPage(index);
 			});
@@ -126,6 +129,7 @@ namespace ScrollApp
 						if (e instanceof HTMLElement)
 							e.classList.add(noOverflowClass);
 					
+					await UI.wait(1);
 					pageHat.head.style.transform = "translateY(0)";
 					await UI.waitTransitionEnd(pageHat.head);
 					this.gridContainer.style.transitionDuration = "0s";
@@ -154,7 +158,8 @@ namespace ScrollApp
 					const s = this.selectedGridItem.style;
 					s.transitionDuration = "0.75s";
 					s.transitionProperty = "opacity, filter";
-					await UI.wait(1);
+					//! These transitions break after a few openings and
+					//! closings on mobile Safari. Is this a bug in the engine?
 					applyVisitedStyle(this.selectedGridItem);
 				}
 				
@@ -171,7 +176,12 @@ namespace ScrollApp
 			}
 			
 			pageHat.onDisconnect(disconnected);
+			
+			//! Temp fix
+			await UI.wait(100);
 			this.gridContainer.after(pageHat.head);
+			await UI.wait(100);
+			
 			this.showGrid(false);
 		}
 		

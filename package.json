@@ -23,6 +23,7 @@
 		"@capacitor/filesystem": "^5.1.4",
 		"@capacitor/ios": "^5.5.1",
 		"@capacitor/share": "^5.0.6",
+		"@capacitor/splash-screen": "^5.0.6",
 		"@capacitor/status-bar": "^5.0.6",
 		"@capacitor/toast": "^5.0.6",
 		"@tauri-apps/api": "^1.4.0",
