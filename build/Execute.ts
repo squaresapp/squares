@@ -1,5 +1,5 @@
 
-namespace ScrollApp.Build
+namespace Squares.Build
 {
 	/**
 	 * Runs the specified command on the command line, and streams

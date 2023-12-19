@@ -1,5 +1,5 @@
 
-namespace ScrollApp.Build
+namespace Squares.Build
 {
 	/**
 	 * Minifies the file at the JavaScript file at the specified location,

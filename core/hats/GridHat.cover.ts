@@ -1,10 +1,10 @@
 
-namespace ScrollApp.Cover
+namespace Squares.Cover
 {
 	/** */
 	export function coverTilerHat()
 	{
-		ScrollApp.appendCssReset();
+		Squares.appendCssReset();
 		const gridHat = new GridHat();
 		
 		gridHat.handleRender(index =>

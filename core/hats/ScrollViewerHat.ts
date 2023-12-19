@@ -1,5 +1,5 @@
 
-namespace ScrollApp
+namespace Squares
 {
 	const transitionDuration = "0.5s";
 	

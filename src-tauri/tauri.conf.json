@@ -10,7 +10,7 @@
 	},
 	"package":
 	{
-		"productName": "Scroll",
+		"productName": "Squares",
 		"version": "0.1.0"
 	},
 	"tauri":

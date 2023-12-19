@@ -1,10 +1,10 @@
 {
-	"name": "scroll-app",
+	"name": "squares",
 	"author": "Paul Gordon",
 	"private": true,
 	"description": "An app for sharing without powerful forces controlling you.",
 	"version": "0.0.0",
-	"main": "scroll.js",
+	"main": "squares.js",
 	"scripts": {
 		"serve-feeds": "vite ./+feeds --host --cors --port 43332",
 		"ionic:serve": "vite ./app --host --cors",
@@ -12,7 +12,7 @@
 		"ios-dev": "ionic cap run ios --external --livereload",
 		"android-dev": "ionic cap run android --external --livereload",
 		"icons": "npx @capacitor/assets generate --ios --android",
-		"bundle": "npm run icons && tsc -p tsconfig.release.json && terser ./app/scroll.js > ./app/scroll.min.js"
+		"bundle": "npm run icons && tsc -p tsconfig.release.json && terser ./app/squares.js > ./app/squares.min.js"
 	},
 	"license": "MIT",
 	"dependencies": {

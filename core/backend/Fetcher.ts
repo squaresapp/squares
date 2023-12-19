@@ -1,5 +1,5 @@
 
-namespace ScrollApp
+namespace Squares
 {
 	/**
 	 * A namespace of functions which are shared between

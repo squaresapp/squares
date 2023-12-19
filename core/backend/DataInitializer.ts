@@ -1,5 +1,5 @@
 
-namespace ScrollApp
+namespace Squares
 {
 	/**
 	 * Initializes the app with a list of default feeds, and populates

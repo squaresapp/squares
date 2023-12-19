@@ -74,7 +74,7 @@ if (typeof DEMO === "undefined")
 
 const t = raw.text;
 
-namespace ScrollApp
+namespace Squares
 {
 	/**
 	 * This is the main entry point of the app.
@@ -132,14 +132,14 @@ namespace ScrollApp
 			if (!await dataFolder.exists())
 				await dataFolder.writeDirectory();
 			
-			await ScrollApp.runDataInitializer(ScrollApp.feedsForDebug);
+			await Squares.runDataInitializer(Squares.feedsForDebug);
 		}
 		else if (DEMO)
 		{
-			await ScrollApp.runDataInitializer(ScrollApp.feedsForDemo);
+			await Squares.runDataInitializer(Squares.feedsForDemo);
 		}
 		
-		ScrollApp.appendCssReset();
+		Squares.appendCssReset();
 		await Data.initialize();
 		const rootHat = new RootHat();
 		await rootHat.construct();
@@ -152,4 +152,4 @@ namespace ScrollApp
 }
 
 //@ts-ignore
-if (typeof module === "object") Object.assign(module.exports, { ScrollApp });
+if (typeof module === "object") Object.assign(module.exports, { Squares });

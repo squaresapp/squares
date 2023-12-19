@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Scroll</string>
-    <string name="title_activity_main">Scroll</string>
-    <string name="package_name">app.scroll</string>
-    <string name="custom_url_scheme">app.scroll</string>
+    <string name="app_name">Squares</string>
+    <string name="title_activity_main">Squares</string>
+    <string name="package_name">app.squaresapp.org</string>
+    <string name="custom_url_scheme">app.squaresapp.org</string>
 </resources>

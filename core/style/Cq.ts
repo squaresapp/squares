@@ -1,5 +1,5 @@
 
-namespace ScrollApp
+namespace Squares
 {
 	/**
 	 * Namespace of functions for container query units.

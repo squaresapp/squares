@@ -1,10 +1,10 @@
 
-namespace ScrollApp.Cover
+namespace Squares.Cover
 {
 	/** */
 	export function coverStoryHat()
 	{
-		ScrollApp.appendCssReset();
+		Squares.appendCssReset();
 		
 		const sections = [
 			raw.div(

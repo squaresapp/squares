@@ -1,10 +1,10 @@
 
-namespace ScrollApp
+namespace Squares
 {
 	/** */
 	export function coverFollowersHat()
 	{
-		ScrollApp.appendCssReset();
+		Squares.appendCssReset();
 		const hat = new FollowersHat();
 		document.body.append(hat.head);
 	}

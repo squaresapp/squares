@@ -1,5 +1,5 @@
 
-namespace ScrollApp
+namespace Squares
 {
 	/**
 	 * Represents the IFeed object, as it is stored on disk.

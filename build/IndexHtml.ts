@@ -1,5 +1,5 @@
 
-namespace ScrollApp.Build
+namespace Squares.Build
 {
 	/**
 	 * A class for generating the index.html file used to launch the app.

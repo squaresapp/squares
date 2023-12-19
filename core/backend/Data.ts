@@ -1,5 +1,5 @@
 
-namespace ScrollApp.Data
+namespace Squares.Data
 {
 	/** */
 	export interface IReadArrayOptions

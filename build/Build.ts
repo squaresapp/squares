@@ -1,5 +1,5 @@
 
-namespace ScrollApp.Build
+namespace Squares.Build
 {
 	/** */
 	export async function buildDemo()

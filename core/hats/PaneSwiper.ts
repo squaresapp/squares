@@ -1,5 +1,5 @@
 
-namespace ScrollApp
+namespace Squares
 {
 	/**
 	 * A class that creates a series of panes that swipe horizontally on mobile.

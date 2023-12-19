@@ -1,6 +1,6 @@
 {
-	"appId": "app.scroll",
-	"appName": "Scroll",
+	"appId": "app.squaresapp.org",
+	"appName": "Squares",
 	"webDir": "app",
 	"plugins": {
 		"CapacitorHttp": {

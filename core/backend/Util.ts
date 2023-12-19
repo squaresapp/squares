@@ -1,5 +1,5 @@
 
-namespace ScrollApp
+namespace Squares
 {
 	export namespace Util
 	{
@@ -66,7 +66,7 @@ namespace ScrollApp
 		
 		/**
 		 * Parses URIs as specified in the HTML feeds specification found at:
-		 * https://www.scrollapp.org/specs/htmlfeeds/
+		 * https://www.Squares.org/specs/htmlfeeds/
 		 */
 		export function parseHtmlUri(uri: string)
 		{

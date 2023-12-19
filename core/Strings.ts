@@ -1,5 +1,5 @@
 
-namespace ScrollApp
+namespace Squares
 {
 	export const enum Strings
 	{

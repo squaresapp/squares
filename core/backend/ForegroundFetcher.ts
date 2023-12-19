@@ -1,5 +1,5 @@
 
-namespace ScrollApp
+namespace Squares
 {
 	/** */
 	export class ForegroundFetcher

@@ -1,5 +1,5 @@
 
-namespace ScrollApp.Instagram
+namespace Squares.Instagram
 {
 	/**
 	 * Describes the format of the file inthe content/posts_1.json file

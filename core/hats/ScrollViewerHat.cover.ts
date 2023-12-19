@@ -1,5 +1,5 @@
 
-namespace ScrollApp.Cover
+namespace Squares.Cover
 {
 	/** */
 	export async function coverScrollFeedViewerHat()
