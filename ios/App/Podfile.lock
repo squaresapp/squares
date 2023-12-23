@@ -1,12 +1,12 @@
 PODS:
-  - Capacitor (5.5.1):
+  - Capacitor (5.6.0):
     - CapacitorCordova
   - CapacitorClipboard (5.0.6):
     - Capacitor
-  - CapacitorCordova (5.5.1)
+  - CapacitorCordova (5.6.0)
   - CapacitorDialog (5.0.6):
     - Capacitor
-  - CapacitorFilesystem (5.1.4):
+  - CapacitorFilesystem (5.2.0):
     - Capacitor
   - CapacitorShare (5.0.6):
     - Capacitor
@@ -54,11 +54,11 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@transistorsoft/capacitor-background-fetch"
 
 SPEC CHECKSUMS:
-  Capacitor: 9da0a2415e3b6098511f8b5ffdb578d91ee79f8f
+  Capacitor: ebfc16cdb8116d04c101686b080342872da42d43
   CapacitorClipboard: 77edf49827ea21da2a9c05c690a4a6a4d07199c4
-  CapacitorCordova: e128cc7688c070ca0bfa439898a5f609da8dbcfe
+  CapacitorCordova: 931b48fcdbc9bc985fc2f16cec9f77c794a27729
   CapacitorDialog: 0f3c15dfe9414b83bc64aef4078f1b92bcfead26
-  CapacitorFilesystem: af704badfbc69f6f8623d9ed313e5490e3723dcb
+  CapacitorFilesystem: 02f9a9053b96e1881ba1fc98d846869413c195c2
   CapacitorShare: cd41743331cb71d217c029de54b681cbd91e0fcc
   CapacitorSplashScreen: 5fa2ab5e46cf5cc530cf16a51c80c7a986579ccd
   CapacitorStatusBar: 565c0a1ebd79bb40d797606a8992b4a105885309
