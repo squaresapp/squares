@@ -5,7 +5,7 @@ namespace Squares
 	if (!DEMO) return;
 	
 	export const feedsForDemo = [
-		"https://raw.githubusercontent.com/Squares./html-feed-examples/main/raccoons/index.txt",
-		"https://raw.githubusercontent.com/Squares./html-feed-examples/main/trees/index.txt",
+		"https://raw.githubusercontent.com/squaresapp/webfeed-examples/main/raccoons/index.txt",
+		"https://raw.githubusercontent.com/squaresapp/webfeed-examples/main/red-flowers/index.txt",
 	];
 }
