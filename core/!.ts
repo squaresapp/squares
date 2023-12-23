@@ -112,8 +112,12 @@ namespace Squares
 		}
 		
 		if (ELECTRON)
+		{
+			g.Hat = require("@squaresapp/hatjs").Hat;
+			g.Fila = require("fila-core").Fila;
+			g.FilaNode = require("fila-node").FilaNode;
 			FilaNode.use();
-		
+		}
 		else if (TAURI)
 			FilaTauri.use();
 		

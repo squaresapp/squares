@@ -22,24 +22,20 @@
 			"esnext.asynciterable"
 		]
 	},
-	"exclude": [
-		"**/+*/**/*.ts",
-		"app*/**/*.ts",
-		"ios/**/*.ts",
-		"android*/**/*.ts",
-		"vite.config.ts"
+	"include": [
+		"core/**/*.ts",
+		"node_modules/@squaresapp/rawjs/*.ts",
+		"node_modules/@squaresapp/hatjs/*.ts",
+		"node_modules/fila-core/*.ts",
+		"node_modules/fila-node/*.ts",
+		"node_modules/fila-keyva/*.ts",
+		"node_modules/fila-capacitor/*.ts",
+		"node_modules/fila-tauri/*.ts",
 	],
 	"references": [
-		{ "path": "../Raw" },
-		{ "path": "../Hat" },
 		{ "path": "../Query" },
 		{ "path": "../Not" },
 		{ "path": "../Force" },
-		{ "path": "../Fila" },
-		{ "path": "../FilaCapacitor" },
-		{ "path": "../FilaTauri" },
-		{ "path": "../FilaNode" },
-		{ "path": "../FilaKeyva" },
 		{ "path": "../Keyva" },
 		{ "path": "../Webfeed" },
 		{ "path": "../Dock" }
