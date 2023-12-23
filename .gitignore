@@ -2,7 +2,7 @@
 +*
 node_modules
 package-lock.json
-app/scroll.*
+app/squares.*
 app-*
 src-tauri/target
 src-tauri/icons

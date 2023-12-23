@@ -16,21 +16,21 @@
 	},
 	"license": "MIT",
 	"dependencies": {
-		"@capacitor/android": "^5.5.1",
+		"@capacitor/android": "^5.6.0",
 		"@capacitor/clipboard": "^5.0.6",
-		"@capacitor/core": "^5.5.1",
+		"@capacitor/core": "^5.6.0",
 		"@capacitor/dialog": "^5.0.6",
-		"@capacitor/filesystem": "^5.1.4",
-		"@capacitor/ios": "^5.5.1",
+		"@capacitor/filesystem": "^5.2.0",
+		"@capacitor/ios": "^5.6.0",
 		"@capacitor/share": "^5.0.6",
 		"@capacitor/splash-screen": "^5.0.6",
 		"@capacitor/status-bar": "^5.0.6",
 		"@capacitor/toast": "^5.0.6",
-		"@tauri-apps/api": "^1.4.0",
+		"@tauri-apps/api": "^1.5.3",
 		"@transistorsoft/capacitor-background-fetch": "^5.1.1"
 	},
 	"peerDependencies": {
-		"@capacitor/cli": "^5.1.0",
+		"@capacitor/cli": "^5.6.0",
 		"moduless": "^3.2.5",
 		"vite": "^2.9.13"
 	},

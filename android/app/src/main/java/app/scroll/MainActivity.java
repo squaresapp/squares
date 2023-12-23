@@ -1,4 +1,4 @@
-package app.scroll;
+package app.squaresapp.org;
 
 import com.getcapacitor.BridgeActivity;
 

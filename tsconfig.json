@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"outFile": "app/scroll.js",
+		"outFile": "app/squares.js",
 		"composite": true,
 		"module": "system",
 		"moduleResolution": "node",
