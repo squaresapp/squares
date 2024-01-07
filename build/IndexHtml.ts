@@ -19,7 +19,7 @@ namespace Squares.Build
 			]
 		}
 		
-		private readonly lines;
+		private readonly lines: string[];
 		private readonly scriptsExternal: string[] = [];
 		private readonly scriptsInternal: Function[] = [];
 		

@@ -16,7 +16,7 @@ namespace Squares
 					top: "env(safe-area-inset-top)",
 					tabIndex: 0,
 				},
-				raw.on(window, "paste", async ev =>
+				raw.on(window, "paste", async () =>
 				{
 					const uri = await Util.readClipboardHtmlUri();
 					if (uri)

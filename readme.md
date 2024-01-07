@@ -19,7 +19,6 @@ The 1.0 release will be a focused Webfeed reader app without any tools to develo
 
 In order to limit the maintenance overhead of reviewing and validating third-party code, we aren't accepting pull requests from code that isn't small and easily testable (bug fixes). That said, we're always interested in hearing your feature requests, so please submit these as an issue. 
 
-
 ## License (Unlicense)
 
 The team behind Squares is composed of free speech absolutists who value freedom and self-agency. The source code of this project is therefore licensed under public domain, also known as the "unlicense".
