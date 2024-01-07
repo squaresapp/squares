@@ -55,7 +55,7 @@ if (typeof globalThis === "undefined")
 // cover function, or in one of the hosts in debug mode. In this case,
 // we set the compilation constants explicitly at runtime.
 if (typeof DEBUG === "undefined")
-	Object.assign(globalThis, { DEBUG: true });
+	Object.assign(globalThis, { DEBUG: false });
 
 if (typeof ELECTRON === "undefined")
 	Object.assign(globalThis, { ELECTRON: typeof screen + typeof require === "objectfunction" });
@@ -70,7 +70,10 @@ if (typeof ANDROID === "undefined")
 	Object.assign(globalThis, { ANDROID: navigator.userAgent.includes("Android") });
 
 if (typeof DEMO === "undefined")
-	Object.assign(globalThis, { DEMO: !(Number(window.location.hostname.split(".").join("")) > 0) });
+{
+	const host = window.location.hostname;
+	Object.assign(globalThis, { DEMO: !!host && !(Number(host.split(".").join("")) > 0) });
+}
 
 const t = raw.text;
 
@@ -82,6 +85,18 @@ namespace Squares
 	 */
 	export async function startup()
 	{
+		if (document.readyState !== "complete")
+		{
+			await new Promise<void>(resolve =>
+			{
+				document.addEventListener("readystatechange", () =>
+				{
+					if (document.readyState === "complete")
+						resolve();
+				});
+			});
+		}
+		
 		// The CAPACITOR constant needs to be defined after the document has loaded,
 		// otherwise, window.Capacitor will be undefined (on Android, it doesn't appear
 		// to be injected right away.
@@ -149,10 +164,6 @@ namespace Squares
 		await rootHat.construct();
 		document.body.append(rootHat.head);
 	}
-	
-	document.addEventListener(
-		"readystatechange",
-		() => document.readyState === "complete" && startup());
 }
 
 //@ts-ignore
