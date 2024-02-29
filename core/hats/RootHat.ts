@@ -16,90 +16,151 @@ namespace Squares
 					top: "env(safe-area-inset-top)",
 					tabIndex: 0,
 				},
-				raw.on(window, "paste", async () =>
+				raw.on(document.body, "squares:follow", () =>
 				{
-					const uri = await Util.readClipboardHtmlUri();
-					if (uri)
-						this.followFeedFromUri(uri);
+					this.construct();
 				}),
-				raw.on(window, "follow" as any, ev =>
+				raw.on(document.body, "squares:unfollow", ev =>
 				{
-					this.followFeedFromUri((ev as any).data);
+					Data.archiveFeed(ev.detail.feedKey);
 				})
 			);
 			
-			Hat.wear(this)
-				.wear(UnfollowSignal, key => Data.archiveFeed(key));
+			Hat.wear(this);
 		}
 		
 		/** */
 		async construct()
 		{
-			const paneSwiper = new PaneSwiper();
+			const scrolls = await Data.readScrolls();
 			
-			for await (const scroll of Data.readScrolls())
+			let e: HTMLElement;
+			
+			if (scrolls.length === 0)
+			{
+				e = this.renderEmptyState();
+			}
+			else if (scrolls.length === 1 || scrolls[0].feeds.length > 1)
+			{
+				e = this.renderScrollState(scrolls);
+			}
+			else
+			{
+				const feed = scrolls[0].feeds[0];
+				e = this.renderSingleFeedState(feed);
+			}
+			
+			this.head.replaceChildren(e);
+		}
+		
+		/** */
+		private renderEmptyState()
+		{
+			let div: HTMLElement;
+			
+			return raw.div(
+				"empty-state",
+				Dock.cover(),
+				{
+					overflow: "hidden",
+					top: "calc(-1.5 * env(safe-area-inset-top))", // centering
+				},
+				div = raw.div(
+					Dock.center(),
+					raw.css(" > *", {
+						textAlign: "center",
+						margin: "40px auto",
+						opacity: 0,
+						transform: "translateY(80px)",
+						transitionProperty: "opacity, transform",
+						transitionDuration: "1s",
+					}),
+					raw.div(e => { e.innerHTML = Images.appLogo }),
+					raw.div(
+						Style.textTitle1(Strings.openingTitle),
+					),
+					raw.div(
+						{ maxWidth: "17em" },
+						Style.textParagraph(Strings.openingMessage)
+					),
+					Widget.attentionButton(Strings.openingAction, () =>
+					{
+						Util.openWebLink(Strings.findFeedsUrl);
+					},
+					{
+						href: Strings.findFeedsUrl,
+						target: "_blank"
+					}),
+				),
+				raw.on("connected", async () =>
+				{
+					await UI.wait(10);
+					for (const element of Query.children(div))
+					{
+						const s = element.style;
+						s.opacity = "1";
+						s.transform = "translateY(0)";
+						await UI.wait(200);
+					}
+				})
+			);
+		}
+		
+		/** */
+		private renderSingleFeedState(feed: IFeedDetail)
+		{
+			return new ScrollFeedViewerHat(feed, []).head;
+		}
+		
+		/**
+		 * Renders the full application state where there is a 
+		 * are multiple feeds multi-plexed within a single scroll.
+		 */
+		private renderScrollState(scrolls: IScroll[])
+		{
+			const paneSwiper = new PaneSwiper();
+				
+			for (const scroll of scrolls)
 			{
 				const viewer = new ScrollMuxViewerHat(scroll);
 				paneSwiper.addPane(viewer.head);
 			}
 			
-			paneSwiper.addPane(new FollowersHat().head);
-			this.head.append(paneSwiper.head);
-			
-			const dotsHat = new DotsHat();
-			dotsHat.insert(2);
-			dotsHat.highlight(0);
-			
-			raw.get(dotsHat.head)({
-				position: "absolute",
-				left: 0,
-				right: 0,
-				bottom:
-					CAPACITOR ? "105px" :
-					DEMO ? 0 :
-					"15px",
-				margin: "auto",
-			});
-			
-			this.head.append(dotsHat.head);
-			
-			paneSwiper.visiblePaneChanged(index =>
+			if (paneSwiper.length === 0)
 			{
-				dotsHat.highlight(index);
-			});
-		}
-		
-		/**
-		 * 
-		 */
-		async followFeedFromUri(htmlUri: string)
-		{
-			const followUri = Util.parseHtmlUri(htmlUri);
-			if (!followUri)
-				return;
-			
-			const urls = await Webfeed.getFeedUrls(followUri);
-			if (!urls)
-				return;
-			
-			const checksum = await Util.getFeedChecksum(followUri);
-			if (!checksum)
-				return;
-			
-			const feedMeta = await Webfeed.getFeedMetaData(followUri);
-			const feed = await Data.writeFeed(feedMeta, { checksum });
-			await Data.captureRawFeed(feed, urls);
-			
-			Hat.signal(FollowSignal, feed);
-			
-			if (CAPACITOR)
+				// Display the first-run experience.
+			}
+			else
 			{
-				await Toast.show({
-					position: "center",
-					duration: "long",
-					text: Strings.nowFollowing + " " + feed.author,
+				paneSwiper.addPane(new FollowersHat().head);
+				this.head.append(paneSwiper.head);
+				
+				const dotsHat = new DotsHat();
+				dotsHat.insert(2);
+				dotsHat.highlight(0);
+				
+				raw.get(dotsHat.head)({
+					position: "absolute",
+					left: 0,
+					right: 0,
+					bottom:
+						CAPACITOR ? "105px" :
+						DEMO ? 0 :
+						"15px",
+					margin: "auto",
+				});
+				
+				this.head.append(dotsHat.head);
+				
+				
+				
+				paneSwiper.visiblePaneChanged(index =>
+				{
+					dotsHat.highlight(index);
 				});
 			}
+			
+			return paneSwiper.head;
 		}
 		
 		/**
@@ -108,7 +169,7 @@ namespace Squares
 		 */
 		getPostUrl(post: IPost)
 		{
-			const feedFolder = Webfeed.Url.folderOf(post.feed.url);
+			const feedFolder = Webfeed.getFolderOf(post.feed.url);
 			return feedFolder + post.path;
 		}
 	}

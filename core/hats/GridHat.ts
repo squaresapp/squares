@@ -15,6 +15,13 @@ namespace Squares
 		/** */
 		constructor()
 		{
+			if (showClass === "")
+			{
+				showClass = raw.css({
+					display: "block !",
+				});
+			}
+			
 			maybeAppendDefaultCss();
 			
 			this.head = raw.div(
@@ -527,9 +534,7 @@ namespace Squares
 	//# Utilities
 	
 	/** */
-	const showClass = raw.css({
-		display: "block !",
-	});
+	let showClass = "";
 	
 	/** */
 	function getByClass(cls: string, element?: Element)

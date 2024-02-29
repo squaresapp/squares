@@ -3,6 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>com.apple.developer.associated-domains</key>
-	<array/>
+	<array>
+		<string>applinks:squaresapp.org</string>
+		<string>applinks:deeplink.squaresapp.org</string>
+	</array>
 </dict>
 </plist>

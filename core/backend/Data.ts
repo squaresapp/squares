@@ -19,6 +19,14 @@ namespace Squares.Data
 		}
 	}
 	
+	/**
+	 * Returns whether there is at least one scroll written to the data layer.
+	 */
+	export function hasScrolls()
+	{
+		return scrollPostCounts.size > 0;
+	}
+	
 	/** */
 	export function readScrollPostCount(scrollKey: number)
 	{
@@ -51,7 +59,9 @@ namespace Squares.Data
 		return scroll;
 	}
 	
-	/** */
+	/**
+	 * Adds a reference to a post within a particular scroll.
+	 */
 	export async function writeScrollPost(scrollKey: number, post: IPost)
 	{
 		const fila = await getScrollPostsFile(scrollKey);
@@ -79,11 +89,11 @@ namespace Squares.Data
 		
 		const diskScrollJson = await fila.readText();
 		const diskScroll: IDiskScroll = JSON.parse(diskScrollJson);
-		const feeds: IFeed[] = [];
+		const feeds: IFeedDetail[] = [];
 		
 		for (const feedKey of diskScroll.feeds)
 		{
-			const feed = await readFeed(feedKey);
+			const feed = await readFeedDetail(feedKey);
 			if (feed)
 				feeds.push(feed);
 		}
@@ -98,21 +108,28 @@ namespace Squares.Data
 	}
 	
 	/** */
-	export async function * readScrolls()
+	export async function readScrolls()
 	{
+		const scrolls: IScroll[] = [];
+		
 		for (const fila of await readScrollFilas("json"))
 		{
 			const key = keyOf(fila);
 			const scroll = await readScroll(key);
 			if (scroll)
-				yield scroll;
+				scrolls.push(scroll);
 		}
+		
+		return scrolls;
 	}
 	
 	/** */
 	async function readScrollFilas(type: "json" | "txt")
 	{
 		const folder = await getScrollFolder();
+		if (!await folder.exists())
+			return [];
+		
 		const filas = await folder.readDirectory();
 		const reg = new RegExp("^[0-9]+\\." + type + "$");
 		return filas.filter(f => reg.test(f.name));
@@ -133,6 +150,7 @@ namespace Squares.Data
 		for (const postKey of await readScrollPostKeys(scrollKey, options))
 		{
 			const post = await readPost(postKey);
+			
 			if (post)
 				yield post;
 		}
@@ -169,10 +187,10 @@ namespace Squares.Data
 	 * Creates a new IFeed object to disk, optionally populated with the
 	 * specified values, writes it to disk, and returns the constructed object.
 	 */
-	export async function writeFeed(...defaults: Partial<IFeed>[])
+	export async function writeFeed(...defaults: Partial<IFeedDetail>[])
 	{
 		const key =  Util.getSafeTicks();
-		const feed: IFeed = Object.assign(
+		const feed: IFeedDetail = Object.assign(
 			{
 				key,
 				url: "",
@@ -183,10 +201,13 @@ namespace Squares.Data
 			},
 			...defaults);
 		
-		const diskFeed = Object.assign({}, feed) as IDiskFeed;
+		if (!feed.url)
+			throw new Error(".url property must be populated.");
+		
+		const diskFeed = Object.assign({}, feed) as IDiskFeedDetail;
 		delete (diskFeed as any).key;
 		const json = JSON.stringify(diskFeed);
-		const fila = await getFeedFile(key);
+		const fila = await getFeedDetailsFile(key);
 		await fila.writeText(json);
 		return feed;
 	}
@@ -194,16 +215,16 @@ namespace Squares.Data
 	/** */
 	async function writeFeedPost(feedKey: number, postKeys: number[])
 	{
-		const fila = await getFeedPostsFile(feedKey);
+		const fila = await getFeedPostKeysFile(feedKey);
 		await appendArrayFile(fila, postKeys);
 	}
 	
 	/**
 	 * 
 	 */
-	export async function readFeed(key: number)
+	export async function readFeedDetail(key: number)
 	{
-		let fila = await getFeedFile(key);
+		let fila = await getFeedDetailsFile(key);
 		if (!await fila.exists())
 		{
 			fila = await getFeedFileArchived(key);
@@ -212,7 +233,7 @@ namespace Squares.Data
 		}
 		
 		const jsonText = await fila.readText();
-		const feed: IFeed = JSON.parse(jsonText);
+		const feed: IFeedDetail = JSON.parse(jsonText);
 		feed.key = key;
 		return feed;
 	}
@@ -220,9 +241,9 @@ namespace Squares.Data
 	/**
 	 * Reads all non-archived feeds from the file system.
 	 */
-	export async function * readFeeds()
+	export async function * readFeedDetails()
 	{
-		const folder = (await getFeedFile(0)).up();
+		const folder = (await getFeedDetailsFile(0)).up();
 		const files = await folder.readDirectory();
 		
 		for (const file of files)
@@ -231,7 +252,7 @@ namespace Squares.Data
 				continue;
 			
 			const key = keyOf(file);
-			const feed = await readFeed(key);
+			const feed = await readFeedDetail(key);
 			if (feed)
 				yield feed;
 		}
@@ -251,7 +272,7 @@ namespace Squares.Data
 	/** */
 	async function readFeedPostKeys(feedKey: number)
 	{
-		const fila = await getFeedPostsFile(feedKey);
+		const fila = await getFeedPostKeysFile(feedKey);
 		const postKeys = await readArrayFile(fila);
 		return postKeys;
 	}
@@ -261,7 +282,7 @@ namespace Squares.Data
 	 */
 	export async function archiveFeed(feedKey: number)
 	{
-		const src = await getFeedFile(feedKey);
+		const src = await getFeedDetailsFile(feedKey);
 		const json = await src.readText();
 		const dst = await getFeedFileArchived(feedKey);
 		dst.writeText(json);
@@ -286,6 +307,18 @@ namespace Squares.Data
 	}
 	
 	/** */
+	async function getFeedDetailsFile(key: number)
+	{
+		return (await getFeedsFolder()).down(key + ".json");
+	}
+	
+	/** */
+	async function getFeedPostKeysFile(key: number)
+	{
+		return (await getFeedsFolder()).down(key + ".txt");
+	}
+	
+	/** */
 	async function getFeedsFolder()
 	{
 		const fila = await Util.getDataFolder();
@@ -293,22 +326,10 @@ namespace Squares.Data
 	}
 	
 	/** */
-	async function getFeedFile(key: number)
-	{
-		return (await getFeedsFolder()).down(key + ".json");
-	}
-	
-	/** */
-	async function getFeedPostsFile(key: number)
-	{
-		return (await getFeedsFolder()).down(key + ".txt");
-	}
-	
-	/** */
 	async function getFeedFileArchived(key: number)
 	{
 		const fila = await Util.getDataFolder();
-		return fila.down("feeds-archived").down(key + ".json");
+		return fila.down("archive").down(key + ".json");
 	}
 	
 	/**
@@ -316,21 +337,21 @@ namespace Squares.Data
 	 * form, and returns an object that indicates what URLs where added and which ones
 	 * were removed from the previous time that this function was called.
 	 * 
-	 * Worth noting that the URLs are expected to be in their fully-qualified form,
-	 * which is different from how the URLs are typically written in the feed text file.
+	 * The URLs are expected to be in their fully-qualified form, which is different from
+	 * how the URLs are typically written in the feed text file.
 	 */
-	export async function captureRawFeed(feed: IFeed, urls: string[])
+	export async function writeFeedUpdates(feed: IFeedDetail, urls: string[])
 	{
 		if (!feed.key)
 			throw new Error("Cannot capture this feed because it has no key.");
 		
 		const added: string[] = [];
 		const removed: string[] = [];
-		const filaRaw = (await getFeedsRawFolder()).down(feed.key + ".txt");
+		const filaIndex = (await getIndexesFolder()).down(feed.key + ".txt");
 		
-		if (await filaRaw.exists())
+		if (await filaIndex.exists())
 		{
-			const rawText = await filaRaw.readText();
+			const rawText = await filaIndex.readText();
 			const rawLines = rawText.split("\n");
 			const rawLinesSet = new Set(rawLines);
 			const urlsSet = new Set(urls);
@@ -349,16 +370,16 @@ namespace Squares.Data
 		}
 		
 		const text = urls.join("\n");
-		await filaRaw.writeText(text);
+		await filaIndex.writeText(text);
 		
 		return { added, removed };
 	}
 	
 	/** */
-	async function getFeedsRawFolder()
+	async function getIndexesFolder()
 	{
 		const fila = await Util.getDataFolder();
-		return fila.down("feeds-raw");
+		return fila.down("indexes");
 	}
 	
 	/** */
@@ -370,7 +391,7 @@ namespace Squares.Data
 		if (!diskPost)
 			return null;
 		
-		const feed = await readFeed(diskPost.feed);
+		const feed = await readFeedDetail(diskPost.feed);
 		if (!feed)
 			return null;
 		
@@ -491,7 +512,7 @@ namespace Squares.Data
 	{
 		const scrollFolder = await getScrollFolder();
 		const feedFolder = await getFeedsFolder();
-		const feedRawFolder = await getFeedsRawFolder();
+		const feedRawFolder = await getIndexesFolder();
 		const postsFolder = await getPostsFolder();
 		const all: Fila[] = [];
 		

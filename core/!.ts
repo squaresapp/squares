@@ -45,6 +45,8 @@ declare const Capacitor: typeof import("@capacitor/core").Capacitor &
 declare const Toast: typeof import("@capacitor/toast").Toast;
 declare const CapClipboard: typeof import("@capacitor/clipboard").Clipboard;
 declare const BackgroundFetch: typeof import("@transistorsoft/capacitor-background-fetch").BackgroundFetch;
+declare const AppLauncher: typeof import("@capacitor/app-launcher").AppLauncher;
+declare const CapacitorApp: typeof import("@capacitor/app").App;
 
 // The globalThis value isn't available in Safari, so a polyfill is necessary:
 if (typeof globalThis === "undefined")
@@ -55,7 +57,7 @@ if (typeof globalThis === "undefined")
 // cover function, or in one of the hosts in debug mode. In this case,
 // we set the compilation constants explicitly at runtime.
 if (typeof DEBUG === "undefined")
-	Object.assign(globalThis, { DEBUG: false });
+	Object.assign(globalThis, { DEBUG: true });
 
 if (typeof ELECTRON === "undefined")
 	Object.assign(globalThis, { ELECTRON: typeof screen + typeof require === "objectfunction" });
@@ -64,10 +66,10 @@ if (typeof TAURI === "undefined")
 	Object.assign(globalThis, { TAURI: typeof window !== "undefined" && typeof (window as any).__TAURI__ !== "undefined" });
 
 if (typeof IOS === "undefined")
-	Object.assign(globalThis, { IOS: navigator.platform.startsWith("iP") });
+	Object.assign(globalThis, { IOS: typeof navigator !== "undefined" && navigator.platform.startsWith("iP") });
 
 if (typeof ANDROID === "undefined")
-	Object.assign(globalThis, { ANDROID: navigator.userAgent.includes("Android") });
+	Object.assign(globalThis, { ANDROID: typeof navigator !== "undefined" && navigator.userAgent.includes("Android") });
 
 if (typeof DEMO === "undefined")
 {
@@ -75,15 +77,17 @@ if (typeof DEMO === "undefined")
 	Object.assign(globalThis, { DEMO: !!host && !(Number(host.split(".").join("")) > 0) });
 }
 
-const t = raw.text;
+declare const t: typeof raw["text"];
 
 namespace Squares
 {
 	/**
-	 * This is the main entry point of the app.
-	 * When running in Tauri, this function is called from the auto-generated index.html file.
+	 * The main entry point of the app.
+	 * 
+	 * This function is called automatically, in every environment (Tauri, Capacitor),
+	 * except when running from a Moduless cover function.
 	 */
-	export async function startup()
+	export async function startup(useDefaultData?: boolean)
 	{
 		if (document.readyState !== "complete")
 		{
@@ -97,6 +101,8 @@ namespace Squares
 			});
 		}
 		
+		(window as any).t = raw.text.bind(raw);
+		
 		// The CAPACITOR constant needs to be defined after the document has loaded,
 		// otherwise, window.Capacitor will be undefined (on Android, it doesn't appear
 		// to be injected right away.
@@ -109,8 +115,9 @@ namespace Squares
 		{
 			const g = globalThis as any;
 			g.Electron = Object.freeze({
+				app: require("electron"),
 				fs: require("fs"),
-				path: require("path")
+				path: require("path"),
 			});
 		}
 		else if (TAURI)
@@ -118,29 +125,14 @@ namespace Squares
 			const g = globalThis as any;
 			g.Tauri = g.__TAURI__;
 		}
-		
-		if (CAPACITOR)
-		{
-			g.Toast = g.Capacitor?.Plugins?.Toast;
-			g.BackgroundFetch = g.Capacitor?.Plugins?.BackgroundFetch;
-			g.Capactor?.Clipboard;
-		}
-		
-		if (ELECTRON)
-		{
-			g.Hat = require("@squaresapp/hatjs").Hat;
-			g.Fila = require("fila-core").Fila;
-			g.FilaNode = require("fila-node").FilaNode;
-			FilaNode.use();
-		}
-		else if (TAURI)
-			FilaTauri.use();
-		
 		else if (CAPACITOR)
-			FilaCapacitor.use();
-		
-		else if (DEMO)
-			FilaKeyva.use();
+		{
+			g.AppLauncher = g.Capacitor?.Plugins?.AppLauncher;
+			g.BackgroundFetch = g.Capacitor?.Plugins?.BackgroundFetch;
+			g.CapacitorApp = g.Capacitor?.Plugins?.App;
+			g.CapClipboard = g.Capacitor?.Plugins?.Clipboard;
+			g.Toast = g.Capacitor?.Plugins?.Toast;
+		}
 		
 		if (DEBUG || DEMO)
 			await Data.clear();
@@ -150,21 +142,24 @@ namespace Squares
 			const dataFolder = await Util.getDataFolder();
 			if (!await dataFolder.exists())
 				await dataFolder.writeDirectory();
-			
-			await Squares.runDataInitializer(Squares.feedsForDebug);
-		}
-		else if (DEMO)
-		{
-			await Squares.runDataInitializer(Squares.feedsForDemo);
 		}
 		
+		if (DEBUG || DEMO)
+			if (useDefaultData)
+				await Squares.runDataInitializer(Squares.feedsDefault);
+		
 		Squares.appendCssReset();
+		Squares.FollowUtil.setupSystemListeners();
 		await Data.initialize();
+		
 		const rootHat = new RootHat();
 		await rootHat.construct();
 		document.body.append(rootHat.head);
 	}
+	
+	// Auto-run the startup function if not running as a moduless cover function
+	if (typeof Moduless === "undefined")
+		startup();
 }
 
-//@ts-ignore
-if (typeof module === "object") Object.assign(module.exports, { Squares });
+typeof module === "object" && Object.assign(module.exports, { Squares });

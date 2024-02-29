@@ -7,7 +7,7 @@ namespace Squares
 		readonly head;
 		
 		/** */
-		constructor(data: IFeed)
+		constructor(data: IFeedDetail)
 		{
 			const iconUrl = Util.getIconUrl(data);
 			const author = data.author || Strings.unknownAuthor;
@@ -73,7 +73,7 @@ namespace Squares
 					isFollowing && (e => this.renderButton(Strings.unfollow, () =>
 					{
 						Hat.over(this, PageHat).head.scrollBy({ top: -1 });
-						Hat.signal(UnfollowSignal, data.key);
+						dispatch("squares:unfollow", { feedKey: data.key });
 						UI.fade(e);
 					})),
 				),

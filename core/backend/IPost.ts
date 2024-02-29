@@ -35,7 +35,7 @@ namespace Squares
 		/**
 		 * A reference to the feed
 		 */
-		feed: IFeed;
+		feed: IFeedDetail;
 	}
 	
 	/** */

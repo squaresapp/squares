@@ -1,6 +1,14 @@
 PODS:
+  - BranchSDK (3.0.1)
   - Capacitor (5.6.0):
     - CapacitorCordova
+  - CapacitorApp (5.0.6):
+    - Capacitor
+  - CapacitorAppLauncher (5.0.6):
+    - Capacitor
+  - CapacitorBranchDeepLinks (7.0.0):
+    - BranchSDK
+    - Capacitor
   - CapacitorClipboard (5.0.6):
     - Capacitor
   - CapacitorCordova (5.6.0)
@@ -21,6 +29,9 @@ PODS:
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
+  - "CapacitorAppLauncher (from `../../node_modules/@capacitor/app-launcher`)"
+  - CapacitorBranchDeepLinks (from `../../node_modules/capacitor-branch-deep-links`)
   - "CapacitorClipboard (from `../../node_modules/@capacitor/clipboard`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorDialog (from `../../node_modules/@capacitor/dialog`)"
@@ -31,9 +42,19 @@ DEPENDENCIES:
   - "CapacitorToast (from `../../node_modules/@capacitor/toast`)"
   - "TransistorsoftCapacitorBackgroundFetch (from `../../node_modules/@transistorsoft/capacitor-background-fetch`)"
 
+SPEC REPOS:
+  trunk:
+    - BranchSDK
+
 EXTERNAL SOURCES:
   Capacitor:
     :path: "../../node_modules/@capacitor/ios"
+  CapacitorApp:
+    :path: "../../node_modules/@capacitor/app"
+  CapacitorAppLauncher:
+    :path: "../../node_modules/@capacitor/app-launcher"
+  CapacitorBranchDeepLinks:
+    :path: "../../node_modules/capacitor-branch-deep-links"
   CapacitorClipboard:
     :path: "../../node_modules/@capacitor/clipboard"
   CapacitorCordova:
@@ -54,7 +75,11 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@transistorsoft/capacitor-background-fetch"
 
 SPEC CHECKSUMS:
+  BranchSDK: e268bcf41469051c9e83efcd6fd85d0ba91d1d0f
   Capacitor: ebfc16cdb8116d04c101686b080342872da42d43
+  CapacitorApp: 024e1b1bea5f883d79f6330d309bc441c88ad04a
+  CapacitorAppLauncher: 5a9f06c13c6b4f5d65b550a07128ef04f3a216b3
+  CapacitorBranchDeepLinks: 933d2dd149ae955245134c388348e85ea2c65be2
   CapacitorClipboard: 77edf49827ea21da2a9c05c690a4a6a4d07199c4
   CapacitorCordova: 931b48fcdbc9bc985fc2f16cec9f77c794a27729
   CapacitorDialog: 0f3c15dfe9414b83bc64aef4078f1b92bcfead26
@@ -65,6 +90,6 @@ SPEC CHECKSUMS:
   CapacitorToast: bb0d79b78d9c27c0199b57f735dd50b8fc363489
   TransistorsoftCapacitorBackgroundFetch: ce4b3e01b898cef516e68485d2160a078016ee97
 
-PODFILE CHECKSUM: ebcb65f198fe29c0e341a3d948dc7587ccfba12d
+PODFILE CHECKSUM: 6cc47943fdb2b108131c9949259a5d5fec771db6
 
 COCOAPODS: 1.14.3

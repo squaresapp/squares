@@ -8,6 +8,7 @@ namespace Squares
 		export function fillButton(...params: Raw.Param[])
 		{
 			return raw.div(
+				"fill-button",
 				{
 					display: "inline-block",
 					padding: "10px",
@@ -29,6 +30,7 @@ namespace Squares
 		})
 		{
 			return raw.div(
+				"hollow-button",
 				{
 					padding: "15px",
 					border: "2px solid " + Pal.gray1,
@@ -40,6 +42,30 @@ namespace Squares
 				},
 				options.click && raw.on("click", options.click),
 				Style.text(options.text, 23, 500),
+			);
+		}
+		
+		/** */
+		export function attentionButton(
+			text: string,
+			click?: (ev: Event) => void,
+			...params: Raw.Param<Raw.AnchorElementAttribute>[]
+		)
+		{
+			return raw.a(
+				"attention-button",
+				{
+					display: "block",
+					width: "fit-content",
+					padding: "1em 3em",
+					borderRadius: "10px",
+					outline: 0,
+					color: "white",
+					textDecoration: "none",
+					backgroundColor: "hsl(205, 100%, 50%)",
+				},
+				Style.text(text, 23, 900),
+				params
 			);
 		}
 		

@@ -14,15 +14,15 @@ namespace Squares
 		{
 			return !!this.feedIterator;
 		}
-		private feedIterator: AsyncGenerator<IFeed, void, unknown> | null = null;
+		private feedIterator: AsyncGenerator<IFeedDetail, void, unknown> | null = null;
 		
 		/** */
 		async fetch()
 		{
 			this.stopFetch();
-			this.feedIterator = Data.readFeeds();
+			this.feedIterator = Data.readFeedDetails();
 			const threads: Promise<void>[] = [];
-			const modifiedFeeds: IFeed[] = [];
+			const modifiedFeeds: IFeedDetail[] = [];
 			
 			for (let i = -1; ++i < maxFetchThreads;)
 			{
@@ -50,7 +50,7 @@ namespace Squares
 						
 						const feed = feedIteration.value;
 						
-						const checksum = await Util.getFeedChecksum(feed.url);
+						const checksum = await Webfeed.ping(feed.url);
 						if (checksum !== feed.checksum)
 							modifiedFeeds.push(feed);
 					}

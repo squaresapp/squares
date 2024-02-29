@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"outFile": "app/squares.js",
+		"outFile": "app/app.js",
 		"composite": true,
 		"module": "system",
 		"moduleResolution": "node",
@@ -26,18 +26,18 @@
 		"core/**/*.ts",
 		"node_modules/@squaresapp/rawjs/*.ts",
 		"node_modules/@squaresapp/hatjs/*.ts",
+		"node_modules/@squaresapp/fila/*.ts",
+		"node_modules/webfeed/*.ts",
 		"node_modules/fila-core/*.ts",
 		"node_modules/fila-node/*.ts",
 		"node_modules/fila-keyva/*.ts",
 		"node_modules/fila-capacitor/*.ts",
 		"node_modules/fila-tauri/*.ts",
-	],
-	"references": [
-		{ "path": "../Query" },
-		{ "path": "../Not" },
-		{ "path": "../Force" },
-		{ "path": "../Keyva" },
-		{ "path": "../Webfeed" },
-		{ "path": "../Dock" }
+		"app/dock.d.ts",
+		"app/force.d.ts",
+		"app/keyva.d.ts",
+		"app/not.d.ts",
+		"app/query.d.ts",
+		"app/squares.d.ts",
 	]
 }

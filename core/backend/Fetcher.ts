@@ -10,19 +10,22 @@ namespace Squares
 		/**
 		 * 
 		 */
-		export async function updateModifiedFeeds(modifiedFeeds: IFeed[])
+		export async function updateModifiedFeeds(modifiedFeeds: IFeedDetail[])
 		{
 			const scroll = await Data.readScroll();
 			
 			for (const feed of modifiedFeeds)
 			{
-				Webfeed.getFeedUrls(feed.url).then(async urls =>
+				Webfeed.downloadIndex(feed.url).then(async urls =>
 				{
 					if (!urls)
 						return;
 					
-					const feedUrlFolder = Webfeed.Url.folderOf(feed.url);
-					const { added, removed } = await Data.captureRawFeed(feed, urls);
+					const feedUrlFolder = Webfeed.getFolderOf(feed.url);
+					if (!feedUrlFolder)
+						return null;
+					
+					const { added, removed } = await Data.writeFeedUpdates(feed, urls);
 					
 					for (const url of added)
 					{

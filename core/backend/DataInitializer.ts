@@ -7,28 +7,28 @@ namespace Squares
 	 */
 	export async function runDataInitializer(defaultFeedUrls: string[])
 	{
-		const feeds: IFeed[] = [];
+		const feedDetails: IFeedDetail[] = [];
 		const urlLists: string[][] = [];
 		
 		for (const url of defaultFeedUrls)
 		{
-			const urls = await Webfeed.getFeedUrls(url);
+			const urls = await Webfeed.downloadIndex(url);
 			if (!urls)
 				continue;
 			
-			const checksum = await Util.getFeedChecksum(url);
+			const checksum = await Webfeed.ping(url);
 			if (!checksum)
 				continue;
 			
 			urlLists.push(urls);
 			
-			const feedMeta = await Webfeed.getFeedMetaData(url);
-			const feed = await Data.writeFeed(feedMeta, { checksum });
-			await Data.captureRawFeed(feed, urls);
-			feeds.push(feed);
+			const feedDetail = await Webfeed.downloadIndex(url) || {};
+			const feed = await Data.writeFeed(feedDetail, { url, checksum });
+			await Data.writeFeedUpdates(feed, urls);
+			feedDetails.push(feed);
 		}
 		
-		const scroll = await Data.writeScroll({ feeds });
+		const scroll = await Data.writeScroll({ feeds: feedDetails });
 		const maxLength = urlLists.reduce((a, b) => a > b.length ? a : b.length, 0);
 		
 		for (let i = -1; ++i < maxLength * urlLists.length;)
@@ -40,8 +40,8 @@ namespace Squares
 			if (urlList.length <= indexWithinList)
 				continue;
 			
-			const feed = feeds[indexOfList];
-			const feedDirectory = Webfeed.Url.folderOf(feed.url);
+			const feed = feedDetails[indexOfList];
+			const feedDirectory = Webfeed.getFolderOf(feed.url)!;
 			const path = urlList[indexWithinList].slice(feedDirectory.length);
 			const post = await Data.writePost({ feed, path });
 			await Data.writeScrollPost(scroll.key, post);

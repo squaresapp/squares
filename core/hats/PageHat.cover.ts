@@ -30,7 +30,7 @@ namespace Squares.Cover
 			)
 		];
 		
-		const feed: IFeed = {
+		const feed: IFeedDetail = {
 			key: Util.getSafeTicks(),
 			author: "Paul Gordon",
 			url: "http://localhost:43332/raccoons/index.txt",

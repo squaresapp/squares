@@ -16,20 +16,21 @@ namespace Squares
 				},
 				raw.on("connected", () => this.construct()),
 				raw.div(
-					{
-						fontSize: "22px",
-						fontWeight: 600,
-						marginBottom: "20px",
-					},
-					raw.text(Strings.following)
+					{ marginBottom: "20px" },
+					Style.textTitle2(Strings.following),
 				),
+				raw.on(document.body, "squares:follow", ev =>
+				{
+					this.handleFollow(ev.detail.feeds);
+				}),
+				raw.on(document.body, "squares:unfollow", ev =>
+				{
+					this.handleUnfollow(ev.detail.feedKey);
+				}),
 				this.feedElements = raw.div()
 			);
 			
-			Hat
-				.wear(this)
-				.wear(UnfollowSignal, this.handleUnfollow)
-				.wear(FollowSignal, this.handleFollow);
+			Hat.wear(this);
 		}
 		
 		/** */
@@ -42,20 +43,21 @@ namespace Squares
 		}
 		
 		/** */
-		private handleFollow(feed: IFeed)
+		private handleFollow(feeds: IFeedDetail[])
 		{
-			this.feedElements.prepend(this.renderIdentity(feed));
+			for (const feed of feeds)
+				this.feedElements.prepend(this.renderIdentity(feed));
 		}
 		
 		/** */
 		private async construct()
 		{
-			for await (const feed of Data.readFeeds())
+			for await (const feed of Data.readFeedDetails())
 				this.feedElements.append(this.renderIdentity(feed));
 		}
 		
 		/** */
-		private renderIdentity(feed: IFeed)
+		private renderIdentity(feed: IFeedDetail)
 		{
 			const iconUrl = Util.getIconUrl(feed);
 			const author = feed.author || Strings.unknownAuthor;
@@ -94,7 +96,7 @@ namespace Squares
 					raw.text(Strings.unfollow),
 					raw.on("click", async () =>
 					{
-						Hat.signal(UnfollowSignal, feed.key);
+						dispatch("squares:unfollow", { feedKey: feed.key });
 						await UI.collapse(e);
 						e.remove();
 					}),

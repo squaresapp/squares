@@ -8,6 +8,44 @@ namespace Squares
 	export namespace Style
 	{
 		/** */
+		export function textTitle1(text: string): Raw.Param
+		{
+			return [
+				{
+					fontSize: "30px",
+					fontWeight: 700,
+				},
+				raw.text(text)
+			];
+		}
+		
+		/** */
+		export function textTitle2(text: string): Raw.Param
+		{
+			return [
+				{
+					fontSize: "22px",
+					fontWeight: 600,
+				},
+				raw.text(text)
+			];
+		}
+		
+		/** */
+		export function textParagraph(text: string): Raw.Param
+		{
+			return [
+				{
+					fontSize: "22px",
+					fontWeight: 500,
+					color: "rgb(210, 210, 210)",
+					lineHeight: 1.3
+				},
+				raw.text(text)
+			];
+		}
+		
+		/** */
 		export function backgroundOverlay(): Raw.Param
 		{
 			return [

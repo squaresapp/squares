@@ -18,7 +18,7 @@ namespace Squares
 		constructor(
 			head: HTMLElement[],
 			sections: HTMLElement[],
-			private readonly feed: IFeed)
+			private readonly feed: IFeedDetail)
 		{
 			if (sections.length < 1)
 				throw new Error("Must have at least one section.");
@@ -43,7 +43,6 @@ namespace Squares
 			}
 			
 			this.swiper = new PaneSwiper();
-			const metaHat = new FeedMetaHat(this.feed);
 			const metaHatHeight = 200;
 			
 			this.head = raw.div(
@@ -78,7 +77,7 @@ namespace Squares
 					snap,
 					{ height: "100%" },
 				),
-				raw.get(metaHat)(
+				raw.get(new FeedMetaHat(this.feed))(
 					{
 						height: (metaHatHeight - 10) + "px",
 						marginBottom: "10px",

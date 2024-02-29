@@ -1,11 +1,11 @@
 
-namespace Squares.Cover
+namespace Cover
 {
 	/** */
 	export function coverTilerHat()
 	{
 		Squares.appendCssReset();
-		const gridHat = new GridHat();
+		const gridHat = new Squares.GridHat();
 		
 		gridHat.handleRender(index =>
 		{

@@ -4,7 +4,7 @@ namespace Squares
 	/**
 	 * Represents the IFeed object, as it is stored on disk.
 	 */
-	export interface IDiskFeed
+	export interface IDiskFeedDetail
 	{
 		/**
 		 * Stores the URL of the text file that contains the feed information.
@@ -37,10 +37,9 @@ namespace Squares
 	}
 	
 	/** */
-	export interface IFeed extends IDiskFeed
+	export interface IFeedDetail extends IDiskFeedDetail
 	{
 		/** */
 		key: number;
 	}
 }
-

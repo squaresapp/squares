@@ -3,41 +3,6 @@ namespace Squares
 {
 	export namespace Util
 	{
-		/** */
-		export async function getFeedChecksum(feedUrl: string)
-		{
-			try
-			{
-				const ac = new AbortController();
-				const id = setTimeout(() => ac.abort(), timeout);
-				
-				const fetchResult = await fetch(feedUrl, {
-					method: "HEAD",
-					mode: "cors",
-					signal: ac.signal,
-				});
-				
-				clearTimeout(id);
-				
-				if (!fetchResult.ok)
-					return null;
-				
-				const len = fetchResult.headers.get("Content-Length") || "";
-				const mod = fetchResult.headers.get("Last-Modified") || "";
-				
-				if (!len && !mod)
-					return null;
-					
-				const checksum = (mod + ";" + len).replace(/[,:\s]/g, "");
-				return checksum;
-			}
-			catch (e) { }
-			
-			return null;
-		}
-		
-		const timeout = 500;
-		
 		/**
 		 * Returns the current date in ticks form, but with any incrementation
 		 * necessary to avoid returning the same ticks value twice.
@@ -58,37 +23,10 @@ namespace Squares
 		 * Returns the fully-qualified URL to the icon image
 		 * specified in the specified feed.
 		 */
-		export function getIconUrl(feed: IFeed)
+		export function getIconUrl(feed: IFeedDetail)
 		{
-			const folder = Webfeed.Url.folderOf(feed.url);
-			return Webfeed.Url.resolve(feed.icon, folder);
-		}
-		
-		/**
-		 * Parses URIs as specified in the HTML feeds specification found at:
-		 * https://www.Squares.org/specs/htmlfeeds/
-		 */
-		export function parseHtmlUri(uri: string)
-		{
-			uri = uri.trim();
-			const prefix = "html://follow?";
-			
-			if (!uri.startsWith(prefix))
-				return "";
-			
-			uri = uri.slice(prefix.length);
-			
-			if (uri.length > 2048)
-				return "";
-			
-			try
-			{
-				const url = new URL(uri);
-				return url.toString();
-			}
-			catch (e) { }
-			
-			return "";
+			const folder = Webfeed.getFolderOf(feed.url) || "";
+			return new URL(feed.icon, folder).toString();
 		}
 		
 		/**
@@ -106,6 +44,30 @@ namespace Squares
 		}
 		
 		/**
+		 * Parses the specified URL string and returns a URL object,
+		 * or null if the URL fails to parse.
+		 */
+		export function tryParseUrl(url: string)
+		{
+			try
+			{
+				return new URL(url);
+			}
+			catch (e) { }
+			
+			return null;
+		}
+		
+		/**
+		 * Returns the value wrapped in an array, if it is not already
+		 * an array to begin with.
+		 */
+		export function toArray<T>(value: T | T[]): T[]
+		{
+			return Array.isArray(value) ? value : [value];
+		}
+		
+		/**
 		 * Returns the environment-specific path to the application data folder.
 		 */
 		export async function getDataFolder()
@@ -113,40 +75,31 @@ namespace Squares
 			if (TAURI)
 			{
 				const dir = await Tauri.path.appDataDir();
-				return Fila.new(dir);
+				return new Fila(dir);
 			}
 			else if (ELECTRON)
 			{
-				const fila = Fila.new(__dirname).down(DEBUG ? "+data" : "data");
+				const fila = new Fila(__dirname).down(DEBUG ? "+data" : "data");
 				await fila.writeDirectory();
 				return fila;
 			}
 			else if (CAPACITOR)
 			{
-				const path = DEBUG ?
-					FilaCapacitor.Directory.documents :
-					FilaCapacitor.Directory.data;
-				
-				return Fila.new(path);
+				// These values are documented here:
+				// https://capacitorjs.com/docs/apis/filesystem#directory
+				const path = DEBUG ? "DOCUMENTS" : "DATA";
+				return new Fila(path);
 			}
 			else if (DEMO)
 			{
-				return Fila.new();
+				return new Fila();
 			}
 			
 			throw new Error("Not implemented");
 		}
 		
 		/** */
-		export async function readClipboardHtmlUri()
-		{
-			const text = await readClipboard();
-			const uri = parseHtmlUri(text);
-			return uri ? text : "";
-		}
-		
-		/** */
-		export async function readClipboard()
+		export async function readClipboard(): Promise<string>
 		{
 			if (ELECTRON)
 			{
@@ -160,10 +113,23 @@ namespace Squares
 			}
 			else if (CAPACITOR)
 			{
-				const text = await CapClipboard.read();
-				return text.value;
+				try
+				{
+					const text = await CapClipboard.read();
+					return text.value;
+				}
+				catch (e) { }
 			}
 			return "";
+		}
+		
+		/** */
+		export async function writeClipboard(text: string)
+		{
+			if (CAPACITOR)
+			{
+				CapClipboard.write({ string: text });
+			}
 		}
 		
 		/**
@@ -186,6 +152,25 @@ namespace Squares
 				opacity: "1 !",
 				transform: "none !",
 			};
+		}
+		
+		/**
+		 * 
+		 */
+		export async function openWebLink(url: string)
+		{
+			if (CAPACITOR)
+			{
+				await AppLauncher.openUrl({ url });
+			}
+			else if (TAURI)
+			{
+				
+			}
+			else
+			{
+				window.open(url, "_blank");
+			}
 		}
 	}
 }

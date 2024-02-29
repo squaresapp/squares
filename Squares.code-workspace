@@ -25,7 +25,10 @@
 			"**/src-tauri/target": true,
 			"**/.cargo": true,
 			"index.*": true,
-			"**/*.js": true
+			"**/*.js": true,
+			"app/*": true,
+			"app-debug/*": true,
+			"app-demo/*": true
 		},
 		"task.allowAutomaticTasks": "on",
 	},
@@ -48,20 +51,14 @@
 				"runtimeExecutable": "${workspaceFolder}/../Moduless/node_modules/electron/cli.js",
 				"cwd": "${workspaceFolder}",
 				"runtimeArgs": [
-					"${workspaceFolder}/../Moduless/build/moduless.js",
+					"${workspaceFolder}/node_modules/moduless/build/moduless.js",
 					"--remote-debugging-port=9222"
 				],
+				"env": {
+					"DEBUG_URL": "http://localhost:3000/",
+				},
 				"sourceMaps": true,
 				"timeout": 2000,
-			},
-			{
-				"name": "Debug Active Cover Function (Node.js)",
-				"type": "node",
-				"request": "launch",
-				"cwd": "${workspaceFolder}",
-				"program": "${workspaceFolder}/../Moduless/build/moduless.js",
-				"sourceMaps": true,
-				"timeout": 2000
 			},
 			{
 				"name": "Debug All Cover Functions",

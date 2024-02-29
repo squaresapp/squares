@@ -89,7 +89,7 @@ namespace Squares
 		protected abstract getPageInfo(index: number): Promise<{
 			readonly head: HTMLElement[];
 			readonly sections: HTMLElement[];
-			readonly feed: IFeed;
+			readonly feed: IFeedDetail;
 		}>;
 		
 		/** */
@@ -234,7 +234,7 @@ namespace Squares
 					if (!url)
 						break block;
 					
-					const poster = await Webfeed.getPosterFromUrl(url);
+					const poster = await Webfeed.downloadPoster(url);
 					if (!poster)
 						break block;
 					
@@ -256,13 +256,14 @@ namespace Squares
 			
 			const root = Hat.over(this, RootHat);
 			const postUrl = root.getPostUrl(post) || "";
-			const page = await Webfeed.getPageFromUrl(postUrl);
-			const head = page?.head || [];
+			const page = await Webfeed.downloadSections(postUrl) || [];
+			console.error("Awkward code here... stuff probably doesn't work.");
+			const head: HTMLElement[] = [];//page?.head || [];
 			const sections: HTMLElement[] = page ?
-				page.sections.slice() :
-				[Webfeed.getErrorPoster()];
+				page.slice() :
+				[await Webfeed.getErrorPoster()];
 			
-			const feed = await Data.readFeed(post.feed.key);
+			const feed = await Data.readFeedDetail(post.feed.key);
 			if (!feed)
 				throw new Error();
 			
@@ -289,10 +290,15 @@ namespace Squares
 	{
 		/** */
 		constructor(
-			private readonly feed: IFeed,
+			private readonly feed: IFeedDetail,
 			private readonly urls: string[])
 		{
 			super();
+			
+			(async () =>
+			{
+				Data.readFeedPosts(feed.key);
+			})();
 		}
 		
 		/** */
@@ -311,7 +317,7 @@ namespace Squares
 			
 			return (async () =>
 			{
-				const maybePoster = await Webfeed.getPosterFromUrl(url);
+				const maybePoster = await Webfeed.downloadPoster(url);
 				return maybePoster || Webfeed.getErrorPoster();
 			})();
 		}
@@ -341,7 +347,8 @@ namespace Squares
 	const translateZ = (amount: string) => `perspective(10px) translateZ(${amount})`;
 	const translateZMax = -3;
 	
-	const noOverflowClass = raw.css({
-		overflow: "hidden !"
-	});
+	let noOverflowClass = "";
+	//const noOverflowClass2 = raw.css({
+	//	overflow: "hidden !"
+	//});
 }

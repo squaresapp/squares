@@ -1,4 +1,6 @@
 
+
+
 namespace Squares
 {
 	/**
@@ -88,5 +90,11 @@ namespace Squares
 		}
 		
 		private lastVisiblePane = 0;
+		
+		/** Gets the number of panes in the PaneSwiper. */
+		get length()
+		{
+			return this.head.childElementCount;
+		}
 	}
 }
