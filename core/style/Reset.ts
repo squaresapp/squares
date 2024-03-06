@@ -11,7 +11,7 @@ namespace Squares
 					padding: 0,
 					margin: 0,
 					zIndex: 0,
-					boxSizing: "border-box",
+					//boxSizing: "border-box",
 					webkitFontSmoothing: "antialiased",
 					color: "inherit",
 					fontSize: "inherit",

@@ -4,7 +4,7 @@ namespace Squares
 	/**
 	 * Represents the IFeed object, as it is stored on disk.
 	 */
-	export interface IDiskFeedDetail
+	export interface IDiskFeed
 	{
 		/**
 		 * Stores the URL of the text file that contains the feed information.
@@ -34,10 +34,22 @@ namespace Squares
 		 * feed has been updated.
 		 */
 		checksum: string;
+		
+		/**
+		 * Stores a value that indicates which post to display in the top-right corner
+		 * of the screen when the feed is first loaded. Used to allow the user to pick
+		 * up where they left off in content consumption.
+		 */
+		anchorIndex: number;
+		
+		/**
+		 * Stores the number of posts in the feed.
+		 */
+		length: number;
 	}
 	
 	/** */
-	export interface IFeedDetail extends IDiskFeedDetail
+	export interface IFeed extends IDiskFeed
 	{
 		/** */
 		key: number;

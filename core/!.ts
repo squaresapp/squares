@@ -8,7 +8,7 @@ declare const LINUX: boolean;
 declare const CAPACITOR: boolean;
 declare const IOS: boolean;
 declare const ANDROID: boolean;
-declare const DEMO: boolean;
+declare const WEB: boolean;
 declare const Moduless: { getRunningFunctionName(): string; }
 
 declare namespace Electron
@@ -35,6 +35,13 @@ declare namespace Tauri
 	export const tauri: typeof import("@tauri-apps/api").tauri;
 	export const updater: typeof import("@tauri-apps/api").updater;
 	export const window: typeof import("@tauri-apps/api").window;
+	
+	/**
+	 * Stores a synchronous version of the variable that stores
+	 * appDataDir in Tauri (Accessing system paths in Tauri
+	 * is asynchronous, which causes cascading asynchrony).
+	 */
+	export let appDataDir: string;
 }
 
 declare const Capacitor: typeof import("@capacitor/core").Capacitor &
@@ -59,11 +66,20 @@ if (typeof globalThis === "undefined")
 if (typeof DEBUG === "undefined")
 	Object.assign(globalThis, { DEBUG: true });
 
+if (typeof WEB === "undefined")
+{
+	const host = window.location.hostname;
+	Object.assign(globalThis, { WEB: !!host && !(Number(host.split(".").join("")) > 0) });
+}
+
 if (typeof ELECTRON === "undefined")
-	Object.assign(globalThis, { ELECTRON: typeof screen + typeof require === "objectfunction" });
+	Object.assign(globalThis, { ELECTRON: !WEB && typeof screen + typeof require === "objectfunction" });
 
 if (typeof TAURI === "undefined")
 	Object.assign(globalThis, { TAURI: typeof window !== "undefined" && typeof (window as any).__TAURI__ !== "undefined" });
+
+if (typeof CAPACITOR === "undefined")
+	Object.assign(globalThis, { CAPACITOR: !WEB && !TAURI && !ELECTRON });
 
 if (typeof IOS === "undefined")
 	Object.assign(globalThis, { IOS: typeof navigator !== "undefined" && navigator.platform.startsWith("iP") });
@@ -71,95 +87,4 @@ if (typeof IOS === "undefined")
 if (typeof ANDROID === "undefined")
 	Object.assign(globalThis, { ANDROID: typeof navigator !== "undefined" && navigator.userAgent.includes("Android") });
 
-if (typeof DEMO === "undefined")
-{
-	const host = window.location.hostname;
-	Object.assign(globalThis, { DEMO: !!host && !(Number(host.split(".").join("")) > 0) });
-}
-
 declare const t: typeof raw["text"];
-
-namespace Squares
-{
-	/**
-	 * The main entry point of the app.
-	 * 
-	 * This function is called automatically, in every environment (Tauri, Capacitor),
-	 * except when running from a Moduless cover function.
-	 */
-	export async function startup(useDefaultData?: boolean)
-	{
-		if (document.readyState !== "complete")
-		{
-			await new Promise<void>(resolve =>
-			{
-				document.addEventListener("readystatechange", () =>
-				{
-					if (document.readyState === "complete")
-						resolve();
-				});
-			});
-		}
-		
-		(window as any).t = raw.text.bind(raw);
-		
-		// The CAPACITOR constant needs to be defined after the document has loaded,
-		// otherwise, window.Capacitor will be undefined (on Android, it doesn't appear
-		// to be injected right away.
-		if (typeof CAPACITOR === "undefined")
-			Object.assign(globalThis, { CAPACITOR: typeof Capacitor === "object" });
-		
-		const g = globalThis as any;
-		
-		if (ELECTRON)
-		{
-			const g = globalThis as any;
-			g.Electron = Object.freeze({
-				app: require("electron"),
-				fs: require("fs"),
-				path: require("path"),
-			});
-		}
-		else if (TAURI)
-		{
-			const g = globalThis as any;
-			g.Tauri = g.__TAURI__;
-		}
-		else if (CAPACITOR)
-		{
-			g.AppLauncher = g.Capacitor?.Plugins?.AppLauncher;
-			g.BackgroundFetch = g.Capacitor?.Plugins?.BackgroundFetch;
-			g.CapacitorApp = g.Capacitor?.Plugins?.App;
-			g.CapClipboard = g.Capacitor?.Plugins?.Clipboard;
-			g.Toast = g.Capacitor?.Plugins?.Toast;
-		}
-		
-		if (DEBUG || DEMO)
-			await Data.clear();
-		
-		if (DEBUG)
-		{
-			const dataFolder = await Util.getDataFolder();
-			if (!await dataFolder.exists())
-				await dataFolder.writeDirectory();
-		}
-		
-		if (DEBUG || DEMO)
-			if (useDefaultData)
-				await Squares.runDataInitializer(Squares.feedsDefault);
-		
-		Squares.appendCssReset();
-		Squares.FollowUtil.setupSystemListeners();
-		await Data.initialize();
-		
-		const rootHat = new RootHat();
-		await rootHat.construct();
-		document.body.append(rootHat.head);
-	}
-	
-	// Auto-run the startup function if not running as a moduless cover function
-	if (typeof Moduless === "undefined")
-		startup();
-}
-
-typeof module === "object" && Object.assign(module.exports, { Squares });

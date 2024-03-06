@@ -2,7 +2,7 @@
 namespace Squares
 {
 	//@ts-ignore
-	if (!DEBUG && !DEMO) return;
+	if (!DEBUG && !WEB) return;
 	
 	export const feedsDefault = [
 		"https://webfeed-tulips.pages.dev/index.txt",

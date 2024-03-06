@@ -3,7 +3,7 @@ declare namespace Raw
 {
 	interface EventMap extends HTMLElementEventMap
 	{
-		"squares:follow": CustomEvent<{ feeds: Squares.IFeedDetail[] }>;
+		"squares:follow": CustomEvent<{ feeds: Squares.IFeed[] }>;
 		"squares:unfollow": CustomEvent<{ feedKey: number }>;
 		"squares:panechanged": Event;
 	}

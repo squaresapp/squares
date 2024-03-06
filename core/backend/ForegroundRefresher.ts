@@ -2,7 +2,7 @@
 namespace Squares
 {
 	/** */
-	export class ForegroundFetcher
+	export class ForegroundRefresher
 	{
 		/** */
 		constructor() { }
@@ -14,15 +14,15 @@ namespace Squares
 		{
 			return !!this.feedIterator;
 		}
-		private feedIterator: AsyncGenerator<IFeedDetail, void, unknown> | null = null;
+		private feedIterator: IterableIterator<IFeed> | null = null;
 		
 		/** */
 		async fetch()
 		{
 			this.stopFetch();
-			this.feedIterator = Data.readFeedDetails();
+			this.feedIterator = Data.eachFeed();
 			const threads: Promise<void>[] = [];
-			const modifiedFeeds: IFeedDetail[] = [];
+			const modifiedFeeds: IFeed[] = [];
 			
 			for (let i = -1; ++i < maxFetchThreads;)
 			{
@@ -32,7 +32,7 @@ namespace Squares
 				{
 					for (;;)
 					{
-						const feedIteration = await this.feedIterator?.next();
+						const feedIteration = this.feedIterator?.next();
 						if (!feedIteration || feedIteration.done)
 						{
 							// If i is less than the number of "threads" running,
@@ -58,7 +58,7 @@ namespace Squares
 			}
 			
 			await Promise.all(threads);
-			await Fetcher.updateModifiedFeeds(modifiedFeeds);
+			await Fetcher.fetch(...modifiedFeeds);
 		}
 		
 		/** */
@@ -68,7 +68,7 @@ namespace Squares
 				ac.abort();
 			
 			this.abortControllers.clear();
-			this.feedIterator?.return();
+			this.feedIterator?.return?.();
 		}
 		
 		private readonly abortControllers = new Set<AbortController>();

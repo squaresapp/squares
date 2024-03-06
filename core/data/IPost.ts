@@ -35,11 +35,11 @@ namespace Squares
 		/**
 		 * A reference to the feed
 		 */
-		feed: IFeedDetail;
+		feed: IFeed;
 	}
 	
 	/** */
-	export interface IPostFile
+	export interface IPostFileObject
 	{
 		[key: number]: IDiskPost
 	}

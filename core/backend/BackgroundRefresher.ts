@@ -4,7 +4,7 @@ namespace Squares
 	/**
 	 * 
 	 */
-	export class BackgroundFetcher
+	export class BackgroundRefresher
 	{
 		/** */
 		constructor()

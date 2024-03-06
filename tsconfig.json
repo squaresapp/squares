@@ -38,6 +38,6 @@
 		"app/keyva.d.ts",
 		"app/not.d.ts",
 		"app/query.d.ts",
-		"app/squares.d.ts",
+		//"app/squares.d.ts",
 	]
 }

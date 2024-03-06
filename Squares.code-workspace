@@ -27,8 +27,6 @@
 			"index.*": true,
 			"**/*.js": true,
 			"app/*": true,
-			"app-debug/*": true,
-			"app-demo/*": true
 		},
 		"task.allowAutomaticTasks": "on",
 	},
@@ -73,6 +71,14 @@
 				],
 				"sourceMaps": true,
 				"timeout": 2000
+			},
+			{
+				"name": "Debug In Browser",
+				"type": "chrome",
+				"request": "launch",
+				"webRoot": "${workspaceFolder}/app-web",
+				"port": 9222,
+				"url": "http://localhost:3000"
 			}
 		]
 	},

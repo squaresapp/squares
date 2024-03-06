@@ -20,16 +20,6 @@ namespace Squares
 		let lastTicks = 0;
 		
 		/**
-		 * Returns the fully-qualified URL to the icon image
-		 * specified in the specified feed.
-		 */
-		export function getIconUrl(feed: IFeedDetail)
-		{
-			const folder = Webfeed.getFolderOf(feed.url) || "";
-			return new URL(feed.icon, folder).toString();
-		}
-		
-		/**
 		 * Safely parses a string JSON into an object.
 		 */
 		export function tryParseJson<T extends object = object>(jsonText: string): T | null
@@ -70,30 +60,27 @@ namespace Squares
 		/**
 		 * Returns the environment-specific path to the application data folder.
 		 */
-		export async function getDataFolder()
+		export function getDataFolder()
 		{
 			if (TAURI)
-			{
-				const dir = await Tauri.path.appDataDir();
-				return new Fila(dir);
-			}
-			else if (ELECTRON)
+				return new Fila(Tauri.appDataDir);
+			
+			if (ELECTRON)
 			{
 				const fila = new Fila(__dirname).down(DEBUG ? "+data" : "data");
-				await fila.writeDirectory();
+				// Cannot use Fila here because this needs to be synchronous.
+				const fs = require("fs") as typeof import("fs");
+				fs.mkdirSync(fila.path, { recursive: true });
 				return fila;
 			}
-			else if (CAPACITOR)
-			{
-				// These values are documented here:
-				// https://capacitorjs.com/docs/apis/filesystem#directory
-				const path = DEBUG ? "DOCUMENTS" : "DATA";
-				return new Fila(path);
-			}
-			else if (DEMO)
-			{
+			
+			// These values are documented here:
+			// https://capacitorjs.com/docs/apis/filesystem#directory
+			if (CAPACITOR)
+				return new Fila(DEBUG ? "DOCUMENTS" : "DATA");
+			
+			if (WEB)
 				return new Fila();
-			}
 			
 			throw new Error("Not implemented");
 		}
@@ -120,6 +107,11 @@ namespace Squares
 				}
 				catch (e) { }
 			}
+			else if (WEB)
+			{
+				throw new Error("Not available.");
+			}
+			
 			return "";
 		}
 		
@@ -171,6 +163,26 @@ namespace Squares
 			{
 				window.open(url, "_blank");
 			}
+		}
+		
+		/**
+		 * Returns the fully-qualified URL to the icon image
+		 * specified in the specified feed.
+		 */
+		export function getIconUrl(feed: IFeed)
+		{
+			const folder = Webfeed.getFolderOf(feed.url) || "";
+			return new URL(feed.icon, folder).toString();
+		}
+		
+		/**
+		 * Gets the fully qualified URL where the post resides, which is calculated
+		 * by concatenating the post path with the containing feed URL.
+		 */
+		export function getPostUrl(post: IPost)
+		{
+			const feedFolder = Webfeed.getFolderOf(post.feed.url);
+			return feedFolder + post.path;
 		}
 	}
 }

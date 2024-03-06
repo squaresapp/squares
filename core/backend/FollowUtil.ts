@@ -90,37 +90,14 @@ namespace Squares
 		 */
 		export async function followWebfeeds(webfeedUrls: string | string[])
 		{
-			const feedDetails: IFeedDetail[] = [];
-			
-			for (const webfeedUrl of Util.toArray(webfeedUrls))
-			{
-				const urls = await Webfeed.downloadIndex(webfeedUrl);
-				if (!urls)
-					return;
-				
-				const checksum = await Webfeed.ping(webfeedUrl);
-				if (!checksum)
-					return;
-				
-				const feedDetail = await Webfeed.downloadDetails(webfeedUrl) || {};
-				const feed = await Data.writeFeed(feedDetail, { checksum, url: webfeedUrl });
-				await Data.writeFeedUpdates(feed, urls);
-				feedDetails.push(feed);
-			}
-			
-			if (feedDetails.length === 0)
-				return;
-			
-			if (!Data.hasScrolls())
-				await Data.writeScroll({ feeds: feedDetails });
-			
-			dispatch("squares:follow", { feeds: feedDetails });
+			const feeds = await Fetcher.fetch(...Util.toArray(webfeedUrls));
+			dispatch("squares:follow", { feeds });
 			
 			if (CAPACITOR)
 			{
 				const text = webfeedUrls.length > 1 ?
 					Strings.nowFollowingCount.replace("?", "" + webfeedUrls.length) :
-					Strings.nowFollowing + " " + feedDetails[0].author;
+					Strings.nowFollowing + " " + feeds[0].author;
 				
 				await Toast.show({
 					position: "center",

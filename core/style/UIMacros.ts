@@ -175,7 +175,7 @@ namespace Squares
 		{
 			return [
 				watchTarget.children.length === 0 ? "" : UI.hide(),
-				raw.on("connected", ev => addVisibilityObserver(ev.target, watchTarget, true)),
+				raw.on("connected", ev => addVisibilityObserver(ev.target as Node, watchTarget, true)),
 			];
 		}
 		
@@ -184,7 +184,7 @@ namespace Squares
 		{
 			return [
 				watchTarget.children.length === 0 ? UI.hide() : "",
-				raw.on("connected", ev => addVisibilityObserver(ev.target, watchTarget, false)),
+				raw.on("connected", ev => addVisibilityObserver(ev.target as Node, watchTarget, false)),
 			];
 		}
 		

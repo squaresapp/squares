@@ -10,7 +10,7 @@ namespace Cover
 	/** */
 	export async function startupAsDebugWithData()
 	{
-		await Squares.startup(true);
+		await Squares.startup({ useDefaultData: true });
 	}
 	
 	/** */
@@ -24,7 +24,7 @@ namespace Cover
 	export async function startupWithData()
 	{
 		Object.assign(globalThis, { DEBUG: false });
-		await Squares.startup(true);
+		await Squares.startup({ useDefaultData: true });
 	}
 	
 	/** */
@@ -33,7 +33,6 @@ namespace Cover
 		await Squares.startup();
 		const link = "https://webfeed-tulips.pages.dev/index.txt";
 		await Squares.FollowUtil.followWebfeeds(link);
-		
 	}
 }
 

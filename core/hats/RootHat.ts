@@ -13,7 +13,6 @@ namespace Squares
 				UI.noScrollBars,
 				{
 					height: "inherit",
-					top: "env(safe-area-inset-top)",
 					tabIndex: 0,
 				},
 				raw.on(document.body, "squares:follow", () =>
@@ -32,23 +31,18 @@ namespace Squares
 		/** */
 		async construct()
 		{
-			const scrolls = await Data.readScrolls();
+			const scrolls = Data.getScrolls();
 			
 			let e: HTMLElement;
 			
 			if (scrolls.length === 0)
-			{
 				e = this.renderEmptyState();
-			}
-			else if (scrolls.length === 1 || scrolls[0].feeds.length > 1)
-			{
-				e = this.renderScrollState(scrolls);
-			}
+			
+			else if (scrolls.length === 1 && scrolls[0].feeds.length === 1)
+				e = new FeedSquaresHat(scrolls[0].feeds[0]).head;
+			
 			else
-			{
-				const feed = scrolls[0].feeds[0];
-				e = this.renderSingleFeedState(feed);
-			}
+				e = new ScrollSquaresHat(scrolls[0]).head;
 			
 			this.head.replaceChildren(e);
 		}
@@ -63,7 +57,6 @@ namespace Squares
 				Dock.cover(),
 				{
 					overflow: "hidden",
-					top: "calc(-1.5 * env(safe-area-inset-top))", // centering
 				},
 				div = raw.div(
 					Dock.center(),
@@ -106,20 +99,15 @@ namespace Squares
 			);
 		}
 		
-		/** */
-		private renderSingleFeedState(feed: IFeedDetail)
-		{
-			return new ScrollFeedViewerHat(feed, []).head;
-		}
-		
 		/**
 		 * Renders the full application state where there is a 
 		 * are multiple feeds multi-plexed within a single scroll.
 		 */
-		private renderScrollState(scrolls: IScroll[])
+		private renderMultiFeedState(scrolls: IScroll[])
 		{
+			/*
 			const paneSwiper = new PaneSwiper();
-				
+			
 			for (const scroll of scrolls)
 			{
 				const viewer = new ScrollMuxViewerHat(scroll);
@@ -145,14 +133,12 @@ namespace Squares
 					right: 0,
 					bottom:
 						CAPACITOR ? "105px" :
-						DEMO ? 0 :
+						WEB ? 0 :
 						"15px",
 					margin: "auto",
 				});
 				
 				this.head.append(dotsHat.head);
-				
-				
 				
 				paneSwiper.visiblePaneChanged(index =>
 				{
@@ -161,16 +147,9 @@ namespace Squares
 			}
 			
 			return paneSwiper.head;
-		}
-		
-		/**
-		 * Gets the fully qualified URL where the post resides, which is calculated
-		 * by concatenating the post path with the containing feed URL.
-		 */
-		getPostUrl(post: IPost)
-		{
-			const feedFolder = Webfeed.getFolderOf(post.feed.url);
-			return feedFolder + post.path;
+			*/
+			
+			return raw.div();
 		}
 	}
 }

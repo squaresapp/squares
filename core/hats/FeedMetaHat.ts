@@ -7,7 +7,7 @@ namespace Squares
 		readonly head;
 		
 		/** */
-		constructor(data: IFeedDetail)
+		constructor(data: IFeed)
 		{
 			const iconUrl = Util.getIconUrl(data);
 			const author = data.author || Strings.unknownAuthor;
@@ -72,7 +72,9 @@ namespace Squares
 					this.renderButton(Strings.share, () => {}),
 					isFollowing && (e => this.renderButton(Strings.unfollow, () =>
 					{
-						Hat.over(this, PageHat).head.scrollBy({ top: -1 });
+						debugger;
+						// Should this be a part of SquaresJS?
+						//Hat.over(this, PageHat).head.scrollBy({ top: -1 });
 						dispatch("squares:unfollow", { feedKey: data.key });
 						UI.fade(e);
 					})),

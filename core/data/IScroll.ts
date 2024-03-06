@@ -5,6 +5,9 @@ namespace Squares
 	export interface IAbstractScroll
 	{
 		anchorIndex: number;
+		
+		/** Stores the number of posts in the scroll. */
+		length: number;
 	}
 	
 	/** */
@@ -17,6 +20,6 @@ namespace Squares
 	export interface IScroll extends IAbstractScroll
 	{
 		key: number;
-		feeds: readonly IFeedDetail[];
+		feeds: readonly IFeed[];
 	}
 }

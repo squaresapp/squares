@@ -43,21 +43,21 @@ namespace Squares
 		}
 		
 		/** */
-		private handleFollow(feeds: IFeedDetail[])
+		private handleFollow(feeds: IFeed[])
 		{
 			for (const feed of feeds)
 				this.feedElements.prepend(this.renderIdentity(feed));
 		}
 		
 		/** */
-		private async construct()
+		private construct()
 		{
-			for await (const feed of Data.readFeedDetails())
+			for (const feed of Data.eachFeed())
 				this.feedElements.append(this.renderIdentity(feed));
 		}
 		
 		/** */
-		private renderIdentity(feed: IFeedDetail)
+		private renderIdentity(feed: IFeed)
 		{
 			const iconUrl = Util.getIconUrl(feed);
 			const author = feed.author || Strings.unknownAuthor;
