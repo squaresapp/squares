@@ -51,7 +51,7 @@ declare const Capacitor: typeof import("@capacitor/core").Capacitor &
 
 declare const Toast: typeof import("@capacitor/toast").Toast;
 declare const CapClipboard: typeof import("@capacitor/clipboard").Clipboard;
-declare const BackgroundFetch: typeof import("@transistorsoft/capacitor-background-fetch").BackgroundFetch;
+//declare const BackgroundFetch: typeof import("@transistorsoft/capacitor-background-fetch").BackgroundFetch;
 declare const AppLauncher: typeof import("@capacitor/app-launcher").AppLauncher;
 declare const CapacitorApp: typeof import("@capacitor/app").App;
 
@@ -68,8 +68,9 @@ if (typeof DEBUG === "undefined")
 
 if (typeof WEB === "undefined")
 {
-	const host = window.location.hostname;
-	Object.assign(globalThis, { WEB: !!host && !(Number(host.split(".").join("")) > 0) });
+	const lo = window.location;
+	const host = lo.hostname;
+	Object.assign(globalThis, { WEB: !(Number(host.split(".").join("")) > 0) && lo.protocol.startsWith("http") });
 }
 
 if (typeof ELECTRON === "undefined")

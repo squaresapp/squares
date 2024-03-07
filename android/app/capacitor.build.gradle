@@ -18,7 +18,6 @@ dependencies {
     implementation project(':capacitor-splash-screen')
     implementation project(':capacitor-status-bar')
     implementation project(':capacitor-toast')
-    implementation project(':transistorsoft-capacitor-background-fetch')
     implementation project(':capacitor-branch-deep-links')
 
 }

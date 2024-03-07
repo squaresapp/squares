@@ -1,30 +1,28 @@
 PODS:
   - BranchSDK (3.0.1)
-  - Capacitor (5.6.0):
+  - Capacitor (5.7.1):
     - CapacitorCordova
-  - CapacitorApp (5.0.6):
+  - CapacitorApp (5.0.7):
     - Capacitor
-  - CapacitorAppLauncher (5.0.6):
+  - CapacitorAppLauncher (5.0.7):
     - Capacitor
   - CapacitorBranchDeepLinks (7.0.0):
     - BranchSDK
     - Capacitor
-  - CapacitorClipboard (5.0.6):
+  - CapacitorClipboard (5.0.7):
     - Capacitor
-  - CapacitorCordova (5.6.0)
-  - CapacitorDialog (5.0.6):
+  - CapacitorCordova (5.7.1)
+  - CapacitorDialog (5.0.7):
     - Capacitor
-  - CapacitorFilesystem (5.2.0):
+  - CapacitorFilesystem (5.2.1):
     - Capacitor
-  - CapacitorShare (5.0.6):
+  - CapacitorShare (5.0.7):
     - Capacitor
-  - CapacitorSplashScreen (5.0.6):
+  - CapacitorSplashScreen (5.0.7):
     - Capacitor
-  - CapacitorStatusBar (5.0.6):
+  - CapacitorStatusBar (5.0.7):
     - Capacitor
-  - CapacitorToast (5.0.6):
-    - Capacitor
-  - TransistorsoftCapacitorBackgroundFetch (5.1.1):
+  - CapacitorToast (5.0.7):
     - Capacitor
 
 DEPENDENCIES:
@@ -40,7 +38,6 @@ DEPENDENCIES:
   - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
   - "CapacitorToast (from `../../node_modules/@capacitor/toast`)"
-  - "TransistorsoftCapacitorBackgroundFetch (from `../../node_modules/@transistorsoft/capacitor-background-fetch`)"
 
 SPEC REPOS:
   trunk:
@@ -71,25 +68,22 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/status-bar"
   CapacitorToast:
     :path: "../../node_modules/@capacitor/toast"
-  TransistorsoftCapacitorBackgroundFetch:
-    :path: "../../node_modules/@transistorsoft/capacitor-background-fetch"
 
 SPEC CHECKSUMS:
   BranchSDK: e268bcf41469051c9e83efcd6fd85d0ba91d1d0f
-  Capacitor: ebfc16cdb8116d04c101686b080342872da42d43
-  CapacitorApp: 024e1b1bea5f883d79f6330d309bc441c88ad04a
-  CapacitorAppLauncher: 5a9f06c13c6b4f5d65b550a07128ef04f3a216b3
+  Capacitor: 6bd16626bc7a4a382eff16f6aed0072fe9776951
+  CapacitorApp: 17fecd0e6cb23feafac7eb0939417389038b0979
+  CapacitorAppLauncher: 7b2705481a74cbe322441bd374f56194de59ab1a
   CapacitorBranchDeepLinks: 933d2dd149ae955245134c388348e85ea2c65be2
-  CapacitorClipboard: 77edf49827ea21da2a9c05c690a4a6a4d07199c4
-  CapacitorCordova: 931b48fcdbc9bc985fc2f16cec9f77c794a27729
-  CapacitorDialog: 0f3c15dfe9414b83bc64aef4078f1b92bcfead26
-  CapacitorFilesystem: 02f9a9053b96e1881ba1fc98d846869413c195c2
-  CapacitorShare: cd41743331cb71d217c029de54b681cbd91e0fcc
-  CapacitorSplashScreen: 5fa2ab5e46cf5cc530cf16a51c80c7a986579ccd
-  CapacitorStatusBar: 565c0a1ebd79bb40d797606a8992b4a105885309
-  CapacitorToast: bb0d79b78d9c27c0199b57f735dd50b8fc363489
-  TransistorsoftCapacitorBackgroundFetch: ce4b3e01b898cef516e68485d2160a078016ee97
+  CapacitorClipboard: 45e5e25f2271f98712985d422776cdc5a779cca1
+  CapacitorCordova: b49f3372270c88fd9c633a4fc8c7ef00e47dd2d6
+  CapacitorDialog: ea1beaccb7f825191aa18b72cba8981b881b3b2d
+  CapacitorFilesystem: 9f3e3c7fea2fff12f46dd5b07a2914f2103e4cfc
+  CapacitorShare: c6a1ebbf0114ff9e863b966cd6052678fa25d480
+  CapacitorSplashScreen: dd3de3f3644710fa2a697cfb91ec262eece4d242
+  CapacitorStatusBar: f390fbb49b82ffb754ea4b3cf71dc8b048baf3e7
+  CapacitorToast: c8bb89eeb59a23c1fc298f138cc06c8ff4d90ac1
 
-PODFILE CHECKSUM: 6cc47943fdb2b108131c9949259a5d5fec771db6
+PODFILE CHECKSUM: 75fad73c63c86e00905069e2998d806e1108bc64
 
 COCOAPODS: 1.14.3
