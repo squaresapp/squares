@@ -9,7 +9,7 @@ namespace Squares.Data
 	}
 	
 	/** */
-	export async function initialize()
+	export async function setupDataCache()
 	{
 		initializeScrollCache();
 		

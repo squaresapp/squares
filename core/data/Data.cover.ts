@@ -7,12 +7,12 @@ namespace Cover
 		await Squares.Data.clear();
 		await Squares.startup({
 			headless: true,
-			skipDataInit: true,
-			useDefaultData: false,
+			setupDataCache: true,
+			setupDefaultData: false,
 		});
 		
-		await Squares.Data.initialize();
-		await Squares.Fetcher.fetch(SampleWebfeedUrls.tulips);
+		await Squares.Data.setupDataCache();
+		await Squares.Refresher.refreshFeeds(Squares.Strings.sampleWebfeedTulips);
 		const scrolls = Squares.Data.getScrolls();
 		
 		if (scrolls.length !== 1)
@@ -23,7 +23,7 @@ namespace Cover
 			return () => !"Bad scroll data";
 		
 		const feed = scroll.feeds[0];
-		if (feed.url !== SampleWebfeedUrls.tulips)
+		if (feed.url !== Squares.Strings.sampleWebfeedTulips)
 			return () => !"Error in feed url";
 		
 		const posts: Squares.IPost[] = [];

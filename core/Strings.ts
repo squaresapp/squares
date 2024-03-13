@@ -14,5 +14,11 @@ namespace Squares
 		invalidFollowUrl = "Invalid follow URL",
 		share = "Share",
 		unknownAuthor = "(Author Unknown)",
+		refreshTitle = "That's all for now.",
+		
+		sampleWebfeedTulips = "https://webfeed-tulips.pages.dev/index.txt",
+		sampleWebfeedHomes = "https://webfeed-homes.pages.dev/index.txt",
+		sampleWebfeedBeaches = "https://webfeed-beaches.pages.dev/index.txt",
+		sampleWebfeedColors = "https://webfeed-worker.squaresapp.workers.dev/index.txt",
 	}
 }

@@ -10,5 +10,6 @@ namespace Squares
 		export const gray1 = Color.gray(180);
 		export const gray2 = Color.gray(100);
 		export const gray3 = Color.gray(60);
+		export const attention = "hsl(205, 100%, 50%)";
 	}
 }

@@ -4,9 +4,10 @@ namespace Squares
 	/** */
 	export interface IStartupOptions
 	{
-		skipDataInit?: boolean;
-		useDefaultData?: boolean;
-		headless?: boolean;
+		clearData: boolean;
+		setupDataCache: boolean;
+		setupDefaultData: boolean;
+		headless: boolean;
 	}
 	
 	/**
@@ -15,7 +16,7 @@ namespace Squares
 	 * This function is called automatically, in every environment (Tauri, Capacitor),
 	 * except when running from a Moduless cover function.
 	 */
-	export async function startup(options?: IStartupOptions)
+	export async function startup(options: Partial<IStartupOptions> = {})
 	{
 		if (document.readyState !== "complete")
 		{
@@ -63,28 +64,24 @@ namespace Squares
 			g.Toast = g.Capacitor?.Plugins?.Toast;
 		}
 		
-		if (DEBUG || WEB)
-			await Data.clear();
-		
 		if (DEBUG)
 		{
+			await Data.clear();
 			const dataFolder = Util.getDataFolder();
 			if (!await dataFolder.exists())
 				await dataFolder.writeDirectory();
 		}
 		
 		if (DEBUG || WEB)
-			if (options?.useDefaultData)
-				await Squares.runDataInitializer(Squares.feedsDefault);
+			if (options?.setupDefaultData)
+				await Refresher.refreshFeeds(Strings.sampleWebfeedColors);
 		
-		if (!options?.skipDataInit)
-			await Data.initialize();
+		if (options?.setupDataCache)
+			await Data.setupDataCache();
 		
 		if (!options?.headless)
 		{
 			Squares.appendCssReset();
-			Squares.FollowUtil.setupSystemListeners();
-			
 			const rootHat = new RootHat();
 			await rootHat.construct();
 			document.body.append(rootHat.head);
@@ -93,7 +90,7 @@ namespace Squares
 	
 	// Auto-run the startup function if not running as a moduless cover function
 	if (typeof Moduless === "undefined")
-		startup({ skipDataInit: true });
+		startup({ setupDefaultData: true });
 }
 
 typeof module === "object" && Object.assign(module.exports, { Squares });

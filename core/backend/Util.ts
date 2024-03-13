@@ -124,6 +124,31 @@ namespace Squares
 			}
 		}
 		
+		/** */
+		export function parseUniversalAppLink(urlText: string)
+		{
+			if (!urlText.startsWith(universalAppLinkPrefix))
+				return null;
+			
+			const queryPos = urlText.indexOf("?");
+			if (queryPos < 0)
+				return null;
+			
+			const query = urlText.slice(queryPos + 1);
+			const urls = query
+				.split("&")
+				.map(s => decodeURIComponent(s))
+				.map(s => Util.tryParseUrl(s) ? s : null)
+				.filter((s): s is string => !!s)
+				.map(s => s.trim());
+			
+			if (urls.length === 0)
+				return null;
+			
+			return urls;
+		}
+		const universalAppLinkPrefix = "https://deeplink.squaresapp.org/follow/";
+		
 		/**
 		 * Removes problematic CSS attributes from the specified section tag,
 		 * and ensures that no external CSS is modifying its display propert

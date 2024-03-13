@@ -2,12 +2,12 @@
 	"name": "squares",
 	"author": "Paul Gordon",
 	"private": true,
-	"description": "An app for sharing without powerful forces controlling you.",
+	"description": "Follow creators without the chaos of social media.",
 	"version": "0.0.0",
 	"main": "squares.js",
 	"scripts": {
 		"serve-feeds": "vite ./+feeds --host --cors --port 43332",
-		"serve-app": "cd app && vite",
+		"serve-web": "cd app && vite",
 		"ionic:serve": "vite ./app --host --cors",
 		"ionic:build": "cd .",
 		"ios-dev": "ionic cap run ios --external --livereload",
@@ -44,6 +44,6 @@
 		"@squaresapp/rawjs": "^1.3.18",
 		"moduless": "^3.2.6",
 		"terser": "^5.24.0",
-		"webfeed": "^2.1.0"
+		"webfeed": "^2.2.2"
 	}
 }

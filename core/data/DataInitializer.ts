@@ -7,6 +7,7 @@ namespace Squares
 	 */
 	export async function runDataInitializer(defaultFeedUrls: string[])
 	{
+		/*
 		const feeds: IFeed[] = [];
 		const urlLists: string[][] = [];
 		
@@ -46,5 +47,6 @@ namespace Squares
 			const post = await Data.writePost({ feed, path });
 			await Data.writeScrollPost(scroll.key, post.key);
 		}
+		*/
 	}
 }

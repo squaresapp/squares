@@ -26,13 +26,13 @@ namespace Squares
 			);
 			
 			Hat.wear(this);
+			this.setupSystemListeners();
 		}
 		
 		/** */
 		async construct()
 		{
 			const scrolls = Data.getScrolls();
-			
 			let e: HTMLElement;
 			
 			if (scrolls.length === 0)
@@ -148,8 +148,83 @@ namespace Squares
 			
 			return paneSwiper.head;
 			*/
+		}
+		
+		/**
+		 * 
+		 */
+		private setupSystemListeners()
+		{
+			if (CAPACITOR)
+			{
+				CapacitorApp.addListener("appUrlOpen", ev =>
+				{
+					this.followUniversalLink(ev.url);
+				});
+			}
+			else if (TAURI)
+			{
+				// This code needs to setup a clipboard monitor
+				// in order to determine when follow links have been
+				// copied to the clipboard. The webfeed-follow library
+				// needs to add something to the clipboard, the application
+				// needs to detect this, and needs to erase the data from
+				// the clipboard. This doesn't work very well though,
+				// because if the app isn't open, there won't be any
+				// clipboard monitoring going on. We need to use custom
+				// protocols, but these aren't widely supported in browsers,
+				// in seems.
+			}
 			
-			return raw.div();
+			// In platforms other than Capacitor, dragging and dropping
+			// links into the webview is supported.
+			if (!CAPACITOR)
+			{
+				raw.get(document.body)(
+					raw.on("dragover", ev => ev.preventDefault()),
+					raw.on("drop", ev =>
+					{
+						ev.preventDefault();
+						
+						for (const item of Array.from(ev.dataTransfer?.items || []))
+							if (item.kind === "string" && item.type === "text/uri-list")
+								item.getAsString(string => this.followUniversalLink(string));
+					})
+				);
+			}
+		}
+		
+		/**
+		 * 
+		 */
+		private async followUniversalLink(url: string)
+		{
+			const webfeedUrls = Util.parseUniversalAppLink(url);
+			if (webfeedUrls)
+				await this.followWebfeedUrls(webfeedUrls);
+		}
+		
+		/**
+		 * 
+		 */
+		private async followWebfeedUrls(webfeedUrls: string | string[])
+		{
+			debugger;
+			const feeds = await Refresher.refreshFeeds(...Util.toArray(webfeedUrls));
+			dispatch("squares:follow", { feeds });
+			
+			if (CAPACITOR)
+			{
+				const text = webfeedUrls.length > 1 ?
+					Strings.nowFollowingCount.replace("?", "" + webfeedUrls.length) :
+					Strings.nowFollowing + " " + feeds[0].author;
+				
+				await Toast.show({
+					position: "center",
+					duration: "long",
+					text
+				});
+			}
 		}
 	}
 }
