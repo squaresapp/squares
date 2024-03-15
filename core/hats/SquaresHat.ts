@@ -5,37 +5,12 @@ namespace Squares
 	export abstract class AbstractSquaresHat
 	{
 		readonly head: HTMLElement;
-		private readonly refreshButton;
 		private squaresElement: SquaresJS.Squares | null = null;
+		private readonly checkmarkHat;
 		
 		/** */
 		constructor()
 		{
-			const refreshSection = raw.div(
-				"refresher",
-				{
-					textAlign: "center",
-					padding: "2em 0",
-					color: "white",
-					fontWeight: 700,
-					fontSize: "30px",
-				},
-				t(Strings.refreshTitle),
-				this.refreshButton = raw.div(
-					{
-						borderRadius: "100%",
-						backgroundColor: Pal.attention,
-						padding: "20px",
-						width: "50px",
-						height: "50px",
-						margin: "1em auto 0",
-						cursor: "pointer",
-					},
-					e => { e.innerHTML = Images.reload },
-					raw.on("click", () => this.beginHandleRefresh()),
-				),
-			);
-			
 			this.head = raw.div(
 				"squares-hat",
 				{
@@ -47,14 +22,40 @@ namespace Squares
 						raw.on("squares:exit", ev =>
 						{
 							applyVisitedStyle(ev.detail.sourcePoster);
+						}),
+						raw.on("squares:scrolledgecollision", ev =>
+						{
+							if (ev.detail.region === "bottom")
+								this.checkmarkHat.show(true);
+							
+							else if (ev.detail.region === "bottom-exit")
+								this.checkmarkHat.show(false);
 						})
 					);
 					
-					this.head.append(
-						this.squaresElement.head,
-						refreshSection
-					);
-				})
+					this.head.append(this.squaresElement.head)
+				}),
+				
+				raw.div(
+					"checkmark-container",
+					{
+						position: "fixed",
+						left: 0,
+						right: 0,
+						bottom: "30px",
+						zIndex: 1,
+						margin: "auto",
+						width: "fit-content",
+						height: "100px",
+						minWidth: "100px",
+						display: "flex",
+						justifyContent: "center",
+						borderRadius: "100%",
+					},
+					raw.css(" *", { pointerEvents: "none" }),
+					raw.on("click", () => this.beginHandleRefresh(), { capture: true }),
+					this.checkmarkHat = new CheckmarkHat(),
+				)
 			);
 			
 			Hat.wear(this);
@@ -68,8 +69,6 @@ namespace Squares
 		{
 			if (!this.squaresElement)
 				return;
-			
-			
 			
 			this.handleRefresh(this.squaresElement);
 		}

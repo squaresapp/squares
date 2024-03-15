@@ -126,6 +126,9 @@ namespace Squares
 		/** */
 		export async function waitTransitionEnd(e: Element)
 		{
+			if (!e.isConnected)
+				return;
+			
 			await new Promise<void>(r => e.addEventListener("transitionend", ev =>
 			{
 				if (ev.target === e)
