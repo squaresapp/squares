@@ -73,8 +73,37 @@ namespace Squares
 			if (feedsOut.length === 0)
 				return [];
 			
-			if (Data.getScrollCount() === 0)
-				Data.writeScroll({ feeds: feedsOut });
+			const count = Data.getScrollCount();
+			let scroll: IScroll | null = null;
+			
+			if (count === 0)
+			{
+				scroll = Data.writeScroll({ feeds: feedsOut });
+			}
+			else
+			{
+				// If there is more than one scroll, we don't handle this case very well, because
+				// it always just adds the feed to the first scroll. In the future, we will need to
+				// offer users the ability to pick the scroll they want to add the feed to
+				// (for the more conscientious users)
+				scroll = Data.getScrolls()[0];
+				
+				for (const feed of feedsOut)
+					scroll.feeds.push(feed);
+				
+				scroll = Data.writeScroll(scroll);
+			}
+			
+			// Cherry pick the last post from the feed, and add it to the first scroll.
+			if (scroll)
+			{
+				for (const feed of feedsOut)
+				{
+					const post = await Data.readFeedPost(feed.key, -1);
+					if (post)
+						await Data.writeScrollPost(scroll.key, post.key);
+				}
+			}
 			
 			return feedsOut;
 		}

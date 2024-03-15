@@ -133,7 +133,11 @@ namespace Squares
 				{
 					return raw.div(raw.text("Loading"));
 				},
-				requestPage: handleRequestPage
+				requestPage: (selectedElement: HTMLElement) =>
+				{
+					const pageInfo = getPageInfoFromPoster(selectedElement);
+					return { sections: pageInfo.sections, path: pageInfo.path };
+				}
 			});
 		}
 		
@@ -158,7 +162,7 @@ namespace Squares
 		/** */
 		protected createSquaresElement()
 		{
-			return new SquaresJS.Squares({
+			const sq = new SquaresJS.Squares({
 				anchorPosterIndex: this.feed.anchorIndex,
 				maxPosterCount: this.feed.length,
 				viewportElement: this.head,
@@ -177,8 +181,16 @@ namespace Squares
 				{
 					return raw.div(raw.text("Loading"));
 				},
-				requestPage: handleRequestPage
+				requestPage: e =>
+				{
+					const pageInfo = getPageInfoFromPoster(e);
+					const hat = new FeedMetaHat(this.feed);
+					const sections = [hat.head, ...pageInfo.sections];
+					return { sections, path: pageInfo.path };
+				}
 			});
+			
+			return sq;
 		}
 		
 		/** */
@@ -191,13 +203,6 @@ namespace Squares
 			this.feed = feedsUpdated[0];
 			sq.grid.extendPosterCount(this.feed.length);
 		}
-	}
-	
-	/** */
-	function handleRequestPage(selectedElement: HTMLElement)
-	{
-		const pageInfo = getPageInfoFromPoster(selectedElement);
-		return { sections: pageInfo.sections, path: pageInfo.path };
 	}
 	
 	/** */

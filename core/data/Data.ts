@@ -526,15 +526,19 @@ namespace Squares.Data
 	export async function writeScrollPost(scrollKey: number, postKey: number)
 	{
 		const fila = getScrollPostsFile(scrollKey);
-		const keys = [postKey];
-		await appendArrayFile(fila, keys);
+		const newKeys = [postKey];
+		await appendArrayFile(fila, newKeys);
 		
+		const allKeys = localScrollPostKeysCache.get(scrollKey) || [];
+		allKeys.push(postKey);
+		localScrollPostKeysCache.set(scrollKey, allKeys);
+			
 		const scroll = getScroll(scrollKey);
-		if (scroll)
-		{
-			scroll.length++;
-			writeScroll(scroll);
-		}
+		if (!scroll)
+			throw new Error("scroll with key not found: " + scrollKey);
+		
+		scroll.length++;
+		writeScroll(scroll);
 	}
 	
 	/**
@@ -542,12 +546,9 @@ namespace Squares.Data
 	 */
 	export async function readScrollPost(scrollKey: number, index: number)
 	{
-		const postKeys = localScrollPostKeysCache.get(scrollKey) || [];
-		if (index >= postKeys.length || index < 0)
-			return null;
-		
-		const post = await readPost(postKeys[index])
-		return post;
+		const postKeys = localScrollPostKeysCache.get(scrollKey);
+		const postKey = postKeys?.at(index);
+		return postKey ? await readPost(postKey) : null;
 	}
 	
 	/** */

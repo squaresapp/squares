@@ -15,14 +15,18 @@ namespace Squares
 					height: "inherit",
 					tabIndex: 0,
 				},
+				raw.on("connected", () =>
+				{
+					this.render();
+				}),
 				raw.on(document.body, "squares:follow", () =>
 				{
-					this.construct();
+					this.render();
 				}),
 				raw.on(document.body, "squares:unfollow", ev =>
 				{
 					Data.archiveFeed(ev.detail.feedKey);
-				})
+				}),
 			);
 			
 			Hat.wear(this);
@@ -30,7 +34,7 @@ namespace Squares
 		}
 		
 		/** */
-		async construct()
+		private render()
 		{
 			const scrolls = Data.getScrolls();
 			let e: HTMLElement;

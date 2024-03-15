@@ -20,6 +20,6 @@ namespace Squares
 	export interface IScroll extends IAbstractScroll
 	{
 		key: number;
-		feeds: readonly IFeed[];
+		feeds: IFeed[];
 	}
 }

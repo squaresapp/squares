@@ -82,9 +82,7 @@ namespace Squares
 		if (!options?.headless)
 		{
 			Squares.appendCssReset();
-			const rootHat = new RootHat();
-			await rootHat.construct();
-			document.body.append(rootHat.head);
+			document.body.append(new RootHat().head);
 		}
 	}
 	

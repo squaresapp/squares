@@ -36,6 +36,10 @@ namespace Cover
 			posts.push(post);
 		}
 		
+		const postWithinScroll = await Squares.Data.readScrollPost(scroll.key, -1);
+		if (!postWithinScroll)
+			return () => false;
+		
 		return () => true;
 	}
 }
