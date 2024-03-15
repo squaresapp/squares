@@ -213,7 +213,6 @@ namespace Squares
 		 */
 		private async followWebfeedUrls(webfeedUrls: string | string[])
 		{
-			debugger;
 			const feeds = await Refresher.refreshFeeds(...Util.toArray(webfeedUrls));
 			dispatch("squares:follow", { feeds });
 			

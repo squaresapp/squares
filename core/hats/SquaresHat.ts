@@ -95,7 +95,8 @@ namespace Squares
 			
 			posterSections.set(page.poster, {
 				path: url,
-				sections: page.sections
+				sections: page.sections,
+				feed: post.feed
 			});
 			
 			return page.poster;
@@ -133,11 +134,7 @@ namespace Squares
 				{
 					return raw.div(raw.text("Loading"));
 				},
-				requestPage: (selectedElement: HTMLElement) =>
-				{
-					const pageInfo = getPageInfoFromPoster(selectedElement);
-					return { sections: pageInfo.sections, path: pageInfo.path };
-				}
+				requestPage: handleRequestPage
 			});
 		}
 		
@@ -181,13 +178,7 @@ namespace Squares
 				{
 					return raw.div(raw.text("Loading"));
 				},
-				requestPage: e =>
-				{
-					const pageInfo = getPageInfoFromPoster(e);
-					const hat = new FeedMetaHat(this.feed);
-					const sections = [hat.head, ...pageInfo.sections];
-					return { sections, path: pageInfo.path };
-				}
+				requestPage: handleRequestPage
 			});
 			
 			return sq;
@@ -216,6 +207,15 @@ namespace Squares
 	}
 	
 	/** */
+	function handleRequestPage(selectedElement: HTMLElement)
+	{
+		const pageInfo = getPageInfoFromPoster(selectedElement);
+		const hat = new FeedMetaHat(pageInfo.feed);
+		const sections = [hat.head, ...pageInfo.sections];
+		return { sections, path: pageInfo.path };
+	}
+	
+	/** */
 	function handleExit(sq: SquaresJS.Squares)
 	{
 		
@@ -234,6 +234,7 @@ namespace Squares
 	{
 		path: string;
 		sections: HTMLElement[];
+		feed: IFeed;
 	}
 	
 	const posterSections = new WeakMap<HTMLElement, IPageInfo>();
